@@ -1,128 +1,31 @@
-<html>
+<!doctype html>
+<html lang="en">
 	
 	<head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 		<style type="text/css">
-
-			body{
-				display:flex;
-				width:100%;
-				margin:0px;
-				flex-direction:column;
-				height:100%;
-				font-family:Arial, sans-serif;
-			}
-
-			#chat_container{
-				background-color:#eee;
-				width:100%;
-				flex:8;
-				height:1px;
-				overflow-y:auto;
-			}
-
-
-			.chat_item{
-				color:white;
-				margin:10px;
-				padding:10px;
-				padding-bottom: 20px;
-				display:inline-block;
-				overflow-y:auto;
-			}
-
-			.chat_item_left{
-				background-color:#4c4;
-				-moz-clip-path:polygon(0% 0%, 100% 0%, 100% 75%, 20px 75%, 
-					10px 100%, 10px 75%, 0% 75%);
-				clip-path:polygon(0% 0%, 100% 0%, 100% 75%, 20px 75%, 
-					10px 100%, 10px 75%, 0% 75%);
-				-webkit-clip-path:polygon(0% 0%, 100% 0%, 100% 75%, 20px 75%, 
-					10px 100%, 10px 75%, 0% 75%);
-			}
-
-			#chat_input_container{
-				flex:1;
-				background-color:white;
-				display:flex;
-				flex-direction:row;
-				width:100%;
-				font-size:1.1rem;
-				margin:0px;
-			}
-
-			#chat_input{
-				flex:7;
-				padding-left:20px;
-				font-size:1.1rem;
-			}
-
-			#chat_submit{
-				flex:1;
-				background-color:#4b4;
-				color:white;
-				display:flex;
-				transition-duration:1s;
-				transition-property:all;
-				transition-timing-function: ease;
-			}
-
-			#chat_submit span{
-				margin:auto;
-			}
-
-			#chat_submit:hover{
-				background-color:#2a2;
-				box-shadow: 0px 0px 2px rgba(30,30,30,0.3);
-			}
-
-			#chat_item_container span{
-				margin:0px;
-				color:#eee;
-				font-size:0.75em;
-			}
-
+            
 		</style>
-		
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-		
-        <script>
-            $(document).ready(function(){
-		alert("Hi boss kaye! :D");
-                $("#chat_submit").click(function(){
-                   var input = $("#chat_input").val();
-                   $("#chat_input").val("");
-                    
-                    var itemContainer = document.createElement("div");
-                    itemContainer.className = "chat_item_container";
-                    
-                    var chatItem = document.createElement("div");
-                    chatItem.className = "chat_item chat_item_left";
-                    chatItem.innerHTML = input;
-                    
-                    itemContainer.append(chatItem);
-                    
-                    $("#chat_container").append(itemContainer);
-                    
-                });
-            });
-		</script>
+        
 	</head>
 
 	<body>	
-		<div id="chat_container">
-			<div class="chat_item_container">
-				<div class="chat_item chat_item_left">
-					Hi
-					<span></span>
-				</div>
-			</div>
-			
+		<div>
+            Joshua Manzano
+            Kaye Ng
+            Nico Roque
 		</div>
-		<form id="chat_input_container">
-			<input type="text" id="chat_input" />
-			<div id="chat_submit"> <span>Submit</span> </div>
-		</form>
 
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>        
+        
+        <script>
+            $(document).ready(function(){
+		        alert("Hi boss kaye! :D");
+            });
+		</script>
+        
 	</body>
 
 </html>
