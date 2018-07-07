@@ -10,3 +10,4 @@ express()
     .get('/', (req, res) => res.sendFile(path.join(__dirname,"index.html")))
     .get('/cool', (req, res) => res.send(cool()))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
