@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+	<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="icon" href="">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="./stylesheets/main.css" rel="stylesheet">     
+        <style type="text/css">      
+            .post{
+                margin-bottom: 10px;
+            }
+		</style>
+        <title>The Forum</title>
+	</head>
+    
+    <body>
+
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+          <a class="navbar-brand" href="">The Forum</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="cool">Cool</a>
+              </li>
+              <!--
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+                <div class="dropdown-menu" aria-labelledby="dropdown01">
+                  <a class="dropdown-item" href="#">Action</a>
+                  <a class="dropdown-item" href="#">Another action</a>
+                  <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+              </li>
+              -->
+            </ul>
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link">Logged in as Nic0</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/" style="margin-right:10px">Log Out</a>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </nav>
+
+        <main role="main" class="container">
+            
+          <div class="starter-template">
+              <ul class="list-unstyled">
+                <!-- START OF POSTS SECTION -->
+                <li class="media post">
+                  <div class="mr-3 actions">
+                    <div class="container">
+                    <i id="upvote" class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes">20</span>                      
+                    </div>
+                    <div class="container">
+                    <i id="downvote" class="material-icons md-18 md-dark">arrow_downward</i>
+                    <span class="votes">14</span>                      
+                    </div>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">Post Title</h5>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+                    vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue
+                    felis in faucibus.
+                  </div>
+                </li>
+
+                <li class="media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes">19</span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">Post Title</h5>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+                    vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue
+                    felis in faucibus.
+                  </div>
+                </li>
+
+                <li class="media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes">2</span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="media-body">
+                    <h5 class="mt-0 mb-1">Post Title</h5>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+                    vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue
+                    felis in faucibus.
+                  </div>
+                </li>
+              </ul>
+              <!--
+            <div class="d-flex align-items-start flex-column bd-highlight mb-3 border bg-secondary">
+              <div class="container-fluid mb-auto p-2 bd-highlight border">Post Title</div>
+              <div class="container-fluid flex-grow-1 p-2 bd-highlight">Post Description<br><p>
+
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec quam quam. Quisque id lectus ut mauris tincidunt blandit. Suspendisse iaculis ullamcorper nulla, ut aliquet libero auctor non. Nunc rhoncus varius tellus, ut auctor diam laoreet malesuada. Aliquam blandit varius ante at rutrum. Aliquam sit amet finibus ligula. Praesent vel pulvinar urna, eget placerat justo. Curabitur malesuada tellus sed est condimentum tincidunt.
+
+                Praesent id dignissim mauris. Quisque ac libero nunc. Vivamus pellentesque ullamcorper tincidunt. Morbi ut tortor tortor. Suspendisse mattis ipsum a nisl dictum, vel semper elit scelerisque. Suspendisse eget scelerisque odio. Duis eu turpis a nisi commodo lacinia non eu enim. Curabitur vel tristique orci. In euismod, tellus sit amet venenatis eleifend, nibh neque hendrerit nunc, vel dignissim leo erat id quam.
+
+                Integer convallis non libero at tristique. Ut nisl leo, convallis ut leo ut, rutrum lobortis orci. Nullam facilisis erat et pulvinar tincidunt. Maecenas in commodo urna, nec rutrum ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut euismod velit ut pellentesque facilisis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin vulputate ligula feugiat neque posuere varius.
+
+                Aenean auctor sapien eget erat placerat dictum. Sed fringilla risus bibendum, ullamcorper turpis vel, pulvinar turpis. Nulla ut arcu vitae tortor tempus malesuada. Curabitur sollicitudin posuere dolor sed vulputate. Proin a vehicula ligula. Phasellus id gravida purus. Fusce id justo a metus sodales ultrices sit amet id quam.
+
+                Etiam leo lorem, ultricies ac urna nec, tristique fringilla diam. Nam bibendum, lacus placerat dapibus congue, quam mauris imperdiet lorem, ac mollis sapien nulla at nibh. Praesent aliquam enim vitae ipsum pulvinar tristique. Nullam a dui nec justo consectetur aliquam vel gravida turpis. Aliquam aliquet lectus ut urna euismod bibendum. Aenean tortor magna, pellentesque sit amet nisi sit amet, posuere euismod mauris. Fusce neque odio, sollicitudin a risus id, gravida vulputate mi. Maecenas non est lobortis, ultrices dolor eu, congue justo. Nullam consectetur, urna sed placerat tristique, sem diam congue ex, ac aliquet risus enim ac lorem. </p></div>
+            </div>-->
+        <div class="media">
+          <img class="mr-3" src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.0-9/35558047_2339044482777767_8428509173892775936_n.jpg?_nc_cat=0&oh=a3503251e265c5abc115c7995cbfccf6&oe=5BDED365" alt="Generic placeholder image" width=64px height=64px>
+          <div class="media-body">
+            <h5 class="mt-0">Comment</h5>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+              
+                <div class="media" style="margin-top: 20px">
+                  <img class="mr-3" src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.0-9/35558047_2339044482777767_8428509173892775936_n.jpg?_nc_cat=0&oh=a3503251e265c5abc115c7995cbfccf6&oe=5BDED365" alt="Generic placeholder image" width=64px height=64px>
+                <div class="media-body">
+                    <h5 class="mt-0">Nested Comment</h5>
+                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                      
+                    <div class="media" style="margin-top: 20px">
+                      <img class="mr-3" src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.0-9/35558047_2339044482777767_8428509173892775936_n.jpg?_nc_cat=0&oh=a3503251e265c5abc115c7995cbfccf6&oe=5BDED365" alt="Generic placeholder image" width=64px height=64px>
+                        <div class="media-body">
+                        <h5 class="mt-0">Nested Nested Comment</h5>
+                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        </main><!-- /.container -->
+
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>        
+        
+        <script>
+            $(document).ready(function(){
+                
+            });
+		</script>
+        
+	</body>
+
+</html>
