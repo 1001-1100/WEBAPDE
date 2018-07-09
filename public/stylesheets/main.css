@@ -10,7 +10,9 @@ body {
 
 .media.post {
   border: 1px solid #ccc;
+  background-color:white;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 /* .media.post:nth-child(2n) {
@@ -20,6 +22,19 @@ body {
 
 .media.post:hover {
   border: 1px solid #000;
+}
+
+.comment-container{
+  border: 1px solid #ccc;
+  background-color:white;
+  padding: 10px;    
+}
+
+.postcomment{
+  border: 1px solid #ccc;
+  background-color:white;
+  padding: 10px;
+  margin-bottom: 10px;
 }
 
 .media.comment {
