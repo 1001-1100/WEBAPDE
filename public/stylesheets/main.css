@@ -88,3 +88,23 @@ body {
 .material-icons.md-dark {
   color: rgba(0, 0, 0, 0.34);
 }
+
+.avatar{
+  
+  margin-top: 103px;
+  width: 200px;
+  height: 250px;
+
+
+}
+
+.bio{
+  display: flex;
+  flex-direction: row;
+}
+
+
+.description{
+
+  float: left;
+}
