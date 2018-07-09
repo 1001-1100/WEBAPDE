@@ -11,6 +11,7 @@ express()
     .get('/', (req, res) => res.sendFile(path.join(__dirname,"index.html")))
 	.get('/signin', (req, res) => res.sendFile(path.join(__dirname,"signin.html")))
 	.get('/signedin', (req, res) => res.sendFile(path.join(__dirname,"signedin.html")))
-    .get('/cool', (req, res) => res.send(cool()))
+    .get('/cool', (req, res) =>res.sendFile(path.join(__dirname,"user-profile.html")))
+    .get('/register', (req, res) => res.sendFile(path.join(__dirname,"register.html")))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
