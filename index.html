@@ -62,6 +62,7 @@
   <main role="main" class="container">
 
     <div class="starter-template">
+
       <div class="sort d-flex flex-fill-1 flex-row-reverse">
         <button class="btn btn-outline-secondary dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">Sort posts by</button>
@@ -72,6 +73,9 @@
       </div>
 
       <ul class="list-unstyled">
+
+      <ul id="postContainer" class="list-unstyled">
+
         <!-- START OF DUMMY POSTS SECTION -->
         <li class="media post">
           <div class="d-flex flex-row">
@@ -221,53 +225,8 @@
       <!-- END OF DUMMY POSTS SECTION -->
 
 
-      <button class="btn btn-primary" type="submit">Load more posts</button>
+      <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
 
-      <!--
-            <div class="d-flex align-items-start flex-column bd-highlight mb-3 border bg-secondary">
-              <div class="container-fluid mb-auto p-2 bd-highlight border">Post Title</div>
-              <div class="container-fluid flex-grow-1 p-2 bd-highlight">Post Description<br><p>
-
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas nec quam quam. Quisque id lectus ut mauris tincidunt blandit. Suspendisse iaculis ullamcorper nulla, ut aliquet libero auctor non. Nunc rhoncus varius tellus, ut auctor diam laoreet malesuada. Aliquam blandit varius ante at rutrum. Aliquam sit amet finibus ligula. Praesent vel pulvinar urna, eget placerat justo. Curabitur malesuada tellus sed est condimentum tincidunt.
-
-                Praesent id dignissim mauris. Quisque ac libero nunc. Vivamus pellentesque ullamcorper tincidunt. Morbi ut tortor tortor. Suspendisse mattis ipsum a nisl dictum, vel semper elit scelerisque. Suspendisse eget scelerisque odio. Duis eu turpis a nisi commodo lacinia non eu enim. Curabitur vel tristique orci. In euismod, tellus sit amet venenatis eleifend, nibh neque hendrerit nunc, vel dignissim leo erat id quam.
-
-                Integer convallis non libero at tristique. Ut nisl leo, convallis ut leo ut, rutrum lobortis orci. Nullam facilisis erat et pulvinar tincidunt. Maecenas in commodo urna, nec rutrum ante. Interdum et malesuada fames ac ante ipsum primis in faucibus. Ut euismod velit ut pellentesque facilisis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin vulputate ligula feugiat neque posuere varius.
-
-                Aenean auctor sapien eget erat placerat dictum. Sed fringilla risus bibendum, ullamcorper turpis vel, pulvinar turpis. Nulla ut arcu vitae tortor tempus malesuada. Curabitur sollicitudin posuere dolor sed vulputate. Proin a vehicula ligula. Phasellus id gravida purus. Fusce id justo a metus sodales ultrices sit amet id quam.
-
-                Etiam leo lorem, ultricies ac urna nec, tristique fringilla diam. Nam bibendum, lacus placerat dapibus congue, quam mauris imperdiet lorem, ac mollis sapien nulla at nibh. Praesent aliquam enim vitae ipsum pulvinar tristique. Nullam a dui nec justo consectetur aliquam vel gravida turpis. Aliquam aliquet lectus ut urna euismod bibendum. Aenean tortor magna, pellentesque sit amet nisi sit amet, posuere euismod mauris. Fusce neque odio, sollicitudin a risus id, gravida vulputate mi. Maecenas non est lobortis, ultrices dolor eu, congue justo. Nullam consectetur, urna sed placerat tristique, sem diam congue ex, ac aliquet risus enim ac lorem. </p></div>
-            </div>-->
-
-      <!-- <div class="media comment">
-        <div class="mr-3"></div>
-        <div class="media-body">
-          <h5 class="mt-0">Comment</h5>
-          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-          vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis
-          in faucibus.
-
-          <div class="media comment" style="margin-top: 20px">
-            <div class="mr-3"></div>
-            <div class="media-body">
-              <h5 class="mt-0">Nested Comment</h5>
-              Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-              vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue
-              felis in faucibus.
-
-              <div class="media comment" style="margin-top: 20px">
-                <div class="mr-3"></div>
-                <div class="media-body">
-                  <h5 class="mt-0">Nested Nested Comment</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> -->
   </main>
   <!-- /.container -->
 
@@ -282,8 +241,78 @@
     crossorigin="anonymous"></script>
 
   <script>
-    $(document).ready(function () {
-
+      
+    $(document).ready(function(){
+        function addPost(){
+            var mediaPost = document.createElement("div");
+            mediaPost.className = "media post";
+            var flexRow = document.createElement("div");
+            flexRow.className = "d-flex flex-row";
+            var flexColumn = document.createElement("div");
+            flexColumn.className = "media-body d-flex flex-column";
+            var voteBox = document.createElement("div");
+            voteBox.className = "mr-3 actions flex-column";
+            var arrowUpward = document.createElement("i");
+            arrowUpward.className = "material-icons md-18 md-dark";
+            arrowUpward.innerHTML = "arrow_upward";
+            var voteValue = document.createElement("span");
+            voteValue.innerHTML = "99";
+            var arrowDownward = document.createElement("i");
+            arrowDownward.className = "material-icons md-18 md-dark";
+            arrowDownward.innerHTML = "arrow_downward";
+            var commentIcon = document.createElement("i");
+            commentIcon.className = "material-icons md-16 md-dark";
+            commentIcon.innerHTML = "comment";
+            var personIcon = document.createElement("i");
+            personIcon.className = "material-icons md-18 md-dark";
+            personIcon.innerHTML = "person_outline";
+            var postTitle = document.createElement("h5");
+            postTitle.className = "mt-0 mb-1";
+            postTitle.innerHTML = "Post Title";
+            var postContent = document.createElement("div");
+            postContent.innerHTML = "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in";
+            var postInfo = document.createElement("div");
+            postInfo.className = "p-1 flex-fill";
+            var spanInfo = document.createElement("span");
+            spanInfo.className="info";
+            var spanComment = document.createElement("span");
+            spanComment.className = "p-2 item";
+            var commentNumber = document.createElement("a");
+            commentNumber.innerHTML = " 9 Comments";
+            commentNumber.setAttribute("href","");
+            var spanUsername = document.createElement("span");
+            spanUsername.className = "p-2";
+            var userName = document.createElement("a");
+            userName.innerHTML = "username";
+            userName.setAttribute("href","");
+            
+            voteBox.append(arrowUpward);
+            voteBox.append(voteValue);
+            voteBox.append(arrowDownward);
+            flexRow.append(voteBox);
+            flexColumn.append(postTitle);
+            flexColumn.append(postContent);
+            spanComment.append(commentIcon);
+            spanComment.append(commentNumber);
+            spanInfo.append(spanComment);
+            spanUsername.append(personIcon);
+            spanUsername.append("Posted by ");
+            spanUsername.append(userName);
+            spanUsername.append(" at 07/02/2018 23:45");
+            spanInfo.append(spanUsername);
+            postInfo.append(spanInfo);
+            flexColumn.append(postInfo);
+            flexRow.append(flexColumn);
+            mediaPost.append(flexRow);
+            
+            $("#postContainer").append(mediaPost);
+        }        
+        $("#loadMorePosts").click(function(){
+            var i;
+            for(i = 0 ; i < 5 ; i++){
+                addPost();
+            }
+        });
     });
   </script>
 
