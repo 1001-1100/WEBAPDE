@@ -9,8 +9,7 @@
     crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="./stylesheets/main.css" rel="stylesheet">
-  <style type="text/css">
-  </style>
+
   <title>The Forum</title>
 </head>
 
@@ -51,8 +50,10 @@
               -->
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        <input class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+          <i class="material-icons md-18">search</i>
+        </button>
       </form>
     </div>
   </nav>
@@ -79,6 +80,17 @@
           Instantly gentleman contained belonging exquisite now direction she ham. West room at sent if year. Numerous indulged
           distance old law you. Total state as merit court green decay he. Steepest sex bachelor the may delicate its yourself.
           As he instantly on discovery concluded to. Open draw far pure miss felt say yet few sigh.
+          <div class="mt-2 flex-fill">
+            <span class="info">
+              <span class="p-2">
+                <i class="material-icons md-16 md-dark">comment</i>
+                5 comments
+              </span>
+              <span class="p-2">
+                <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                <a href="#">username</a> at 07/09/2018 15:30
+              </span>
+          </div>
         </div>
       </div>
       <div class="postcomment">
@@ -91,8 +103,8 @@
         </form>
       </div>
       <div class="comment-container">
-        <div class="media comment">
-          <div class="mr-3 actions">
+        <div class="media comment ml-3">
+          <div class="mr-3 commentactions">
             <i class="material-icons md-18 md-dark">arrow_upward</i>
             <i class="material-icons md-18 md-dark">arrow_downward</i>
           </div>
@@ -102,6 +114,8 @@
                 <b>Kansei_Drift</b>
               </h6>
               <span class="ml-2 points">12 points</span>
+              <span class="ml-2">·</span>
+              <span class="ml-2 points">07/01/18 22:50</span>
             </div>
             Falling may cause long term damages. Tread with caution!
             <div class="nav-item active mt-2">
@@ -112,7 +126,7 @@
               </span>
             </div>
             <div class="media comment" style="margin-top: 20px">
-              <div class="mr-3 actions">
+              <div class="mr-3 commentactions">
                 <i class="material-icons md-18 md-dark">arrow_upward</i>
                 <i class="material-icons md-18 md-dark">arrow_downward</i>
               </div>
@@ -122,6 +136,8 @@
                     <b>SonofLelith</b>
                   </h6>
                   <span class="ml-2 points">7 points</span>
+                  <span class="ml-2">·</span>
+                  <span class="ml-2 points">07/07/18 16:20</span>
                 </div>
                 You can fall to your death, so don't.
                 <div class="nav-item active mt-2">
@@ -132,7 +148,7 @@
                   </span>
                 </div>
                 <div class="media comment" style="margin-top: 20px">
-                  <div class="mr-3 actions">
+                  <div class="mr-3 commentactions">
                     <i class="material-icons md-18 md-dark">arrow_upward</i>
                     <i class="material-icons md-18 md-dark">arrow_downward</i>
                   </div>
@@ -142,6 +158,8 @@
                         <b>lemoncup91</b>
                       </h6>
                       <span class="ml-2 points">13 points</span>
+                      <span class="ml-2">·</span>
+                      <span class="ml-2 points">07/11/18 10:45</span>
                     </div>
                     "Don't mess up"
                     <div class="nav-item active mt-2">
@@ -157,8 +175,8 @@
             </div>
           </div>
         </div>
-        <div class="media comment" style="margin-top: 20px">
-          <div class="mr-3 actions">
+        <div class="media comment ml-3" style="margin-top: 20px">
+          <div class="mr-3 commentactions">
             <i class="material-icons md-18 md-dark">arrow_upward</i>
             <i class="material-icons md-18 md-dark">arrow_downward</i>
           </div>
@@ -168,6 +186,8 @@
                 <b>jumprealhigh</b>
               </h6>
               <span class="ml-2 points">9 points</span>
+              <span class="ml-2">·</span>
+              <span class="ml-2 points">07/09/18 18:30</span>
             </div>
             Is there a game where falling causes irreparable damage to the player character? Obviously there are games where falling
             causes damage, but typically that can be healed/repaired. Seems like it would be an interesting dynamic to have
@@ -181,7 +201,7 @@
             </div>
 
             <div class="media comment" style="margin-top: 20px">
-              <div class="mr-3 actions">
+              <div class="mr-3 commentactions">
                 <i class="material-icons md-18 md-dark">arrow_upward</i>
                 <i class="material-icons md-18 md-dark">arrow_downward</i>
               </div>
@@ -191,6 +211,8 @@
                     <b>BryceMuldoon</b>
                   </h6>
                   <span class="ml-2 points">3 points</span>
+                  <span class="ml-2">·</span>
+                  <span class="ml-2 points">07/10/18 12:30</span>
                 </div>
                 Fallout New Vegas allows you to heal limbs but there are perk incentives to not healing those limbs. Not the same but the
                 closest thing I could think of.
