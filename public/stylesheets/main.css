@@ -111,7 +111,7 @@ body a {
 }
 
 .avatar {
-  margin-top: 103px;
+  /* margin-top: 103px; */
   width: 200px;
   height: 250px;
 }
@@ -121,6 +121,7 @@ body a {
   flex-direction: row;
 }
 
+/* 
 .description {
   float: left;
-}
+} */
