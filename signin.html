@@ -1,46 +1,58 @@
 <!doctype html>
 <html lang="en">
-	<head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="icon" href="">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <link href="./stylesheets/signin.css" rel="stylesheet">     
-        <style type="text/css">      
-		</style>
-        <title>The Forum</title>
-	</head>
-    
-    <body class="text-center">
-        <form class="form-signin">
-          <img class="mb-4" src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.0-9/35558047_2339044482777767_8428509173892775936_n.jpg?_nc_cat=0&oh=a3503251e265c5abc115c7995cbfccf6&oe=5BDED365" alt="" width="72" height="72">
-          <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-          <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
-          <label for="inputPassword" class="sr-only">Password</label>
-          <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
-          <div class="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me"> Remember me
-            </label>
-          </div>
-          <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>-->
-        <a class="nav-link btn btn-lg btn-primary btn-block" href="signedin">Sign in</a>
-        </form>
 
-        <!-- Bootstrap core JavaScript
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+    <link href="./stylesheets/signin.css" rel="stylesheet">
+    <style type="text/css">
+    </style>
+    <title>The Forum</title>
+</head>
+
+<body class="text-center">
+    <form class="form-signin">
+        <img class="mb-4 rounded-circle" src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.0-9/35558047_2339044482777767_8428509173892775936_n.jpg?_nc_cat=0&oh=a3503251e265c5abc115c7995cbfccf6&oe=5BDED365"
+            width="72" height="72">
+        <div class="h4 mb-3 font-weight-normal">Sign in to your account</div>
+        <div class="form-group">
+            <label for="inputEmail">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input type="password" id="inputPassword" class="form-control" required>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me</label>
+        </div>
+        <a class="nav-link btn btn-lg btn-primary btn-block" href="signedin">Sign in</a>
+        <div class="mt-3 text-center">Don't have an account?
+            <a href="/register">Register now</a>
+        </div>
+    </form>
+
+    <!-- Bootstrap core JavaScript
         ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-        
-        <script>
-            $(document).ready(function(){
-                
-            });
-		</script>
-        
-	</body>
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+
+    <script>
+        $(document).ready(function () {
+
+        });
+    </script>
+
+</body>
 
 </html>
