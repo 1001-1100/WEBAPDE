@@ -36,6 +36,11 @@ express()
 	})    
 	
 	.get('/post', (req, res) => res.render("./pages/post.hbs"))
+    .get('/post2', (req, res) => res.render("./pages/post2.hbs"))
+    .get('/post3', (req, res) => res.render("./pages/post3.hbs"))
+    .get('/post4', (req, res) => res.render("./pages/post4.hbs"))
+    .get('/post5', (req, res) => res.render("./pages/post5.hbs"))
+
     .get('/signin', (req, res) => res.render("./pages/signin.hbs"))
 
     .post('/signedin', urlencoder, (req, res) => {
@@ -59,6 +64,8 @@ express()
 	}))
 	.get('/logout', (req, res) => res.render("./pages/index.hbs"))
     .get('/register', (req, res) => res.render("./pages/register.hbs"))
-    .get('/newpost', (req, res) => res.render("./pages/newpost.hbs"))
+    .get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
+        uname: req.session.username
+    }))
     .get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`))
