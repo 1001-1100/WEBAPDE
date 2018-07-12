@@ -48,8 +48,16 @@ express()
 		req.session.destroy()
 		res.render("./pages/index.hbs")
 	})
+    .post('/registered', urlencoder, (req, res) => {
+		req.session.username = req.body.username
+		res.render("./pages/signedin.hbs", {
+			uname: req.session.username
+		})
+	})
+    .get('/user-profile', (req, res) => res.render("./pages/user-profile.hbs", {
+		uname: req.session.username
+	}))
 	.get('/logout', (req, res) => res.render("./pages/index.hbs"))
-    .get('/user-profile', (req, res) => res.render("./pages/user-profile.hbs"))
     .get('/register', (req, res) => res.render("./pages/register.hbs"))
     .get('/newpost', (req, res) => res.render("./pages/newpost.hbs"))
     .get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
