@@ -29,11 +29,6 @@
           <a class="nav-link" href="/">Home
           </a>
         </li>
-		<form action="logout" method="post">
-			<li class="nav-item">
-				<input type="submit" class="nav-link">
-			</li>
-		</form>
         <li class="nav-item active">
           <a class="nav-link" href="user-profile">User Profile
 			<span class="sr-only">(current)</span>
@@ -54,11 +49,15 @@
               -->
       </ul>
       <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-          <i class="material-icons md-18">search</i>
-        </button>
-      </form>
+       	<input class="form-control mr-sm-2" type="text" placeholder="Search..." aria-label="Search">
+       	<button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+        	<i class="material-icons md-18">search</i>
+       	</button>
+      	</form>
+		<a class="nav-link" href="user-profile">Signed in as {{uname}}</a>
+		<form action="logout" class="form-inline my-2 my-lg-0" method="post">
+			<button type="submit" class="btn btn-warning">Logout</button>
+		</form>	
     </div>
   </nav>
 
