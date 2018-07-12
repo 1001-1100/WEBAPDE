@@ -66,8 +66,8 @@
     <div class="starter-template">
 
       <div class="sort d-flex flex-fill-1 mb-3">
-        <button type="button" class="mr-auto btn btn-outline-primary">
-          <i class="material-icons md-18">add</i> Create post</button>
+        <a href="/newpost" class="mr-auto btn btn-outline-primary">
+          <i class="material-icons md-18">add</i> Create post</a>
 
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
@@ -76,151 +76,174 @@
         </div>
       </div>
 
-      <ul class="list-unstyled">
+      <ul id="postContainer" class="list-unstyled">
 
-        <ul id="postContainer" class="list-unstyled">
+        <!-- START OF DUMMY POSTS SECTION -->
+        <li class="media post">
+          <div class="d-flex flex-row">
+            <div class="mr-3 actions flex-column">
+              <i class="material-icons md-18 md-dark up">arrow_upward</i>
+              <span class="votes">6</span>
+              <i class="material-icons md-18 md-dark down">arrow_downward</i>
+            </div>
 
-          <!-- START OF DUMMY POSTS SECTION -->
-          <li class="media post">
-            <div class="d-flex flex-row">
-              <div class="mr-3 actions flex-column">
-                <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                <span class="votes">6</span>
-                <i class="material-icons md-18 md-dark down">arrow_downward</i>
-              </div>
-
-              <div class="media-body d-flex flex-column">
-                <h5 class="mt-0 mb-1">Post Title</h5>
-                ADD LIFE-LIFE DATA
-                <div class="p-1 flex-fill">
-                  <span class="info">
-                    <span class="mr-3">
-                      <a href="#">
-                        <i class="material-icons md-16 md-dark">comment</i>
-                        5 comments</a>
-                    </span>
-                    <span class="p-1">
-                      <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                      <a href="#">username</a> at 07/09/2018 15:30
-                    </span>
-                </div>
+            <div class="media-body d-flex flex-column">
+              <h5 class="mt-0 mb-1">Do you find portrait mode worth it?</h5>
+              <p>Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos.
+                Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have
+                these great portrait modes, and I want to make myself look better for online shots. Is that alone a good
+                enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look
+                great)?
+              </p>
+              <div class="p-1 flex-fill">
+                <span class="info">
+                  <span class="mr-3">
+                    <a href="#">
+                      <i class="material-icons md-16 md-dark">comment</i>
+                      5 comments</a>
+                  </span>
+                  <span class="p-1">
+                    <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                    <a href="#">fandroid</a> at 07/09/2018 15:30
+                  </span>
               </div>
             </div>
-          </li>
+          </div>
+        </li>
 
-          <li class="media post">
-            <div class="d-flex flex-row">
-              <div class="mr-3 actions flex-column">
-                <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                <span class="votes">19</span>
-                <i class="material-icons md-18 md-dark down">arrow_downward</i>
-              </div>
+        <li class="media post">
+          <div class="d-flex flex-row">
+            <div class="mr-3 actions flex-column">
+              <i class="material-icons md-18 md-dark up">arrow_upward</i>
+              <span class="votes">19</span>
+              <i class="material-icons md-18 md-dark down">arrow_downward</i>
+            </div>
 
-              <div class="media-body d-flex flex-column">
-                <h5 class="mt-0 mb-1">Post Title</h5>
-                ADD LIFE-LIFE DATA
-                <div class="p-1 flex-fill">
-                  <span class="info">
-                    <span class="mr-3">
-                      <a href="#">
-                        <i class="material-icons md-16 md-dark">comment</i>
-                        4 comments</a>
-                    </span>
-                    <span class="p-1">
-                      <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                      <a href="#">username</a> at 07/06/2018 22:10
-                    </span>
-                </div>
+            <div class="media-body d-flex flex-column">
+              <h5 class="mt-0 mb-1">What was the best film you watched this week? (02/07/2018 - 08/07/2018)</h5>
+              <p>The way this works is that you post a review of the best film you watched this week. It doesn't have to be
+                a new release, just any film you have seen over the last seven days that you feel is worth talking about.
+                Here are some rules.
+                <br>1. Check to see if your favourite film of last week has been posted already.
+                <br>2. Please post your favourite film of last week.
+                <br>3. NO TV SHOWS!
+                <br>4. ALWAYS use spoiler tags. Report any comments that spoil recent / little-known films (e.g. Solo, First
+                Reformed, Hereditary) without using the spoiler tag.
+                <br>5. Comments that only contain the title of the film will be removed!</p>
+              <div class="p-1 flex-fill">
+                <span class="info">
+                  <span class="mr-3">
+                    <a href="#">
+                      <i class="material-icons md-16 md-dark">comment</i>
+                      4 comments</a>
+                  </span>
+                  <span class="p-1">
+                    <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                    <a href="#">filmbuff93</a> at 07/08/2018 20:10
+                  </span>
               </div>
             </div>
-          </li>
+          </div>
+        </li>
 
-          <li class="media post">
-            <div class="d-flex flex-row">
-              <div class="mr-3 actions flex-column">
-                <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                <span class="votes">12</span>
-                <i class="material-icons md-18 md-dark down">arrow_downward</i>
-              </div>
+        <li class="media post">
+          <div class="d-flex flex-row">
+            <div class="mr-3 actions flex-column">
+              <i class="material-icons md-18 md-dark up">arrow_upward</i>
+              <span class="votes">12</span>
+              <i class="material-icons md-18 md-dark down">arrow_downward</i>
+            </div>
 
-              <div class="media-body d-flex flex-column">
-                <h5 class="mt-0 mb-1">Post Title</h5>
-                ADD LIFE-LIFE DATA
-                <div class="p-1 flex-fill">
-                  <span class="info">
-                    <span class="mr-3">
-                      <a href="#">
-                        <i class="material-icons md-16 md-dark">comment</i>
-                        11 comments</a>
-                    </span>
-                    <span class="p-1">
-                      <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                      <a href="#">username</a> at 07/02/2018 20:05
-                    </span>
-                </div>
+            <div class="media-body d-flex flex-column">
+              <h5 class="mt-0 mb-1">1-800-273-8255 🎉🎊🎉🎊</h5>
+              <img src="https://i.redditmedia.com/uyT7ovAistqgUSas8KxzWOCM1lUUDbh0rju8o548hR4.jpg?fit=crop&crop=faces%2Centropy&arh=2&w=640&s=839671115d89f3fc93d6e36c32eb001c">
+              <div class="p-1 flex-fill">
+                <span class="info">
+                  <span class="mr-3">
+                    <a href="#">
+                      <i class="material-icons md-16 md-dark">comment</i>
+                      11 comments</a>
+                  </span>
+                  <span class="p-1">
+                    <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                    <a href="#">mranonymous</a> at 07/09/2018 20:05
+                  </span>
               </div>
             </div>
-          </li>
+          </div>
+        </li>
 
-          <li class="media post">
-            <div class="d-flex flex-row">
-              <div class="mr-3 actions flex-column">
-                <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                <span class="votes">21</span>
-                <i class="material-icons md-18 md-dark down">arrow_downward</i>
-              </div>
+        <li class="media post">
+          <div class="d-flex flex-row">
+            <div class="mr-3 actions flex-column">
+              <i class="material-icons md-18 md-dark up">arrow_upward</i>
+              <span class="votes">21</span>
+              <i class="material-icons md-18 md-dark down">arrow_downward</i>
+            </div>
 
-              <div class="media-body d-flex flex-column">
-                <h5 class="mt-0 mb-1">Post Title</h5>
-                ADD LIFE-LIFE DATA
-                <div class="p-1 flex-fill">
-                  <span class="info">
-                    <span class="mr-3">
-                      <a href="#">
-                        <i class="material-icons md-16 md-dark">comment</i>
-                        19 comments</a>
-                    </span>
-                    <span class="p-1">
-                      <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                      <a href="#">username</a> at 07/02/2018 23:45
-                    </span>
-                </div>
+            <div class="media-body d-flex flex-column">
+              <h5 class="mt-0 mb-1">Dear Netflix - stop auto-playing every time I want to look at a title.</h5>
+              <p>I mainly watch Netflix on my Playstation, but often on my computer too. I’m very close to canceling my service
+                based solely on this one unbearable design flaw. If I want to read a description of whatever I’m thinking
+                about watching, I should be able to do it without having my eyes and ears assaulted. In fact, I frequently
+                skip over titles (including, of course, a lot of Netflix original content) simply because I don’t want it
+                to come blaring through my screen and speakers before I’m done perusing. I don’t even see why this is an
+                option. Nobody wants this. Stop.</p>
+              <div class="p-1 flex-fill">
+                <span class="info">
+                  <span class="mr-3">
+                    <a href="#">
+                      <i class="material-icons md-16 md-dark">comment</i>
+                      19 comments</a>
+                  </span>
+                  <span class="p-1">
+                    <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                    <a href="#">FrustratedDude</a> at 07/02/2018 23:45
+                  </span>
               </div>
             </div>
-          </li>
+          </div>
+        </li>
 
-          <li class="media post">
-            <div class="d-flex flex-row">
-              <div class="mr-3 actions flex-column">
-                <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                <span class="votes">13</span>
-                <i class="material-icons md-18 md-dark down">arrow_downward</i>
+        <li class="media post">
+          <div class="d-flex flex-row">
+            <div class="mr-3 actions flex-column">
+              <i class="material-icons md-18 md-dark up">arrow_upward</i>
+              <span class="votes">13</span>
+              <i class="material-icons md-18 md-dark down">arrow_downward</i>
+            </div>
+
+            <div class="media-body d-flex flex-column">
+              <div class="mt-0 mb-1">
+                <span class="h5">Despite ‘Build, Build, Build’ push, DPWH spent only a third of 2017 budget</span>
+                <a href="http://business.inquirer.net/253689/despite-build-build-build-push-dpwh-spent-third-2017-budget" class="ml-3 text-muted h6">
+                  <i class="material-icons md-16 md-dark">link</i> business.inquirer.net/253689...</a>
               </div>
+              <p>The Duterte administration’s infrastructure push continues to be hampered by bureaucratic bottlenecks, as shown
+                by the Department of Public Works and Highways’ use of only a third of its P662.69-billion funding in 2017.</p>
 
-              <div class="media-body d-flex flex-column">
-                <h5 class="mt-0 mb-1">Post Title</h5>
-                ADD LIFE-LIKE DATA
-                <div class="p-1 flex-fill">
-                  <span class="info">
-                    <span class="mr-3">
-                      <a href="#">
-                        <i class="material-icons md-16 md-dark">comment</i>
-                        7 comments</a>
-                    </span>
-                    <span class="p-1">
-                      <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                      <a href="#">username</a> at 06/30/2018 20:30
-                    </span>
-                </div>
+              <div class="p-1 flex-fill">
+                <span class="info">
+                  <span class="mr-3">
+                    <a href="#">
+                      <i class="material-icons md-16 md-dark">comment</i>
+                      7 comments</a>
+                  </span>
+                  <span class="p-1">
+                    <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                    <a href="#">proudfilipino88</a> at 07/10/2018 20:30
+                  </span>
               </div>
             </div>
-          </li>
-        </ul>
-        <!-- END OF DUMMY POSTS SECTION -->
+          </div>
+          <img class="ml-3 img-thumbnail align-self-center" src="" alt="thumbnail">
+        </li>
+      </ul>
+      <!-- END OF DUMMY POSTS SECTION -->
 
 
-        <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
-
+      <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
+    </div>
   </main>
   <!-- /.container -->
 
