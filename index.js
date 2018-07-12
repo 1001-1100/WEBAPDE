@@ -4,28 +4,51 @@ const path = require('path')
 const bodyparser = require("body-parser")
 const request = require('request')
 const hbs = require("hbs")
+const session = require("express-session")
 const urlencoder = bodyparser.urlencoded({
 	extended : false
 })
 const PORT = process.env.PORT || 5000
 
 express()
+	.use(session({
+		saveUninitialized: true,
+		resave: true,
+		secret: "nicokayejosh",
+		name: "Nico's Cookie",
+		cookie:{
+			maxAge: 1000*60*60*24*7*3
+		}
+	}))
+
     .use(express.static(path.join(__dirname, 'public')))
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'hbs')
-    .get('/', (req, res) => res.render("./pages/index.hbs"))
-    .get('/post', (req, res) => res.render("./pages/post.hbs"))
+
+    .get('/', urlencoder, (req, res) => {
+		if(req.session.username){
+			res.render("./pages/signedin.hbs", {
+				uname: req.session.username
+			})		
+		}else{
+			res.render("./pages/index.hbs")
+		}
+	})    
+	
+	.get('/post', (req, res) => res.render("./pages/post.hbs"))
     .get('/signin', (req, res) => res.render("./pages/signin.hbs"))
 
     .post('/signedin', urlencoder, (req, res) => {
-		console.log(req.body.username)
+		req.session.username = req.body.username
 		res.render("./pages/signedin.hbs", {
-			uname: req.body.username
+			uname: req.session.username
 		})
 	})
-
-	.get('/signedin', (req, res) => res.render("./pages/signedin.hbs"))
-
+	.post('/logout', (req, res) => {
+		req.session.destroy()
+		res.render("./pages/index.hbs")
+	})
+	.get('/logout', (req, res) => res.render("./pages/index.hbs"))
     .get('/user-profile', (req, res) => res.render("./pages/user-profile.hbs"))
     .get('/register', (req, res) => res.render("./pages/register.hbs"))
     .get('/newpost', (req, res) => res.render("./pages/newpost.hbs"))
