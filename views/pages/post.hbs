@@ -2,19 +2,11 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="icon" href="">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-    crossorigin="anonymous">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="./stylesheets/main.css" rel="stylesheet">
-
+  {{> headerResources}}
   <title>The Forum</title>
 </head>
 
 <body>
-
   <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="">The Forum</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault"
@@ -74,9 +66,7 @@
       </div>
     </div>
   </nav>
-
   <main role="main" class="container">
-
     <div class="starter-template">
       <!-- START OF POSTS SECTION -->
       <div class="media post">
@@ -92,11 +82,11 @@
             <span class="info">
               <span class="p-2">
                 <i class="material-icons md-16 md-dark">comment</i>
-                {{commentNumber}} comments
+				<a href="#comments">{{commentNumber}} comments</a>
               </span>
               <span class="p-2">
                 <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                <a href="#">{{postAuthor}}</a> at {{postDate}}
+                <a href="user-profile">{{postAuthor}}</a> at {{postDate}}
               </span>
           </div>
         </div>
@@ -122,7 +112,7 @@
           <div class="media-body">
             <div class="d-flex">
               <h6 class="mt-0">
-                <b>Kansei_Drift</b>
+                <a href="user-profile" style="color : #000000;">Kansei_Drift</a>
               </h6>
               <span class="ml-2 points">12 points</span>
               <span class="ml-2">·</span>
@@ -144,7 +134,7 @@
               <div class="media-body">
                 <div class="d-flex">
                   <h6 class="mt-0">
-                    <b>SonofLelith</b>
+                    <a href="user-profile" style="color : #000000;">SonOfLelith</a>
                   </h6>
                   <span class="ml-2 points">7 points</span>
                   <span class="ml-2">·</span>
@@ -166,7 +156,7 @@
                   <div class="media-body">
                     <div class="d-flex">
                       <h6 class="mt-0">
-                        <b>lemoncup91</b>
+                        <a href="user-profile" style="color : #000000;">lemoncup91</a>
                       </h6>
                       <span class="ml-2 points">13 points</span>
                       <span class="ml-2">·</span>
