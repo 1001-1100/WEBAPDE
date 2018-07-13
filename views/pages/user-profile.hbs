@@ -196,23 +196,6 @@
         postContent.innerHTML =
           "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in";
 
-        var deleteIcon = document.createElement("i");
-        deleteIcon.className = "material-icons md-18 md-dark delete"
-        deleteIcon.innerHTML = "delete";
-
-        var edit = document.createElement("i");
-        edit.className = "material-icons md-18 md-dark delete"
-        edit.innerHTML = "edit";
-
-        var editspan = document.createElement("span");
-
-        var edita = document.createElement("a");
-        edita.href = "editpost";
-
-        editspan.append(edit);
-        edita.append(editspan);
-
-
         var postInfo = document.createElement("div");
         postInfo.className = "p-1 flex-fill";
         var spanInfo = document.createElement("span");
@@ -223,8 +206,6 @@
         voteBox.append(arrowDownward);
         flexRow.append(voteBox);
         flexColumn.append(postTitle);
-        postTitle.append(deleteIcon);
-        postTitle.append(edita);
         flexColumn.append(postContent);
         postInfo.append(spanInfo);
         flexColumn.append(postInfo);
