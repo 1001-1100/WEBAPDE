@@ -1,7 +1,7 @@
 ## Site Map
-* [Home](index.hbs)
-* [Login](signin.hbs)
-* [Register](register.hbs)
-* [User Profile](user-profile.hbs)
-* [Create Post](newpost.hbs)
-* [Edit Post](editpost)
+* [Home](https://the-great-forum.herokuapp.com/)
+* [Login](https://the-great-forum.herokuapp.com/signin)
+* [Register](https://the-great-forum.herokuapp.com/register)
+* [User Profile](https://the-great-forum.herokuapp.com/user-profile)
+* [Create Post](https://the-great-forum.herokuapp.com/newpost)
+* [Edit Post](https://the-great-forum.herokuapp.com/editpost)
