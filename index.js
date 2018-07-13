@@ -35,7 +35,22 @@ express()
 		}
 	})    
 	
-	.get('/post', (req, res) => res.render("./pages/post.hbs"))
+	.get('/post', (req, res) => res.render("./pages/post.hbs",{
+		postTitle: "Do you find portrait mode worth it?",
+		postDescription: "Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos. Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have these great portrait modes, and I want to make myself look better for online shots. Is that alone a good enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look great)?",
+		postAuthor: "fandroid",
+		postDate: "07/09/2018 15:30",
+		postScore: "6",
+		commentNumber: "5",
+		uname: req.session.username
+	}))
+
+    .get('/user-profile', (req, res) => res.render("./pages/user-profile.hbs", {
+		userHandle: "@Nine",
+		userBioData: "Hi my name is Nine.",
+		uname: req.session.username
+	}))
+
     .get('/signin', (req, res) => res.render("./pages/signin.hbs"))
 
     .post('/signedin', urlencoder, (req, res) => {
@@ -54,11 +69,11 @@ express()
 			uname: req.session.username
 		})
 	})
-    .get('/user-profile', (req, res) => res.render("./pages/user-profile.hbs", {
-		uname: req.session.username
-	}))
+
 	.get('/logout', (req, res) => res.render("./pages/index.hbs"))
     .get('/register', (req, res) => res.render("./pages/register.hbs"))
-    .get('/newpost', (req, res) => res.render("./pages/newpost.hbs"))
+    .get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
+        uname: req.session.username
+    }))
     .get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
     .listen(PORT, () => console.log(`Listening on ${ PORT }`))

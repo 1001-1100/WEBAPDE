@@ -10,6 +10,9 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="./stylesheets/main.css" rel="stylesheet">
   <style type="text/css">
+	  .comment-container{
+	  	margin-bottom:10px;
+	  }
   </style>
   <title>The Forum</title>
 </head>
@@ -67,8 +70,8 @@
         <div class="text-center mb-3 mt-5">
           <img class="avatar img-thumbnail" src="./josh.jpg">
         </div>
-        <div class="font-weight-bold">@Nine</div>
-        <div class="description">Hi I'm Josh but some people call me Daddy. *wink*</div>
+        <div class="font-weight-bold">{{userHandle}}</div>
+        <div class="description">{{userBioData}}</div>
       </div>
 
       <div class="col-lg-9">
@@ -150,63 +153,62 @@
           </div>
           <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
             <ul class="list-unstyled">
-              <li class="media post">
-                <div class="mr-3 actions">
-                  <i id="upvote" class="material-icons md-18 md-dark">arrow_upward</i>
-                  <span class="votes">6</span>
-                  <i id="downvote" class="material-icons md-18 md-dark">arrow_downward</i>
-                </div>
-                <div class="media-body">
+			  <li class="comment-container">
+				<div class="media comment ml-3">
+				  <div class="mr-3 commentactions">
+					<i class="material-icons md-18 md-dark up">arrow_upward</i>
+					<i class="material-icons md-18 md-dark down">arrow_downward</i>
+				  </div>
+				  <div class="media-body">
+					<div class="d-flex">
+					  <h6 class="mt-0">
+						<b>Kansei_Drift</b>
+					  </h6>
+					  <span class="ml-2 points">12 points</span>
+					  <span class="ml-2">·</span>
+					  <span class="ml-2 points">07/01/18 22:50</span>
+					</div>
+					Falling may cause long term damages. Tread with caution!
+			  </li>
 
-                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
-                   <a href = "editcomment">
-                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
-                  </a>
-                  <h5 class="mt-0 mb-1">Post Title</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
-                </div>
-              </li>
+			  <li class="comment-container">
+				<div class="media comment ml-3">
+				  <div class="mr-3 commentactions">
+					<i class="material-icons md-18 md-dark up">arrow_upward</i>
+					<i class="material-icons md-18 md-dark down">arrow_downward</i>
+				  </div>
+				  <div class="media-body">
+					<div class="d-flex">
+					  <h6 class="mt-0">
+						<b>Kansei_Drift</b>
+					  </h6>
+					  <span class="ml-2 points">12 points</span>
+					  <span class="ml-2">·</span>
+					  <span class="ml-2 points">07/01/18 22:50</span>
+					</div>
+					Falling may cause long term damages. Tread with caution!
+			  </li>
 
-              <li class="media post">
-                <div class="mr-3 actions">
-                  <i class="material-icons md-18 md-dark">arrow_upward</i>
-                  <span class="votes">19</span>
-                  <i class="material-icons md-18 md-dark">arrow_downward</i>
-                </div>
-                <div class="media-body">
-                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
-                   <a href = "editcomment">
-                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
-                  </a>
-                  <h5 class="mt-0 mb-1">Post Title</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
-                </div>
-              </li>
-
-              <li class="media post">
-                <div class="mr-3 actions">
-                  <i class="material-icons md-18 md-dark">arrow_upward</i>
-                  <span class="votes">2</span>
-                  <i class="material-icons md-18 md-dark">arrow_downward</i>
-                </div>
-                <div class="media-body">
-                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
-                   <a href = "editcomment">
-                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
-                  </a>
-                  <h5 class="mt-0 mb-1">Post Title</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
-                </div>
-
-              </li>
-             </ul>
-            <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
+			  <li class="comment-container">
+				<div class="media comment ml-3">
+				  <div class="mr-3 commentactions">
+					<i class="material-icons md-18 md-dark up">arrow_upward</i>
+					<i class="material-icons md-18 md-dark down">arrow_downward</i>
+				  </div>
+				  <div class="media-body">
+					<div class="d-flex">
+					  <h6 class="mt-0">
+						<b>Kansei_Drift</b>
+					  </h6>
+					  <span class="ml-2 points">12 points</span>
+					  <span class="ml-2">·</span>
+					  <span class="ml-2 points">07/01/18 22:50</span>
+					</div>
+					Falling may cause long term damages. Tread with caution!
+			  </li>
+					
+              <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
+            </ul>
           </div>
         </div>
       </div>
