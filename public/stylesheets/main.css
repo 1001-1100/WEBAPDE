@@ -41,6 +41,15 @@ body a {
   font-size: 0.9rem;
 }
 
+.dropdown-menu a:hover {
+  text-decoration: none;
+}
+
+.media.comment .points a {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 0.9rem;
+}
+
 .comment-container {
   border: 1px solid #ccc;
   background-color: white;
@@ -88,7 +97,7 @@ body a {
   transition-property: ease;
   transition-duration: .25s;
   transition-property: all;
-  cursor:default;
+  cursor: default;
 }
 
 .material-icons.up:hover {
@@ -118,8 +127,7 @@ body a {
   height: 250px;
 }
 
-.delete{
-  float:right;
-  cursor:pointer;
-
+.delete {
+  float: right;
+  cursor: pointer;
 }

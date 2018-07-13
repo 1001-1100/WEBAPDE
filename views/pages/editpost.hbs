@@ -24,16 +24,16 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="">Home
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="signin">Login</a>
+                    <a class="nav-link" href="site-map">Site Map</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="cool">Cool</a>
+                    <a class="nav-link" href="signin">Login</a>
                 </li>
                 <!--
               <li class="nav-item">
@@ -55,13 +55,32 @@
                     <i class="material-icons md-18">search</i>
                 </button>
             </form>
+
+            <div class="dropdown mr-2 ml-2">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                    {{uname}}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
+                    <a href="/user-profile" style="color: #000;">
+                        <button class="dropdown-item" type="button">
+                            View Profile
+                        </button>
+                    </a>
+                    <button class="dropdown-item" type="button">
+                        <form action="logout" class="form-inline my-2 my-lg-0" method="post">
+                            <button type="submit" class="dropdown-item">Logout</button>
+                        </form>
+                    </button>
+                </div>
+            </div>
         </div>
     </nav>
 
     <main role="main" class="container">
-        <div class="row starter-template" style ="width: 120%;">
+        <div class="row" style="padding-top: 3rem;">
             <div class="col-lg-4">
-                <div class="card mb-3 mt-5" style="width: 22rem;">
+                <div class="card mb-3 mt-5">
                     <div class="card-header">
                         Posting rules
                     </div>
@@ -84,10 +103,10 @@
                 <form>
                     <div class="ml-3 h2 mb-3">Edit post</div>
                     <div class="container-fluid">
-                        <input type="text" class="form-control" id="inputPostTitle" value = "If life was a video game, what tips would appear on the loading screen?" required>
+                        <input type="text" class="form-control" id="inputPostTitle" value="Do you find portrait mode worth it?" required>
                         <textarea class="form-control mt-3" type="text" id="inputPostContent" rows="9">
-Unpacked now declared put you confined daughter improved. Celebrated imprudence few interested especially reasonable off one. Wonder bed elinor family secure met. It want gave west into high no in. Depend repair met before man admire see and. An he observe be it covered delight hastily message. Margaret no ladyship endeavor ye to settling. He as compliment unreserved projecting. Between had observe pretend delight for believe. Do newspaper questions consulted sweetness do. Our sportsman his unwilling fulfilled departure law. Now world own total saved above her cause table. 
-                        </textarea>
+Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos. Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have these great portrait modes, and I want to make myself look better for online shots. Is that alone a good enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look great)?
+</textarea>
                     </div>
                     <a class="btn btn-primary mt-2 ml-3" href="/signedin">Save</a>
                 </form>
