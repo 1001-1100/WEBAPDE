@@ -68,25 +68,21 @@
       <div class="media post">
         <div class="mr-3 actions">
           <i class="material-icons md-18 md-dark up">arrow_upward</i>
-          <span class="votes">6</span>
+          <span class="votes">{{postScore}}</span>
           <i class="material-icons md-18 md-dark down">arrow_downward</i>
         </div>
         <div class="media-body">
-          <h5 class="mt-0 mb-1">Do you find portrait mode worth it?</h5>
-            Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos.
-            Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have
-            these great portrait modes, and I want to make myself look better for online shots. Is that alone a good
-            enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look
-            great)?
+          <h5 class="mt-0 mb-1">{{postTitle}}</h5>
+          	{{postDescription}}
           <div class="mt-2 flex-fill">
             <span class="info">
               <span class="p-2">
                 <i class="material-icons md-16 md-dark">comment</i>
-                5 comments
+                {{commentNumber}} comments
               </span>
               <span class="p-2">
                 <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                <a href="#">pika</a> at 06/30/2018 15:30
+                <a href="#">{{postAuthor}}</a> at {{postDate}}
               </span>
           </div>
         </div>
@@ -100,6 +96,9 @@
           <button class="btn btn-primary mt-2 ml-3">Submit</button>
         </form>
       </div>
+		  
+	  <a name="comments"></a>
+		  
       <div class="comment-container">
         <div class="media comment ml-3">
           <div class="mr-3 commentactions">
