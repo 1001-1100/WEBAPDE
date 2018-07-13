@@ -93,10 +93,18 @@
                   <i id="downvote" class="material-icons md-18 md-dark">arrow_downward</i>
                 </div>
                 <div class="media-body">
-                  <h5 class="mt-0 mb-1">Post Title</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
+                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
+                 <a href = "editpost">
+                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
+                  </a>
+                  <h5 class="mt-0 mb-1">If life was a video game, what tips would appear on the loading screen?</h5>
+                  <p>Unpacked now declared put you confined daughter improved. Celebrated imprudence few interested especially reasonable
+                    off one. Wonder bed elinor family secure met. It want gave west into high no in. Depend repair met before
+                    man admire see and. An he observe be it covered delight hastily message. Margaret no ladyship endeavor ye
+                    to settling. He as compliment unreserved projecting. Between had observe pretend delight for believe. Do
+                    newspaper questions consulted sweetness do. Our sportsman his unwilling fulfilled departure law. Now world
+                    own total saved above her cause table.
+                  </p>
                 </div>
               </li>
 
@@ -107,6 +115,10 @@
                   <i class="material-icons md-18 md-dark">arrow_downward</i>
                 </div>
                 <div class="media-body">
+                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
+                   <a href = "editpost">
+                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
+                  </a>
                   <h5 class="mt-0 mb-1">Post Title</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
                   vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
@@ -121,6 +133,11 @@
                   <i class="material-icons md-18 md-dark">arrow_downward</i>
                 </div>
                 <div class="media-body">
+
+                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
+                   <a href = "editpost">
+                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
+                  </a>
                   <h5 class="mt-0 mb-1">Post Title</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
                   vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
@@ -128,9 +145,8 @@
                 </div>
 
               </li>
-              <div id="loadMorePosts" class="btn btn-outline-primary">See more posts</div>
-            </ul>
-
+             </ul>
+            <div id="loadMorePosts" class="btn btn-outline-primary">See more posts</div>
           </div>
           <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
             <ul class="list-unstyled">
@@ -141,6 +157,11 @@
                   <i id="downvote" class="material-icons md-18 md-dark">arrow_downward</i>
                 </div>
                 <div class="media-body">
+
+                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
+                   <a href = "editcomment">
+                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
+                  </a>
                   <h5 class="mt-0 mb-1">Post Title</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
                   vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
@@ -155,6 +176,10 @@
                   <i class="material-icons md-18 md-dark">arrow_downward</i>
                 </div>
                 <div class="media-body">
+                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
+                   <a href = "editcomment">
+                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
+                  </a>
                   <h5 class="mt-0 mb-1">Post Title</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
                   vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
@@ -169,6 +194,10 @@
                   <i class="material-icons md-18 md-dark">arrow_downward</i>
                 </div>
                 <div class="media-body">
+                  <span class = "deletePost"><i class = "material-icons md-18 md-dark delete">delete</i></span>
+                   <a href = "editcomment">
+                      <span class = "editPost"><i class = "material-icons md-18 md-dark delete">edit</i></span>
+                  </a>
                   <h5 class="mt-0 mb-1">Post Title</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
                   vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
@@ -176,8 +205,8 @@
                 </div>
 
               </li>
-              <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
-            </ul>
+             </ul>
+            <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
           </div>
         </div>
       </div>
@@ -197,6 +226,85 @@
 
   <script>
     $(document).ready(function () {
+
+      function addPost(){
+        var mediaPost = document.createElement("div");
+        mediaPost.className = "media post";
+        var flexRow = document.createElement("div");
+        flexRow.className = "d-flex flex-row";
+        var flexColumn = document.createElement("div");
+        flexColumn.className = "media-body d-flex flex-column";
+        var voteBox = document.createElement("div");
+        voteBox.className = "mr-3 actions flex-column";
+        var arrowUpward = document.createElement("i");
+        arrowUpward.className = "material-icons md-18 md-dark up";
+        arrowUpward.innerHTML = "arrow_upward";
+        var voteValue = document.createElement("span");
+        voteValue.innerHTML = "99";
+
+        var arrowDownward = document.createElement("i");
+        arrowDownward.className = "material-icons md-18 md-dark down";
+        arrowDownward.innerHTML = "arrow_downward";
+       
+        var postTitle = document.createElement("h5");
+        postTitle.className = "mt-0 mb-1";
+        postTitle.innerHTML = "Post Title";
+
+        var postContent = document.createElement("div");
+        postContent.innerHTML =
+          "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in";
+        
+        var deleteIcon = document.createElement("i");
+        deleteIcon.className = "material-icons md-18 md-dark delete"
+        deleteIcon.innerHTML = "delete";
+
+        var edit = document.createElement("i");
+        edit.className = "material-icons md-18 md-dark delete"
+        edit.innerHTML = "edit";
+
+        var editspan = document.createElement("span");
+
+        var edita = document.createElement("a");
+        edita.href = "editpost";
+
+        editspan.append(edit);
+        edita.append(editspan);
+
+
+        var postInfo = document.createElement("div");
+        postInfo.className = "p-1 flex-fill";
+        var spanInfo = document.createElement("span");
+        spanInfo.className = "info";
+  
+        voteBox.append(arrowUpward);
+        voteBox.append(voteValue);
+        voteBox.append(arrowDownward);
+        flexRow.append(voteBox);
+        flexColumn.append(postTitle);
+        postTitle.append(deleteIcon);
+        postTitle.append(edita);
+        flexColumn.append(postContent);
+        postInfo.append(spanInfo);
+        flexColumn.append(postInfo);
+        flexRow.append(flexColumn);
+        mediaPost.append(flexRow);
+
+        $(".list-unstyled").append(mediaPost);
+      }
+
+
+      $("#loadMorePosts").click(function(){
+        
+       
+        let i;
+        for (i = 0; i < 5; i++) {
+          addPost();
+           console.log("im here");
+        }
+
+      });
+
+
 
     });
   </script>
