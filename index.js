@@ -10,6 +10,32 @@ const urlencoder = bodyparser.urlencoded({
 	extended: false
 })
 const PORT = process.env.PORT || 5000
+const mongoose = require("mongoose")     
+mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js2x',
+{
+    useNewUrlParser:true
+});
+//var conn = mongoose.connection;
+//conn.on('error', console.error.bind(console, 'connection error:'));  
+//conn.once('open', function() {           
+//});
+//var User = mongoose.model("userList",{
+//    username : String,
+//    password : String,
+//    height : Number
+//})
+//
+//var u = new User({
+//    username : "Nine",
+//    password : "31415",
+//    height: 9
+//})
+//
+//u.save().then((msg)=>{
+//    console.log(msg)
+//},(err)=>{
+//    console.log(err)
+//})
 
 express()
 	.use(session({
