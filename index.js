@@ -5,7 +5,6 @@ const bodyparser = require("body-parser")
 const request = require('request')
 const hbs = require("hbs")
 hbs.registerPartials(path.join(__dirname,'/views/partials'))
-const mongoose = require("mongoose")
 const session = require("express-session")
 const urlencoder = bodyparser.urlencoded({
 	extended: false
