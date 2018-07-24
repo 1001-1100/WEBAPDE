@@ -12,45 +12,6 @@ const urlencoder = bodyparser.urlencoded({
 })
 const PORT = process.env.PORT || 5000
 
-//var foo = new Promise((resolve, reject)=>{
-//    var n = Math.random()
-//    if(n > 0.5){
-//        resolve("Correct!")
-//    }else{
-//        resolve("Error!")
-//    }
-//})
-//
-//foo.then((msg)=>{
-//    //fulfilled
-//    console.log(msg)
-//},(err)=>{
-//    //depression
-//    console.log(err)
-//})
-
-mongoose.connect("mongodb://heroku_0n46js2x:31415926balm@ds145951.mlab.com:45951/heroku_0n46js2x",{
-    useNewUrlParser: true
-})
-
-var User = mongoose.model("userList",{
-    username : String,
-    password : String,
-    height : Number
-})
-
-var u = new User({
-    username : "Nine",
-    password : "31415",
-    height: 9
-})
-
-u.save().then((msg)=>{
-    console.log(msg)
-},(err)=>{
-    console.log(err)
-})
-
 express()
 	.use(session({
 		saveUninitialized: true,
