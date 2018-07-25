@@ -14,7 +14,7 @@
     <div class="h4 mb-3 font-weight-normal">Register a new account</div>
     <div class="form-group">
       <label for="inputEmail">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" required autofocus>
+      <input name="emailAddress" type="email" id="inputEmail" class="form-control" required autofocus>
     </div>
     <div class="form-group">
       <label for="inputUsername">Username</label>
@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
       <label for="inputPassword">Password</label>
-      <input type="password" id="inputPassword" class="form-control" required>
+      <input name="password" type="password" id="inputPassword" class="form-control" required>
     </div>
     <div class="form-group">
       <label for="inputConfirmPassword">Confirm password</label>
@@ -30,14 +30,14 @@
     </div>
     <div class="form-group">
       <label for="inputBio">Short bio (optional)</label>
-      <textarea class="form-control" id="inputBio" rows="2"></textarea>
+      <textarea name="shortBio" class="form-control" id="inputBio" rows="2"></textarea>
     </div>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text">Avatar</span>
       </div>
       <div class="text-left custom-file">
-        <input type="file" class="custom-file-input" id="inputAvatar">
+        <input name="avatar" type="file" class="custom-file-input" id="inputAvatar">
         <label class="custom-file-label" for="inputAvatar">Choose file</label>
       </div>
     </div>

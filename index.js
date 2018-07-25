@@ -6,36 +6,32 @@ const request = require('request')
 const hbs = require("hbs")
 hbs.registerPartials(path.join(__dirname,'/views/partials'))
 const session = require("express-session")
+const cookieparser = require("cookie-parser")
 const urlencoder = bodyparser.urlencoded({
 	extended: false
 })
 const PORT = process.env.PORT || 5000
+const bcrypt = require("bcrypt")
 const mongoose = require("mongoose")     
 mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js2x',
 {
     useNewUrlParser:true
-});
-//var conn = mongoose.connection;
-//conn.on('error', console.error.bind(console, 'connection error:'));  
-//conn.once('open', function() {           
-//});
-//var User = mongoose.model("userList",{
-//    username : String,
-//    password : String,
-//    height : Number
-//})
-//
-//var u = new User({
-//    username : "Nine",
-//    password : "31415",
-//    height: 9
-//})
-//
-//u.save().then((msg)=>{
-//    console.log(msg)
-//},(err)=>{
-//    console.log(err)
-//})
+})
+var User = mongoose.model("userList",{
+	emailAddress : String,
+	username : String,
+	password : String,
+	shortBio : String,
+	avatar: String
+})
+var Post = mongoose.model("postList",{
+	postTitle: String,
+	postDescription: String,
+	postAuthor: String,
+	postDate: String,
+	postScore: Number,
+	commentNumber: Number
+})
 
 express()
 	.use(session({
@@ -47,6 +43,8 @@ express()
 			maxAge: 1000 * 60 * 60 * 24 * 7 * 3
 		}
 	}))
+
+	.use(cookieparser())
 
 	.use(express.static(path.join(__dirname, 'public')))
 	.set('views', path.join(__dirname, 'views'))
@@ -103,9 +101,24 @@ express()
 	.get('/signin', (req, res) => res.render("./pages/signin.hbs"))
 
 	.post('/signedin', urlencoder, (req, res) => {
-		req.session.username = req.body.username
-		res.render("./pages/signedin.hbs", {
-			uname: req.session.username
+		var findUser = User.findOne({
+			emailAddress : req.body.emailAddress,
+		})
+		findUser.then((foundUser)=>{
+			if(foundUser){
+				bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
+					if(msg){
+						req.session.username = req.body.emailAddress
+						res.render("./pages/signedin.hbs", {
+							uname: req.session.username
+						})
+					}else{
+						res.render("./pages/signin.hbs")
+					}
+				})
+			}else{
+				res.render("./pages/signin.hbs")
+			}
 		})
 	})
 	.post('/logout', (req, res) => {
@@ -113,9 +126,30 @@ express()
 		res.render("./pages/index.hbs")
 	})
 	.post('/registered', urlencoder, (req, res) => {
-		req.session.username = req.body.username
-		res.render("./pages/signedin.hbs", {
-			uname: req.session.username
+		var findUser = User.findOne({
+			username : req.body.username
+		})
+		findUser.then((foundUser)=>{
+			if(foundUser){
+				res.render("./pages/register.hbs")
+			}else{
+				bcrypt.hash(req.body.password,12).then((hashed)=>{
+					var hashedPassword = hashed
+					var newUser = new User({
+						emailAddress : req.body.emailAddress,
+						username : req.body.username,
+						password : hashedPassword,
+						shortBio : req.body.shortBio,
+						avatar: req.body.avatar
+					})
+					newUser.save().then((msg)=>{
+						req.session.username = req.body.username
+						res.render("./pages/signedin.hbs", {
+							uname: req.session.username
+						})
+					})
+				})
+			}
 		})
 	})
 
