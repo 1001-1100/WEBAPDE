@@ -60,27 +60,36 @@ express()
 		}
 	})
 
-	.get('/post', (req, res) => {
-		if (req.session.username) {
-            res.render("./pages/signed-post.hbs", {
-                postTitle: "Do you find portrait mode worth it?",
-                postDescription: "Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos. Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have these great portrait modes, and I want to make myself look better for online shots. Is that alone a good enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look great)?",
-                postAuthor: "Kansei_Drift",
-                postDate: "07/09/2018 15:30",
-                postScore: "6",
-                commentNumber: "5",
-                uname: req.session.username
-            })
-		} else {
-			res.render("./pages/post.hbs", {
-                postTitle: "Do you find portrait mode worth it?",
-                postDescription: "Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos. Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have these great portrait modes, and I want to make myself look better for online shots. Is that alone a good enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look great)?",
-                postAuthor: "Kansei_Drift",
-                postDate: "07/09/2018 15:30",
-                postScore: "6",
-                commentNumber: "5"
-            })
-		}
+	.get('/post', urlencoder, (req, res) => {
+		var findPost = Post.findOne({
+			_id : req.query.id
+		})
+		findPost.then((foundPost)=>{
+			if(foundPost){
+                if (req.session.username) {
+                    res.render("./pages/signed-post.hbs", {
+                        postTitle: foundPost.postTitle,
+                        postDescription: foundPost.postDescription,
+                        postAuthor: foundPost.postAuthor,
+                        postDate: foundPost.postDate,
+                        postScore: foundPost.postScore,
+                        commentNumber: foundPost.commentNumber,
+                        uname: req.session.username
+                    })
+                } else {
+                    res.render("./pages/post.hbs", {
+                        postTitle: foundPost.postTitle,
+                        postDescription: foundPost.postDescription,
+                        postAuthor: foundPost.postAuthor,
+                        postDate: foundPost.postDate,
+                        postScore: foundPost.postScore,
+                        commentNumber: foundPost.commentNumber
+                    })
+                }
+			}else{
+				
+			}
+		})
     })
 
 	.get('/user-profile', (req, res) => {

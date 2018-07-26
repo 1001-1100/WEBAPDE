@@ -11,9 +11,6 @@
 	  color: blue;
 	  cursor: pointer;
 	}
-	.submitLink:focus {
-	  outline: none;
-	}  
   </style>
   <title>The Forum</title>
 </head>
@@ -45,7 +42,7 @@
             </div>
 
             <div class="media-body d-flex flex-column">
-              <a href="post">
+              <a href="post?id=1234">
                 <h5 class="mt-0 mb-1">Do you find portrait mode worth it?</h5>
               </a>
               <p>Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos.
@@ -79,10 +76,9 @@
             </div>
 
             <div class="media-body d-flex flex-column">
-			  <form>
-              <input class="submitLink mt-0 mb-1" type="submit">
-                  <h5 class="mt-0 mb-1">What was the best film you watched this week? (02/07/2018 - 08/07/2018)</h5></input>
-	          </form>
+              <a href="post">
+                <h5 class="mt-0 mb-1">What was the best film you watched this week? (02/07/2018 - 08/07/2018)</h5>
+              </a>
               <p>The way this works is that you post a review of the best film you watched this week. It doesn't have to be
                 a new release, just any film you have seen over the last seven days that you feel is worth talking about.
                 Here are some rules.
