@@ -40,6 +40,7 @@ var User = mongoose.model("userList",{
 		commentScore: Number
 	}]
 })
+
 var Post = mongoose.model("postList",{
 	postTitle: String,
 	postDescription: String,
@@ -80,29 +81,10 @@ express()
 	.set('view engine', 'hbs')
 
 	.get('/', urlencoder, (req, res) => {
-		var findPosts = Post.find()
-		findPosts.then((foundPosts)=>{
-			var postIDs = []
-			var postTitles = []
-			var postDescriptions = []
-			var postAuthors = []
-			var postDates = []
-			var postScores = []
-			var commentNumbers = []
-			for(let i = 0 ; i < foundPosts.length ; i++){
-				postIDs.push(foundPosts[i]._id)
-				postTitles.push(foundPosts[i].postTitle)
-				postDescriptions.push(foundPosts[i].postDescription)
-				postAuthors.push(foundPosts[i].postAuthor)
-				postDates.push(foundPosts[i].postDate)
-				postScores.push(foundPosts[i].postScore)
-				commentNumbers.push(foundPosts[i].commentNumber)				
-			}
-			res.render("./pages/index.hbs", {
-				uname: req.session.username,
-				postIDs, postTitles, postDescriptions, postAuthors, postDates, postScores, commentNumbers
-			})
-		})
+        res.render("./pages/index.hbs", {
+            uname: req.session.username,
+            face: cool()
+        })
 	})
 
 	/*
@@ -245,11 +227,12 @@ express()
 		uname: req.session.username
 	}))
 	.post('/createnewpost', urlencoder, (req, res) => {
+        var dateNow = new Date()
 		var newPost = new Post({
 			postTitle: req.body.postTitle,
-			postDescription: req.body.postTitle,
+			postDescription: req.body.postDescription,
 			postAuthor: req.session.username,
-			postDate: "Filler Date",
+			postDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
 			postScore: 0,
 			commentNumber: 0
 		})
@@ -258,6 +241,27 @@ express()
 			res.redirect(newPostLink)
 		})
 	})	
+
 	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
+
+	.get('/coolz', (req, res) => {
+        res.send(cool())
+    })
+
+    //AJAX CALLS
+
+	.get('/getposts', (req, res) => {
+		var findPosts = Post.find()
+		findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+		})
+    })
+
+    .post('/getcomment', urlencoder, (req, res) => {
+		var findComment = Comment.find({ _id : req.body.commentID})
+		findComment.then((foundComment)=>{
+            res.send(foundComment)
+		})
+    })
 
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`))

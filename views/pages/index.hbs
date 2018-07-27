@@ -51,60 +51,26 @@
       <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
     </div>
   </main>
-  <!-- /.container -->
-
-  <!-- Bootstrap core JavaScript
-        ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-    crossorigin="anonymous"></script>
-
+    
+  {{> scriptResources}}
+    
   <script>
     $(document).ready(function () {
-		var postIDs = []
-		var postTitles = []
-		var postDescriptions = []
-		var postAuthors = []
-		var postDates = []
-		var postScores = []
-		var commentNumbers = []
-		{{#each postIDs}}
-        	postIDs.push("{{this}}")
-    	{{/each}}
-		{{#each postTitles}}
-        	postTitles.push("{{this}}")
-    	{{/each}}
-		{{#each postDescriptions}}
-        	postDescriptions.push("{{this}}")
-    	{{/each}}
-		{{#each postAuthors}}
-        	postAuthors.push("{{this}}")
-    	{{/each}}
-		{{#each postDates}}
-        	postDates.push("{{this}}")
-    	{{/each}}
-		{{#each postScores}}
-        	postScores.push("{{this}}")
-    	{{/each}}
-		{{#each commentNumbers}}
-        	commentNumbers.push("{{this}}")
-    	{{/each}}
-	
-		if(postIDs.length > 0){
-			for (let i = 0; i < postIDs.length; i++) {
-			  addPost(postIDs[i], postTitles[i], postDescriptions[i], postAuthors[i], postDates[i], postScores[i], commentNumbers[i]);
-			}	
-		}else{	
-			$("#postContainer").append("No posts available");
-		}
+        $.get("getposts",{},(foundPosts)=>{
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })
+        
       $("#loadMorePosts").click(function () {
+          
       });
-		  
-      function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
+
+      function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
         mediaPost.className = "media post";
         var flexRow = document.createElement("div");
@@ -130,7 +96,7 @@
         personIcon.innerHTML = "person_outline";
         var postTitleContainer = document.createElement("h5");
 		var postTitleLink = document.createElement("a");
-		postTitleLink.setAttribute("href", "post?id="+postIDs);
+		postTitleLink.setAttribute("href", "post?id="+postID);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleLink.innerHTML = postTitle;
         var postContent = document.createElement("div");
@@ -143,7 +109,7 @@
         spanComment.className = "mr-3";
         var commentNumberContainer = document.createElement("a");
         commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post?id="+postIDs+"#comments");
+        commentNumberContainer.setAttribute("href", "post?id="+postID+"#comments");
         var spanUsername = document.createElement("span");
         spanUsername.className = "p-1";
         var userName = document.createElement("a");
