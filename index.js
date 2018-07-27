@@ -49,10 +49,6 @@ var Post = mongoose.model("postList",{
 	commentNumber: Number,
 	comment: [{
 		commentID: String,
-		commentContent: String,
-		commentAuthor: String,
-		commentDate: String,
-		commentScore: Number
 	}]
 })
 
@@ -61,12 +57,8 @@ var Comment = mongoose.model("commentList",{
 	commentAuthor: String,
 	commentDate: String,
 	commentScore: Number,
-	comment: [{
-		commentID: String,
-		commentContent: String,
-		commentAuthor: String,
-		commentDate: String,
-		commentScore: Number
+	nestedComments: [{
+		commentID: String
 	}]
 })
 
@@ -113,12 +105,34 @@ express()
 		})
 	})
 
+	/*
+	commentContent: String,
+	commentAuthor: String,
+	commentDate: String,
+	commentScore: Number,
+	comment: [{
+		commentID: String,
+		commentContent: String,
+		commentAuthor: String,
+		commentDate: String,
+		commentScore: Number
+	}]
+	*/
+
 	.get('/post', (req, res) => {
 		var findPost = Post.findOne({
 			_id : req.query.id
 		})
 		findPost.then((foundPost)=>{
 			if(foundPost){
+				var comments = []
+				var comment = []
+				for(let i = 0 ; i < foundPost.comment.length ; i++){
+					comment.push(foundPost.comment[i].commentContent)
+					comment.push(foundPost.comment[i].commentAuthor)
+					comment.push(foundPost.comment[i].commentDate)
+					comment.push(foundPost.comment[i].commentScore)
+				}
                 res.render("./pages/post.hbs", {
                 	postTitle: foundPost.postTitle,
                 	postDescription: foundPost.postDescription,
