@@ -12,7 +12,11 @@
 </head>
 
 <body>
-  {{> unsignedNavBar}}
+  {{#if uname}}
+	{{> signedNavBar}}	
+  {{else}}
+	{{> unsignedNavBar}}
+  {{/if}}
   <main role="main" class="container">
     <div class="row starter-template">
       <div class="col-lg-3">
@@ -37,53 +41,7 @@
 
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="user-posts" role="tabpanel" aria-labelledby="user-posts-tab">
-            <ul class="list-unstyled">
-              <li class="media post">
-                <div class="mr-3 actions">
-                  <i id="upvote" class="material-icons md-18 md-dark up">arrow_upward</i>
-                  <span class="votes">6</span>
-                  <i id="downvote" class="material-icons md-18 md-dark down">arrow_downward</i>
-                </div>
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1">Do you find portrait mode worth it?</h5>
-                  <p>Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except
-                    photos. Now I’m not too much into photography and it takes good photos but these new phones like the
-                    Pixel 2 have these great portrait modes, and I want to make myself look better for online shots. Is that
-                    alone a good enough reason to upgrade? Like is the difference magical or just hype (as in make someone
-                    meh looking look great)?
-                  </p>
-                </div>
-              </li>
-
-              <li class="media post">
-                <div class="mr-3 actions">
-                  <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                  <span class="votes">19</span>
-                  <i class="material-icons md-18 md-dark down">arrow_downward</i>
-                </div>
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1">Post Title</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
-                </div>
-              </li>
-
-              <li class="media post">
-                <div class="mr-3 actions">
-                  <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                  <span class="votes">2</span>
-                  <i class="material-icons md-18 md-dark down">arrow_downward</i>
-                </div>
-                <div class="media-body">
-                  <h5 class="mt-0 mb-1">Post Title</h5>
-                  Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in
-                  vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia
-                  congue felis in faucibus.
-                </div>
-
-              </li>
-            </ul>
+            <ul id="postContainer" class="list-unstyled"></ul>
             <div id="loadMorePosts" class="btn btn-outline-primary">See more posts</div>
           </div>
 
@@ -169,9 +127,48 @@
 
   <script>
     $(document).ready(function () {
-      function addPost() {
+		var postIDs = []
+		var postTitles = []
+		var postDescriptions = []
+		var postAuthors = []
+		var postDates = []
+		var postScores = []
+		var commentNumbers = []
+		{{#each postIDs}}
+        	postIDs.push("{{this}}")
+    	{{/each}}
+		{{#each postTitles}}
+        	postTitles.push("{{this}}")
+    	{{/each}}
+		{{#each postDescriptions}}
+        	postDescriptions.push("{{this}}")
+    	{{/each}}
+		{{#each postAuthors}}
+        	postAuthors.push("{{this}}")
+    	{{/each}}
+		{{#each postDates}}
+        	postDates.push("{{this}}")
+    	{{/each}}
+		{{#each postScores}}
+        	postScores.push("{{this}}")
+    	{{/each}}
+		{{#each commentNumbers}}
+        	commentNumbers.push("{{this}}")
+    	{{/each}}
+	
+		if(postIDs.length > 0){
+			for (let i = 0; i < postIDs.length; i++) {
+			  addPost(postIDs[i], postTitles[i], postDescriptions[i], postAuthors[i], postDates[i], postScores[i], commentNumbers[i]);
+			}	
+		}else{	
+			$("#postContainer").append("No posts available");
+		}
+      $("#loadMorePosts").click(function () {
+      });
+		  
+      function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
-        mediaPost.className = "media post newpost";
+        mediaPost.className = "media post";
         var flexRow = document.createElement("div");
         flexRow.className = "d-flex flex-row";
         var flexColumn = document.createElement("div");
@@ -182,53 +179,60 @@
         arrowUpward.className = "material-icons md-18 md-dark up";
         arrowUpward.innerHTML = "arrow_upward";
         var voteValue = document.createElement("span");
-        voteValue.innerHTML = "99";
-
+		voteValue.className = "votes";
+        voteValue.innerHTML = postScore;
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
         arrowDownward.innerHTML = "arrow_downward";
-
-        var postTitle = document.createElement("h5");
-        postTitle.className = "mt-0 mb-1";
-        postTitle.innerHTML = "Post Title";
-
+        var commentIcon = document.createElement("i");
+        commentIcon.className = "material-icons md-16 md-dark";
+        commentIcon.innerHTML = "comment";
+        var personIcon = document.createElement("i");
+        personIcon.className = "material-icons md-18 md-dark";
+        personIcon.innerHTML = "person_outline";
+        var postTitleContainer = document.createElement("a");
+		postTitleContainer.setAttribute("href", "post?id="+postIDs);
+        postTitleContainer.className = "mt-0 mb-1";
+        postTitleContainer.innerHTML = postTitle;
         var postContent = document.createElement("div");
-        postContent.innerHTML =
-          "Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in";
-
+        postContent.innerHTML = postDescription;
         var postInfo = document.createElement("div");
         postInfo.className = "p-1 flex-fill";
         var spanInfo = document.createElement("span");
         spanInfo.className = "info";
+        var spanComment = document.createElement("span");
+        spanComment.className = "mr-3";
+        var commentNumberContainer = document.createElement("a");
+        commentNumberContainer.innerHTML = " ";
+        commentNumberContainer.setAttribute("href", "post?id="+postIDs+"#comments");
+        var spanUsername = document.createElement("span");
+        spanUsername.className = "p-1";
+        var userName = document.createElement("a");
+        userName.innerHTML = postAuthor;
+        userName.setAttribute("href", "user-profile?u="+postAuthor);
 
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);
         voteBox.append(arrowDownward);
         flexRow.append(voteBox);
-        flexColumn.append(postTitle);
+        flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
+        commentNumberContainer.append(commentIcon);
+        commentNumberContainer.append(" "+commentNumber+" Comments");
+        spanComment.append(commentNumberContainer);
+        spanInfo.append(spanComment);
+        spanUsername.append(personIcon);
+        spanUsername.append("Posted by ");
+        spanUsername.append(userName);
+        spanUsername.append(" at "+postDate);
+        spanInfo.append(spanUsername);
         postInfo.append(spanInfo);
         flexColumn.append(postInfo);
         flexRow.append(flexColumn);
         mediaPost.append(flexRow);
 
-        $(".list-unstyled").append(mediaPost);
+        $("#postContainer").append(mediaPost);
       }
-
-
-      $("#loadMorePosts").click(function () {
-
-
-        let i;
-        for (i = 0; i < 5; i++) {
-          addPost();
-          console.log("im here");
-        }
-
-      });
-      $("#user-comments-tab").click(function () {
-        $(".newpost").remove();
-      })
     });
   </script>
 

@@ -31,13 +31,13 @@
             </div>
 
             <div class="col-lg-8">
-                <form>
+                <form action="createnewpost" method="post">
                     <div class="ml-3 h2 mb-3">Create a new post</div>
                     <div class="container-fluid">
-                        <input type="text" class="form-control" id="inputPostTitle" placeholder="Title" required>
-                        <textarea class="form-control mt-3" type="text" id="inputPostContent" placeholder="Text (optional)" rows="9"></textarea>
+                        <input type="text" name="postTitle" class="form-control" id="inputPostTitle" placeholder="Title" required>
+                        <textarea class="form-control mt-3" type="text" name="postDescription" id="inputPostContent" placeholder="Text (optional)" rows="9"></textarea>
                     </div>
-                    <a class="btn btn-primary mt-2 ml-3" href="">Post</a>
+                    <button type="submit" class="btn btn-primary mt-2 ml-3" href="">Post</button>
                 </form>
             </div>
         </div>

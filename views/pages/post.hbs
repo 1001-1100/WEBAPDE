@@ -7,7 +7,11 @@
 </head>
 
 <body>
-  {{> unsignedNavBar}}
+  {{#if uname}}
+	{{> signedNavBar}}	
+  {{else}}
+	{{> unsignedNavBar}}
+  {{/if}}
   <main role="main" class="container">
     <div class="starter-template">
       <!-- START OF POSTS SECTION -->
@@ -33,6 +37,8 @@
           </div>
         </div>
       </div>
+		  
+	  {{#if uname}}
       <div class="postcomment">
         <form>
           <h5 class="mt-0 mb-1">Reply to post</h5>
@@ -41,7 +47,8 @@
           </div>
           <button class="btn btn-primary mt-2 ml-3">Submit</button>
         </form>
-      </div>
+      </div>	
+	  {{/if}}
 
       <a name="comments"></a>
 

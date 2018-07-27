@@ -22,7 +22,23 @@ var User = mongoose.model("userList",{
 	username : String,
 	password : String,
 	shortBio : String,
-	avatar: String
+	avatar: String,
+	post: [{
+		postID: String,
+		postTitle: String,
+		postDescription: String,
+		postAuthor: String,
+		postDate: String,
+		postScore: Number,
+		commentNumber: Number
+	}],
+	comment: [{
+		commentID: String,
+		commentContent: String,
+		commentAuthor: String,
+		commentDate: String,
+		commentScore: Number
+	}]
 })
 var Post = mongoose.model("postList",{
 	postTitle: String,
@@ -30,7 +46,28 @@ var Post = mongoose.model("postList",{
 	postAuthor: String,
 	postDate: String,
 	postScore: Number,
-	commentNumber: Number
+	commentNumber: Number,
+	comment: [{
+		commentID: String,
+		commentContent: String,
+		commentAuthor: String,
+		commentDate: String,
+		commentScore: Number
+	}]
+})
+
+var Comment = mongoose.model("commentList",{
+	commentContent: String,
+	commentAuthor: String,
+	commentDate: String,
+	commentScore: Number,
+	comment: [{
+		commentID: String,
+		commentContent: String,
+		commentAuthor: String,
+		commentDate: String,
+		commentScore: Number
+	}]
 })
 
 express()
@@ -51,59 +88,89 @@ express()
 	.set('view engine', 'hbs')
 
 	.get('/', urlencoder, (req, res) => {
-		if (req.session.username) {
-			res.render("./pages/signedin.hbs", {
-				uname: req.session.username
+		var findPosts = Post.find()
+		findPosts.then((foundPosts)=>{
+			var postIDs = []
+			var postTitles = []
+			var postDescriptions = []
+			var postAuthors = []
+			var postDates = []
+			var postScores = []
+			var commentNumbers = []
+			for(let i = 0 ; i < foundPosts.length ; i++){
+				postIDs.push(foundPosts[i]._id)
+				postTitles.push(foundPosts[i].postTitle)
+				postDescriptions.push(foundPosts[i].postDescription)
+				postAuthors.push(foundPosts[i].postAuthor)
+				postDates.push(foundPosts[i].postDate)
+				postScores.push(foundPosts[i].postScore)
+				commentNumbers.push(foundPosts[i].commentNumber)				
+			}
+			res.render("./pages/index.hbs", {
+				uname: req.session.username,
+				postIDs, postTitles, postDescriptions, postAuthors, postDates, postScores, commentNumbers
 			})
-		} else {
-			res.render("./pages/index.hbs")
-		}
+		})
 	})
 
-	.get('/post', urlencoder, (req, res) => {
+	.get('/post', (req, res) => {
 		var findPost = Post.findOne({
 			_id : req.query.id
 		})
 		findPost.then((foundPost)=>{
 			if(foundPost){
-                if (req.session.username) {
-                    res.render("./pages/signed-post.hbs", {
-                        postTitle: foundPost.postTitle,
-                        postDescription: foundPost.postDescription,
-                        postAuthor: foundPost.postAuthor,
-                        postDate: foundPost.postDate,
-                        postScore: foundPost.postScore,
-                        commentNumber: foundPost.commentNumber,
-                        uname: req.session.username
-                    })
-                } else {
-                    res.render("./pages/post.hbs", {
-                        postTitle: foundPost.postTitle,
-                        postDescription: foundPost.postDescription,
-                        postAuthor: foundPost.postAuthor,
-                        postDate: foundPost.postDate,
-                        postScore: foundPost.postScore,
-                        commentNumber: foundPost.commentNumber
-                    })
-                }
+                res.render("./pages/post.hbs", {
+                	postTitle: foundPost.postTitle,
+                	postDescription: foundPost.postDescription,
+                	postAuthor: foundPost.postAuthor,
+                	postDate: foundPost.postDate,
+                	postScore: foundPost.postScore,
+                	commentNumber: foundPost.commentNumber,
+					uname: req.session.username
+                })
 			}else{
-				
+				res.send("Not found.")
 			}
 		})
     })
 
 	.get('/user-profile', (req, res) => {
-        if (req.session.username) {
-			res.render("./pages/signed-user-profile.hbs", {
-                userHandle: "@Kansei_Drift",
-                userBioData: "Hi my name is Kansei_Drift.",
-				uname: req.session.username
+		if(req.query.u){
+			var findUser = User.findOne({
+				username : req.query.u,
 			})
-		} else {
-			res.render("./pages/user-profile.hbs", {
-                userHandle: "@Kansei_Drift",
-                userBioData: "Hi my name is Kansei_Drift."
-            })
+			findUser.then((foundUser)=>{
+				if(foundUser){
+					var findPosts = Post.find({postAuthor : foundUser.username},{ _id : {$slice: 5} })
+					findPosts.then((foundPosts)=>{
+						var postIDs = []
+						var postTitles = []
+						var postDescriptions = []
+						var postAuthors = []
+						var postDates = []
+						var postScores = []
+						var commentNumbers = []
+						for(let i = 0 ; i < foundPosts.length ; i++){
+							postIDs.push(foundPosts[i]._id)
+							postTitles.push(foundPosts[i].postTitle)
+							postDescriptions.push(foundPosts[i].postDescription)
+							postAuthors.push(foundPosts[i].postAuthor)
+							postDates.push(foundPosts[i].postDate)
+							postScores.push(foundPosts[i].postScore)
+							commentNumbers.push(foundPosts[i].commentNumber)				
+						}	
+					})
+					res.render("./pages/user-profile.hbs", {
+						userHandle: "@"+foundUser.username,
+						userBioData: foundUser.shortBio,
+						uname: req.session.username
+					})			
+				}else{
+					res.send("Not found.")
+				}
+			})		
+		}else{
+			res.redirect("user-profile?u="+req.session.username)
 		}
     })
 
@@ -111,28 +178,26 @@ express()
 
 	.post('/signedin', urlencoder, (req, res) => {
 		var findUser = User.findOne({
-			emailAddress : req.body.emailAddress,
+			username : req.body.username,
 		})
 		findUser.then((foundUser)=>{
 			if(foundUser){
 				bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
 					if(msg){
-						req.session.username = req.body.emailAddress
-						res.render("./pages/signedin.hbs", {
-							uname: req.session.username
-						})
+						req.session.username = req.body.username
+						res.redirect("/")
 					}else{
-						res.render("./pages/signin.hbs")
+						
 					}
 				})
 			}else{
-				res.render("./pages/signin.hbs")
+				res.send("User not found")
 			}
 		})
 	})
 	.post('/logout', (req, res) => {
 		req.session.destroy()
-		res.render("./pages/index.hbs")
+		res.redirect("/")
 	})
 	.post('/registered', urlencoder, (req, res) => {
 		var findUser = User.findOne({
@@ -140,7 +205,7 @@ express()
 		})
 		findUser.then((foundUser)=>{
 			if(foundUser){
-				res.render("./pages/register.hbs")
+				res.send("User already exists")
 			}else{
 				bcrypt.hash(req.body.password,12).then((hashed)=>{
 					var hashedPassword = hashed
@@ -153,9 +218,7 @@ express()
 					})
 					newUser.save().then((msg)=>{
 						req.session.username = req.body.username
-						res.render("./pages/signedin.hbs", {
-							uname: req.session.username
-						})
+						res.redirect("/")
 					})
 				})
 			}
@@ -163,10 +226,24 @@ express()
 	})
 
 	.get('/site-map', urlencoder, (req, res) => res.render("./pages/sitemap.hbs"))
-	.get('/logout', (req, res) => res.render("./pages/index.hbs"))
 	.get('/register', (req, res) => res.render("./pages/register.hbs"))
 	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
 		uname: req.session.username
 	}))
+	.post('/createnewpost', urlencoder, (req, res) => {
+		var newPost = new Post({
+			postTitle: req.body.postTitle,
+			postDescription: req.body.postTitle,
+			postAuthor: req.session.username,
+			postDate: "Filler Date",
+			postScore: 0,
+			commentNumber: 0
+		})
+		newPost.save().then((msg)=>{
+			var newPostLink = "post?id="+newPost._id
+			res.redirect(newPostLink)
+		})
+	})	
 	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
+
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`))
