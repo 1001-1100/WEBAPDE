@@ -40,13 +40,18 @@
 		  
 	  {{#if uname}}
       <div class="postcomment">
-        <form action="createnewcomment" method="post">
-          <h5 class="mt-0 mb-1">Reply to post</h5>
-          <div class="container-fluid">
-            <textarea class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
-          </div>
-          <button class="btn btn-primary mt-2 ml-3">Submit</button>
-        </form>
+      	<h5 class="mt-0 mb-1">Reply to post</h5>
+      	<div class="container-fluid">
+        	<textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
+        </div>
+		<script>
+			function createNewComment(){
+				$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
+					location.reload()
+				})
+			}	
+		</script>
+      	<button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
       </div>	
 	  {{/if}}
 
@@ -66,16 +71,16 @@
         $.post("getonepost",{ postID: "{{postID}}" },(foundPost)=>{
             if(foundPost.comment.length > 0){
                 for(let i = 0 ; i < foundPost.comment.length ; i++){
-                    addComment(foundPost.comment[i].commentID, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
+                    addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
                 }                
             }else{             
                 var noComments = document.createElement("div");
                 noComments.innerHTML = "No comments.";
+				noComments.id = "noComment";
                 $("#allComments").append(noComments);
             }
         })
-        
-        
+		
         function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore){
             var wholeCommentContainer = document.createElement("div");
             wholeCommentContainer.className = "comment-container";

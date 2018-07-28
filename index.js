@@ -59,7 +59,16 @@ var Post = mongoose.model("postList",{
 	postDate: String,
 	postScore: Number,
 	commentNumber: Number,
-	comment: Comment[]
+	comment: [{
+		postID: String,
+		commentContent: String,
+		commentAuthor: String,
+		commentDate: String,
+		commentScore: Number,
+		nestedComments: [{
+			commentID: String
+		}]
+	}]
 })
 
 express()
@@ -236,26 +245,6 @@ express()
 		})
 	})	
 
-    .post('/createnewcomment', urlencoder, (req, res) => {
-        var dateNow = new Date()
-        var findPost = Post.findOne({ _id : req.body.postID})
-        findPost.then((foundPost)=>{  
-            var newComment = new Comment({
-                postID: foundPost._id,
-                commentContent: req.body.commentContent,
-                commentAuthor: req.body.commentAuthor,
-                commentDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
-                commentScore: 0,
-                nestedComments: []
-            })
-            foundPost.comment.push(newComment)
-            foundPost.save.then((msg)=>{
-                var postLink = "post?id="+foundPost._id
-                res.redirect(postLink)
-            })
-        })
-	})	
-
 	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
 
 	.get('/coolz', (req, res) => {
@@ -284,5 +273,24 @@ express()
             res.send(foundComment)
 		})
     })
+
+    .post('/createnewcomment', urlencoder, (req, res) => {
+        var dateNow = new Date()
+        var findPost = Post.findOne({ _id : req.body.postID})
+        findPost.then((foundPost)=>{  
+            var newComment = new Comment({
+                postID: foundPost._id,
+                commentContent: req.body.commentContent,
+                commentAuthor: req.session.username,
+                commentDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
+                commentScore: 0,
+                nestedComments: []
+            })
+            foundPost.comment.push(newComment)
+            foundPost.save().then((msg)=>{
+            	res.send(newComment)
+            })
+        })
+	})	
 
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`))
