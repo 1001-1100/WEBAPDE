@@ -142,8 +142,8 @@
         }
 		
 		function createNewComment(){
-			$("#commentContent").val("");
 			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
+				$("#commentContent").val("");
 				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
 			})
 		}
