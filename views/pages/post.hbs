@@ -4,85 +4,12 @@
 <head>
   {{> headerResources}}
   <title>The Forum</title>
-</head>
-
-<body>
-  {{#if uname}}
-	{{> signedNavBar}}	
-  {{else}}
-	{{> unsignedNavBar}}
-  {{/if}}
-  <main role="main" class="container">
-    <div class="starter-template">
-      <!-- START OF POSTS SECTION -->
-      <div class="media post">
-        <div class="mr-3 actions">
-          <i class="material-icons md-18 md-dark up">arrow_upward</i>
-          <span class="votes">{{postScore}}</span>
-          <i class="material-icons md-18 md-dark down">arrow_downward</i>
-        </div>
-        <div class="media-body">
-          <h5 class="mt-0 mb-1">{{postTitle}}</h5>
-          {{postDescription}}
-          <div class="mt-2 flex-fill">
-            <span class="info">
-              <span class="p-2">
-                <i class="material-icons md-16 md-dark">comment</i>
-                <a href="#comments">{{commentNumber}} comments</a>
-              </span>
-              <span class="p-2">
-                <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                <a href="user-profile">{{postAuthor}}</a> at {{postDate}}
-              </span>
-          </div>
-        </div>
-      </div>
-		  
-	  {{#if uname}}
-      <div class="postcomment">
-      	<h5 class="mt-0 mb-1">Reply to post</h5>
-      	<div class="container-fluid">
-        	<textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
-        </div>
-		<script>
-			function createNewComment(){
-				$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
-					location.reload()
-				})
-			}	
-		</script>
-      	<button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
-      </div>	
-	  {{/if}}
-
-    <a name="comments"></a>
-          
-    <div id="allComments"></div> 
-
-    </div>
-  </main>
-        
-  {{> scriptResources}}
-
-      
-  <script>
-    $(document).ready(function () {
-
-        $.post("getonepost",{ postID: "{{postID}}" },(foundPost)=>{
-            if(foundPost.comment.length > 0){
-                for(let i = 0 ; i < foundPost.comment.length ; i++){
-                    addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
-                }                
-            }else{             
-                var noComments = document.createElement("div");
-                noComments.innerHTML = "No comments.";
-				noComments.id = "noComment";
-                $("#allComments").append(noComments);
-            }
-        })
-		
-        function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore){
-            var wholeCommentContainer = document.createElement("div");
+  
+	//FUNCTIONS
+	<script>
+	  
+  		function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore){
+    		var wholeCommentContainer = document.createElement("div");
             wholeCommentContainer.className = "comment-container";
             var mainCommentContainer = document.createElement("div");
             mainCommentContainer.className = "media comment ml-3";
@@ -214,6 +141,85 @@
             
             $(commentContainer).append(mainCommentContainer);
         }
+		
+		function createNewComment(){
+			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
+				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+			})
+		}
+		
+  	</script>
+
+</head>
+
+<body>
+  {{#if uname}}
+	{{> signedNavBar}}	
+  {{else}}
+	{{> unsignedNavBar}}
+  {{/if}}
+  <main role="main" class="container">
+    <div class="starter-template">
+      <!-- START OF POSTS SECTION -->
+      <div class="media post">
+        <div class="mr-3 actions">
+          <i class="material-icons md-18 md-dark up">arrow_upward</i>
+          <span class="votes">{{postScore}}</span>
+          <i class="material-icons md-18 md-dark down">arrow_downward</i>
+        </div>
+        <div class="media-body">
+          <h5 class="mt-0 mb-1">{{postTitle}}</h5>
+          {{postDescription}}
+          <div class="mt-2 flex-fill">
+            <span class="info">
+              <span class="p-2">
+                <i class="material-icons md-16 md-dark">comment</i>
+                <a href="#comments">{{commentNumber}} comments</a>
+              </span>
+              <span class="p-2">
+                <i class="material-icons md-18 md-dark">person_outline</i> Posted by
+                <a href="user-profile">{{postAuthor}}</a> at {{postDate}}
+              </span>
+          </div>
+        </div>
+      </div>
+		  
+	  {{#if uname}}
+      <div class="postcomment">
+      	<h5 class="mt-0 mb-1">Reply to post</h5>
+      	<div class="container-fluid">
+        	<textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
+        </div>
+      	<button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
+      </div>	
+	  {{/if}}
+
+    <a name="comments"></a>
+          
+    <div id="allComments"></div> 
+
+    </div>
+  </main>
+        
+  {{> scriptResources}}
+
+      
+  <script>
+    $(document).ready(function () {
+
+        $.post("getonepost",{ postID: "{{postID}}" },(foundPost)=>{
+            if(foundPost.comment.length > 0){
+                for(let i = 0 ; i < foundPost.comment.length ; i++){
+                    addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
+                }                
+            }else{             
+                var noComments = document.createElement("div");
+                noComments.innerHTML = "No comments.";
+				noComments.id = "noComment";
+                $("#allComments").append(noComments);
+            }
+        })
+		
     });
   </script>
 
