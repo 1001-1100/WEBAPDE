@@ -54,6 +54,7 @@ body a {
   border: 1px solid #ccc;
   background-color: white;
   padding: 10px;
+  margin-bottom: 5px;
 }
 
 .postcomment {

@@ -41,19 +41,8 @@ var User = mongoose.model("userList",{
 	}]
 })
 
-var Post = mongoose.model("postList",{
-	postTitle: String,
-	postDescription: String,
-	postAuthor: String,
-	postDate: String,
-	postScore: Number,
-	commentNumber: Number,
-	comment: [{
-		commentID: String,
-	}]
-})
-
 var Comment = mongoose.model("commentList",{
+    postID: String,
 	commentContent: String,
 	commentAuthor: String,
 	commentDate: String,
@@ -61,6 +50,16 @@ var Comment = mongoose.model("commentList",{
 	nestedComments: [{
 		commentID: String
 	}]
+})
+
+var Post = mongoose.model("postList",{
+	postTitle: String,
+	postDescription: String,
+	postAuthor: String,
+	postDate: String,
+	postScore: Number,
+	commentNumber: Number,
+	comment: Comment[]
 })
 
 express()
@@ -107,15 +106,8 @@ express()
 		})
 		findPost.then((foundPost)=>{
 			if(foundPost){
-				var comments = []
-				var comment = []
-				for(let i = 0 ; i < foundPost.comment.length ; i++){
-					comment.push(foundPost.comment[i].commentContent)
-					comment.push(foundPost.comment[i].commentAuthor)
-					comment.push(foundPost.comment[i].commentDate)
-					comment.push(foundPost.comment[i].commentScore)
-				}
                 res.render("./pages/post.hbs", {
+                    postID: foundPost._id,
                 	postTitle: foundPost.postTitle,
                 	postDescription: foundPost.postDescription,
                 	postAuthor: foundPost.postAuthor,
@@ -226,6 +218,7 @@ express()
 	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
 		uname: req.session.username
 	}))
+
 	.post('/createnewpost', urlencoder, (req, res) => {
         var dateNow = new Date()
 		var newPost = new Post({
@@ -234,12 +227,33 @@ express()
 			postAuthor: req.session.username,
 			postDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
 			postScore: 0,
-			commentNumber: 0
+			commentNumber: 0,
+            comment: []
 		})
 		newPost.save().then((msg)=>{
 			var newPostLink = "post?id="+newPost._id
 			res.redirect(newPostLink)
 		})
+	})	
+
+    .post('/createnewcomment', urlencoder, (req, res) => {
+        var dateNow = new Date()
+        var findPost = Post.findOne({ _id : req.body.postID})
+        findPost.then((foundPost)=>{  
+            var newComment = new Comment({
+                postID: foundPost._id,
+                commentContent: req.body.commentContent,
+                commentAuthor: req.body.commentAuthor,
+                commentDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
+                commentScore: 0,
+                nestedComments: []
+            })
+            foundPost.comment.push(newComment)
+            foundPost.save.then((msg)=>{
+                var postLink = "post?id="+foundPost._id
+                res.redirect(postLink)
+            })
+        })
 	})	
 
 	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
@@ -257,7 +271,14 @@ express()
 		})
     })
 
-    .post('/getcomment', urlencoder, (req, res) => {
+    .post('/getonepost', urlencoder, (req, res) => {
+        var findPost = Post.findOne({ _id : req.body.postID})
+        findPost.then((foundPost)=>{
+            res.send(foundPost)
+        })
+    })
+
+    .get('/getcomment', urlencoder, (req, res) => {
 		var findComment = Comment.find({ _id : req.body.commentID})
 		findComment.then((foundComment)=>{
             res.send(foundComment)
