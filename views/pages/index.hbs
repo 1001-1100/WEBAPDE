@@ -4,29 +4,25 @@
 <head>
   {{> headerResources}}
   <style>
-	.submitLink {
-	  background-color: transparent;
-	  text-decoration: underline;
-	  border: none;
-	  color: blue;
-	  cursor: pointer;
-	}
+    .submitLink {
+      background-color: transparent;
+      text-decoration: underline;
+      border: none;
+      color: blue;
+      cursor: pointer;
+    }
   </style>
   <title>The Forum</title>
 </head>
 
 <body>
-  {{#if uname}}
-	{{> signedNavBar}}	
-  {{else}}
-	{{> unsignedNavBar}}
-  {{/if}}
+  {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="starter-template">
-		
-	  {{#if uname}}
+
+      {{#if uname}}
       <div class="sort d-flex flex-fill-1 mb-3">
-        <a href="/newpost" class="mr-auto btn btn-outline-primary">
+        <a href="/newpost" class="mr-auto btn btn-outline-success">
           <i class="material-icons md-18">add</i> Create post</a>
 
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
@@ -35,7 +31,7 @@
           <a class="dropdown-item" href="#">Popularity</a>
         </div>
       </div>
-	  {{else}}
+      {{else}}
       <div class="sort d-flex flex-fill-1 flex-row-reverse">
         <button class="btn btn-outline-secondary dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">Sort posts by</button>
@@ -43,31 +39,31 @@
           <a class="dropdown-item" href="#">Date Created</a>
           <a class="dropdown-item" href="#">Popularity</a>
         </div>
-      </div>		
-	  {{/if}}
-		
+      </div>
+      {{/if}}
+
       <ul id="postContainer" class="list-unstyled"></ul>
 
       <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
     </div>
   </main>
-    
+
   {{> scriptResources}}
-    
+
   <script>
     $(document).ready(function () {
-        $.get("getposts",{},(foundPosts)=>{
-            if(foundPosts.length > 0){
-                for(let i = 0; i < foundPosts.length; i++) {
-                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                }	
-            }else{	
-                $("#postContainer").append("No posts available");
-            }
-        })
-        
+      $.get("getposts", {}, (foundPosts) => {
+        if (foundPosts.length > 0) {
+          for (let i = 0; i < foundPosts.length; i++) {
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+          }
+        } else {
+          $("#postContainer").append("No posts available");
+        }
+      })
+
       $("#loadMorePosts").click(function () {
-          
+
       });
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
@@ -83,7 +79,7 @@
         arrowUpward.className = "material-icons md-18 md-dark up";
         arrowUpward.innerHTML = "arrow_upward";
         var voteValue = document.createElement("span");
-		voteValue.className = "votes";
+        voteValue.className = "votes";
         voteValue.innerHTML = postScore;
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
@@ -95,8 +91,8 @@
         personIcon.className = "material-icons md-18 md-dark";
         personIcon.innerHTML = "person_outline";
         var postTitleContainer = document.createElement("h5");
-		var postTitleLink = document.createElement("a");
-		postTitleLink.setAttribute("href", "post?id="+postID);
+        var postTitleLink = document.createElement("a");
+        postTitleLink.setAttribute("href", "post?id=" + postID);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleLink.innerHTML = postTitle;
         var postContent = document.createElement("div");
@@ -109,28 +105,28 @@
         spanComment.className = "mr-3";
         var commentNumberContainer = document.createElement("a");
         commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post?id="+postID+"#comments");
+        commentNumberContainer.setAttribute("href", "post?id=" + postID + "#comments");
         var spanUsername = document.createElement("span");
         spanUsername.className = "p-1";
         var userName = document.createElement("a");
         userName.innerHTML = postAuthor;
-        userName.setAttribute("href", "user-profile?u="+postAuthor);
+        userName.setAttribute("href", "user-profile?u=" + postAuthor);
 
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);
         voteBox.append(arrowDownward);
         flexRow.append(voteBox);
-		postTitleContainer.append(postTitleLink);
+        postTitleContainer.append(postTitleLink);
         flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
         commentNumberContainer.append(commentIcon);
-        commentNumberContainer.append(" "+commentNumber+" Comments");
+        commentNumberContainer.append(" " + commentNumber + " Comments");
         spanComment.append(commentNumberContainer);
         spanInfo.append(spanComment);
         spanUsername.append(personIcon);
         spanUsername.append("Posted by ");
         spanUsername.append(userName);
-        spanUsername.append(" at "+postDate);
+        spanUsername.append(" at " + postDate);
         spanInfo.append(spanUsername);
         postInfo.append(spanInfo);
         flexColumn.append(postInfo);

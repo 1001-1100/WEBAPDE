@@ -4,160 +4,167 @@
 <head>
   {{> headerResources}}
   <title>The Forum</title>
-  
-	<script>
-	  
-  		function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore){
-    		var wholeCommentContainer = document.createElement("div");
-            wholeCommentContainer.className = "comment-container";
-            var mainCommentContainer = document.createElement("div");
-            mainCommentContainer.className = "media comment ml-3";
-            var voteContainer = document.createElement("div");
-            voteContainer.className = "mr-3 commentactions";
-            var upArrow = document.createElement("i");
-            upArrow.className = "material-icons md-18 md-dark up";
-            upArrow.innerHTML = "arrow_upward";
-            var downArrow = document.createElement("i");
-            downArrow.className = "material-icons md-18 md-dark down";
-            downArrow.innerHTML = "arrow_downward";
-            var commentBodyContainer = document.createElement("div");
-            commentBodyContainer.className = "media-body";
-            commentBodyContainer.id = commentID;
-            var flexContainer = document.createElement("div");
-            flexContainer.className = "d-flex";
-            var userNameContainer = document.createElement("h6");
-            userNameContainer.className = "mt-0";
-            var userName = document.createElement("a");
-            userName.setAttribute("href", "user-profile?u="+commentAuthor);
-            userName.setAttribute("style", "color : #000000;");
-            userName.innerHTML = commentAuthor;
-            var commentScoreContainer = document.createElement("span");
-            commentScoreContainer.className = "ml-2 points";
-            commentScoreContainer.innerHTML = commentScore+" points";
-            var separator = document.createElement("span");
-            separator.className = "ml-2";
-            separator.innerHTML = "·";
-            var commentDateContainer = document.createElement("span");
-            commentDateContainer.className = "ml-2 points";
-            commentDateContainer.innerHTML = commentDate;
-            var commentContentContainer = document.createElement("div");
-            commentContentContainer.innerHTML = commentContent;
-            var navContainer = document.createElement("div");
-            navContainer.className = "nav-item active mt-2";
-            var infoSpan = document.createElement("span");
-            infoSpan.className = "info";
-            var replyLink = document.createElement("a");
-            replyLink.setAttribute("href", "");
-            var commentIcon = document.createElement("i");
-            commentIcon.className = "material-icons md-16 md-dark";
-            commentIcon.innerHTML = "comment";
-            var replyText = document.createElement("span");
-            replyText.innerHTML = " Reply";
-            
-            voteContainer.append(upArrow);
-            voteContainer.append(downArrow);
-            userNameContainer.append(userName);
-            flexContainer.append(userNameContainer);
-            flexContainer.append(commentScoreContainer);
-            flexContainer.append(separator);
-            flexContainer.append(commentDateContainer);
-            replyLink.append(commentIcon);
-            replyLink.append(replyText);
-            infoSpan.append(replyLink);
-            navContainer.append(infoSpan);
-            commentBodyContainer.append(flexContainer);
-            commentBodyContainer.append(commentContentContainer);
-            commentBodyContainer.append(navContainer);
-            mainCommentContainer.append(voteContainer);
-            mainCommentContainer.append(commentBodyContainer);
-            wholeCommentContainer.append(mainCommentContainer);
-            
-            $("#allComments").append(wholeCommentContainer);
-        }
 
-        function addNestedComment(commentContainer, commentID, commentContent, commentAuthor, commentDate, commentScore){
-            var mainCommentContainer = document.createElement("div");
-            mainCommentContainer.className = "media comment";
-            mainCommentContainer.setAttribute("style", "margin-top: 20px");
-            var voteContainer = document.createElement("div");
-            voteContainer.className = "mr-3 commentactions";
-            var upArrow = document.createElement("i");
-            upArrow.className = "material-icons md-18 md-dark up";
-            upArrow.innerHTML = "arrow_upward";
-            var downArrow = document.createElement("i");
-            downArrow.className = "material-icons md-18 md-dark down";
-            downArrow.innerHTML = "arrow_downward";
-            var commentBodyContainer = document.createElement("div");
-            commentBodyContainer.className = "media-body";
-            commentBodyContainer.id = commentID;
-            var flexContainer = document.createElement("div");
-            flexContainer.className = "d-flex";
-            var userNameContainer = document.createElement("h6");
-            userNameContainer.className = "mt-0";
-            var userName = document.createElement("a");
-            userName.setAttribute("href", "user-profile?u="+commentAuthor);
-            userName.setAttribute("style", "color : #000000;");
-            userName.innerHTML = commentAuthor;
-            var commentScoreContainer = document.createElement("span");
-            commentScoreContainer.className = "ml-2 points";
-            commentScoreContainer.innerHTML = commentScore+" points";
-            var separator = document.createElement("span");
-            separator.className = "ml-2";
-            separator.innerHTML = "·";
-            var commentDateContainer = document.createElement("span");
-            commentDateContainer.className = "ml-2 points";
-            commentDateContainer.innerHTML = commentDate;
-            var commentContentContainer = document.createElement("div");
-            commentContentContainer.innerHTML = commentContent;
-            var navContainer = document.createElement("div");
-            navContainer.className = "nav-item active mt-2";
-            var infoSpan = document.createElement("span");
-            infoSpan.className = "info";
-            var replyLink = document.createElement("a");
-            replyLink.setAttribute("href", "");
-            var commentIcon = document.createElement("i");
-            commentIcon.className = "material-icons md-16 md-dark";
-            commentIcon.innerHTML = "comment";
-            var replyText = document.createElement("span");
-            replyText.innerHTML = " Reply";
-            
-            voteContainer.append(upArrow);
-            voteContainer.append(downArrow);
-            userNameContainer.append(userName);
-            flexContainer.append(userNameContainer);
-            flexContainer.append(commentScoreContainer);
-            flexContainer.append(separator);
-            flexContainer.append(commentDateContainer);
-            replyLink.append(commentIcon);
-            replyLink.append(replyText);
-            infoSpan.append(replyLink);
-            navContainer.append(infoSpan);
-            commentBodyContainer.append(flexContainer);
-            commentBodyContainer.append(commentContentContainer);
-            commentBodyContainer.append(navContainer);
-            mainCommentContainer.append(voteContainer);
-            mainCommentContainer.append(commentBodyContainer);
-            
-            $(commentContainer).append(mainCommentContainer);
-        }
-		
-		function createNewComment(){
-			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
-				$("#commentContent").val("");
-				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
-			})
-		}
-		
-  	</script>
+  <script>
+    var username = "{{uname}}";
+
+    function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
+      var wholeCommentContainer = document.createElement("div");
+      wholeCommentContainer.className = "comment-container";
+      var mainCommentContainer = document.createElement("div");
+      mainCommentContainer.className = "media comment ml-3";
+      var voteContainer = document.createElement("div");
+      voteContainer.className = "mr-3 commentactions";
+      var upArrow = document.createElement("i");
+      upArrow.className = "material-icons md-18 md-dark up";
+      upArrow.innerHTML = "arrow_upward";
+      var downArrow = document.createElement("i");
+      downArrow.className = "material-icons md-18 md-dark down";
+      downArrow.innerHTML = "arrow_downward";
+      var commentBodyContainer = document.createElement("div");
+      if (username)
+        commentBodyContainer.className = "media-body";
+      else
+        commentBodyContainer.className = "media-body mb-3";
+      commentBodyContainer.id = commentID;
+      var flexContainer = document.createElement("div");
+      flexContainer.className = "d-flex";
+      var userNameContainer = document.createElement("h6");
+      userNameContainer.className = "mt-0";
+      var userName = document.createElement("a");
+      userName.setAttribute("href", "user-profile?u=" + commentAuthor);
+      userName.setAttribute("style", "color : #000000;");
+      userName.innerHTML = commentAuthor;
+      var commentScoreContainer = document.createElement("span");
+      commentScoreContainer.className = "ml-2 points";
+      commentScoreContainer.innerHTML = commentScore + " points";
+      var separator = document.createElement("span");
+      separator.className = "ml-2";
+      separator.innerHTML = "·";
+      var commentDateContainer = document.createElement("span");
+      commentDateContainer.className = "ml-2 points";
+      commentDateContainer.innerHTML = commentDate;
+      var commentContentContainer = document.createElement("div");
+      commentContentContainer.innerHTML = commentContent;
+      var navContainer = document.createElement("div");
+      navContainer.className = "nav-item active mt-2";
+      var infoSpan = document.createElement("span");
+      infoSpan.className = "info";
+      var replyLink = document.createElement("a");
+      replyLink.setAttribute("href", "");
+      var commentIcon = document.createElement("i");
+      commentIcon.className = "material-icons md-16 md-dark";
+      commentIcon.innerHTML = "comment";
+      var replyText = document.createElement("span");
+      replyText.innerHTML = " Reply";
+
+      voteContainer.append(upArrow);
+      voteContainer.append(downArrow);
+      userNameContainer.append(userName);
+      flexContainer.append(userNameContainer);
+      flexContainer.append(commentScoreContainer);
+      flexContainer.append(separator);
+      flexContainer.append(commentDateContainer);
+      if (username) {
+        replyLink.append(commentIcon);
+        replyLink.append(replyText);
+        infoSpan.append(replyLink);
+        navContainer.append(infoSpan);
+      }
+      commentBodyContainer.append(flexContainer);
+      commentBodyContainer.append(commentContentContainer);
+      commentBodyContainer.append(navContainer);
+      mainCommentContainer.append(voteContainer);
+      mainCommentContainer.append(commentBodyContainer);
+      wholeCommentContainer.append(mainCommentContainer);
+
+      $("#allComments").append(wholeCommentContainer);
+    }
+
+    function addNestedComment(commentContainer, commentID, commentContent, commentAuthor, commentDate, commentScore) {
+      var mainCommentContainer = document.createElement("div");
+      mainCommentContainer.className = "media comment";
+      mainCommentContainer.setAttribute("style", "margin-top: 20px");
+      var voteContainer = document.createElement("div");
+      voteContainer.className = "mr-3 commentactions";
+      var upArrow = document.createElement("i");
+      upArrow.className = "material-icons md-18 md-dark up";
+      upArrow.innerHTML = "arrow_upward";
+      var downArrow = document.createElement("i");
+      downArrow.className = "material-icons md-18 md-dark down";
+      downArrow.innerHTML = "arrow_downward";
+      var commentBodyContainer = document.createElement("div");
+      if (username)
+        commentBodyContainer.className = "media-body";
+      else
+        commentBodyContainer.className = "media-body mb-3";
+      commentBodyContainer.id = commentID;
+      var flexContainer = document.createElement("div");
+      flexContainer.className = "d-flex";
+      var userNameContainer = document.createElement("h6");
+      userNameContainer.className = "mt-0";
+      var userName = document.createElement("a");
+      userName.setAttribute("href", "user-profile?u=" + commentAuthor);
+      userName.setAttribute("style", "color : #000000;");
+      userName.innerHTML = commentAuthor;
+      var commentScoreContainer = document.createElement("span");
+      commentScoreContainer.className = "ml-2 points";
+      commentScoreContainer.innerHTML = commentScore + " points";
+      var separator = document.createElement("span");
+      separator.className = "ml-2";
+      separator.innerHTML = "·";
+      var commentDateContainer = document.createElement("span");
+      commentDateContainer.className = "ml-2 points";
+      commentDateContainer.innerHTML = commentDate;
+      var commentContentContainer = document.createElement("div");
+      commentContentContainer.innerHTML = commentContent;
+      var navContainer = document.createElement("div");
+      navContainer.className = "nav-item active mt-2";
+      var infoSpan = document.createElement("span");
+      infoSpan.className = "info";
+      var replyLink = document.createElement("a");
+      replyLink.setAttribute("href", "");
+      var commentIcon = document.createElement("i");
+      commentIcon.className = "material-icons md-16 md-dark";
+      commentIcon.innerHTML = "comment";
+      var replyText = document.createElement("span");
+      replyText.innerHTML = " Reply";
+
+      voteContainer.append(upArrow);
+      voteContainer.append(downArrow);
+      userNameContainer.append(userName);
+      flexContainer.append(userNameContainer);
+      flexContainer.append(commentScoreContainer);
+      flexContainer.append(separator);
+      flexContainer.append(commentDateContainer);
+      if (username) {
+        replyLink.append(commentIcon);
+        replyLink.append(replyText);
+        infoSpan.append(replyLink);
+        navContainer.append(infoSpan);
+      }
+      commentBodyContainer.append(flexContainer);
+      commentBodyContainer.append(commentContentContainer);
+      commentBodyContainer.append(navContainer);
+      mainCommentContainer.append(voteContainer);
+      mainCommentContainer.append(commentBodyContainer);
+
+      $(commentContainer).append(mainCommentContainer);
+    }
+
+    function createNewComment() {
+      $.post("createnewcomment", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
+        $("#commentContent").val("");
+        addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+      })
+    }
+
+  </script>
 
 </head>
 
 <body>
-  {{#if uname}}
-	{{> signedNavBar}}	
-  {{else}}
-	{{> unsignedNavBar}}
-  {{/if}}
+  {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="starter-template">
       <!-- START OF POSTS SECTION -->
@@ -183,44 +190,77 @@
           </div>
         </div>
       </div>
-		  
-	  {{#if uname}}
-      <div class="postcomment">
-      	<h5 class="mt-0 mb-1">Reply to post</h5>
-      	<div class="container-fluid">
-        	<textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
-        </div>
-      	<button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
-      </div>	
-	  {{/if}}
 
-    <a name="comments"></a>
-          
-    <div id="allComments"></div> 
+      {{#if uname}}
+      <div class="postcomment">
+        <h5 class="mt-0 mb-1">Replying as
+          <a href="user-profile?u={{uname}}">{{uname}}</a>
+        </h5>
+        <div class="container-fluid">
+          <textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
+        </div>
+        <button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
+      </div>
+      {{else}}
+      <div class="postcomment">
+        <h5 class="mt-0 mb-3">Reply to post</h5>
+        <div class="container-fluid">
+          <form>
+            <fieldset disabled>
+              <input type="text" class="form-control mb-3" placeholder="What are your thoughts? Log in or Sign up">
+            </fieldset>
+          </form>
+
+        </div>
+      </div>
+      {{/if}}
+
+      <a name="comments"></a>
+
+      <div id="allComments"></div>
 
     </div>
   </main>
-        
+
   {{> scriptResources}}
 
-      
+
   <script>
     $(document).ready(function () {
 
-        $.post("getonepost",{ postID: "{{postID}}" },(foundPost)=>{
-            if(foundPost.comment.length > 0){
-                for(let i = 0 ; i < foundPost.comment.length ; i++){
-                    addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
-                }                
-            }else{             
-                var noComments = document.createElement("div");
-                noComments.innerHTML = "No comments.";
-				noComments.id = "noComment";
-                $("#allComments").append(noComments);
-            }
-        })
-		
+      $.post("getonepost", { postID: "{{postID}}" }, (foundPost) => {
+        if (foundPost.comment.length > 0) {
+          for (let i = 0; i < foundPost.comment.length; i++) {
+            addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
+          }
+        } else {
+          var noComments = document.createElement("div");
+          noComments.innerHTML = "No comments.";
+          noComments.id = "noComment";
+          $("#allComments").append(noComments);
+        }
+      })
+
     });
+
+    $(".commentbox").on({
+      mouseover: function () {
+        $('.cbox-action').toggleClass('visible');
+        $('.cbox-action').animate({
+          'left': '0px'
+        },
+          'slow');
+      },
+
+      mouseout: function () {
+        // $(".cbox-action").stop().hide(500);
+        $('.cbox-action').toggleClass('hide');
+        $('.cbox-action').animate({
+          'left': '500px'
+        },
+          'slow');
+      }
+    })
   </script>
 
 </body>
