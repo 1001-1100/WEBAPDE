@@ -6,7 +6,9 @@
   <title>The Forum</title>
   
 	<script>
-	  
+
+      var newComments = 0;
+
   		function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore){
     		var wholeCommentContainer = document.createElement("div");
             wholeCommentContainer.className = "comment-container";
@@ -144,6 +146,8 @@
 		function createNewComment(){
 			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
 				$("#commentContent").val("");
+        newComments += 1;
+        $("#commentNumber").html({{commentNumber}}+newComments+" comments");
 				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
 			})
 		}
@@ -155,7 +159,7 @@
         $("#submitButton").attr("disabled","disabled");
       }
     }
-		
+	
   	</script>
 
 </head>
@@ -182,7 +186,7 @@
             <span class="info">
               <span class="p-2">
                 <i class="material-icons md-16 md-dark">comment</i>
-                <a href="#comments">{{commentNumber}} comments</a>
+                <a id="commentNumber" href="#comments">{{commentNumber}} comments</a>
               </span>
               <span class="p-2">
                 <i class="material-icons md-18 md-dark">person_outline</i> Posted by

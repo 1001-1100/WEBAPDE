@@ -286,7 +286,8 @@ express()
                 commentScore: 0,
                 nestedComments: []
             })
-            foundPost.comment.push(newComment)
+			foundPost.comment.push(newComment)
+			foundPost.commentNumber += 1
             foundPost.save().then((msg)=>{
             	res.send(newComment)
             })
