@@ -147,6 +147,14 @@
 				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
 			})
 		}
+
+    function checkCommentBox(){
+      if($("#commentContent").val().trim() != ""){
+        $("#submitButton").removeAttr("disabled");
+      }else{
+        $("#submitButton").attr("disabled","disabled");
+      }
+    }
 		
   	</script>
 
@@ -188,9 +196,9 @@
       <div class="postcomment">
       	<h5 class="mt-0 mb-1">Reply to post</h5>
       	<div class="container-fluid">
-        	<textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
+        	<textarea oninput="checkCommentBox();" id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
         </div>
-      	<button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
+      	<button disabled id="submitButton" onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
       </div>	
 	  {{/if}}
 
