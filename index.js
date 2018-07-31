@@ -38,13 +38,10 @@ mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js
 
 express()
 	.use(session({
-		saveUninitialized: true,
+		saveUninitialized: false,
 		resave: true,
 		secret: "nicokayejosh",
-		name: "Nico's Cookie",
-		cookie: {
-			maxAge: 1000 * 60 * 60 * 24 * 7 * 3
-		}
+		name: "Nico's Cookie"
 	}))
 
 	.use(cookieparser())
@@ -54,11 +51,15 @@ express()
 	.set('view engine', 'hbs')
 
 /** ROUTES **/
-
+	
 	.get('/', urlencoder, (req, res) => {
+		if(req.session.rememberMe){
+			req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
+			req.session.maxAge = 1000 * 60 * 60 * 24 * 3
+		}
         res.render("./pages/index.hbs", {
             uname: req.session.username,
-            face: cool()
+			face: cool()
         })
 	})
 
@@ -134,6 +135,11 @@ express()
 			if(foundUser){
 				bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
 					if(msg){
+						if(req.body.rememberMe){
+							req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
+							req.session.maxAge = 1000 * 60 * 60 * 24 * 3
+						}
+						req.session.rememberMe = req.body.rememberMe
 						req.session.username = req.body.username
 						res.redirect("/")
 					}else{
@@ -147,6 +153,7 @@ express()
 	})
 	.post('/logout', (req, res) => {
 		req.session.destroy()
+		res.clearCookie("Nico's Cookie")
 		res.redirect("/")
 	})
 	.post('/registered', urlencoder, (req, res) => {
@@ -167,6 +174,7 @@ express()
 						avatar: req.body.avatar
 					})
 					newUser.save().then((msg)=>{
+						req.session.rememberMe = req.body.rememberMe
 						req.session.username = req.body.username
 						res.redirect("/")
 					})
