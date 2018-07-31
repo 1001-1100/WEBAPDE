@@ -49,7 +49,7 @@
             var infoSpan = document.createElement("span");
             infoSpan.className = "info";
             var replyLink = document.createElement("a");
-            replyLink.setAttribute("href", "");
+            replyLink.setAttribute("onclick", "showReplyNestedComment();");
             var commentIcon = document.createElement("i");
             commentIcon.className = "material-icons md-16 md-dark";
             commentIcon.innerHTML = "comment";
@@ -115,8 +115,10 @@
             navContainer.className = "nav-item active mt-2";
             var infoSpan = document.createElement("span");
             infoSpan.className = "info";
+            infoSpan.id = commentID+"info";
             var replyLink = document.createElement("a");
-            replyLink.setAttribute("href", "");
+            var replyLinkID = commentID+"info";
+            replyLink.setAttribute("onclick", "showReplyNestedComment();");
             var commentIcon = document.createElement("i");
             commentIcon.className = "material-icons md-16 md-dark";
             commentIcon.innerHTML = "comment";
@@ -142,7 +144,11 @@
             
             $(commentContainer).append(mainCommentContainer);
         }
-		
+
+    function showReplyNestedComment(){
+
+    }
+
 		function createNewComment(){
 			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
 				$("#commentContent").val("");

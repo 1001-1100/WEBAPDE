@@ -31,8 +31,8 @@
 
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Date Created</a>
-          <a class="dropdown-item" href="#">Popularity</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
         </div>
       </div>
 	  {{else}}
@@ -40,8 +40,8 @@
         <button class="btn btn-outline-secondary dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Date Created</a>
-          <a class="dropdown-item" href="#">Popularity</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
         </div>
       </div>		
 	  {{/if}}
@@ -56,7 +56,35 @@
     
   <script>
     $(document).ready(function () {
+
+        var skipNum = 0;
+
         $.get("getposts",{},(foundPosts)=>{
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                  skipNum += 1;
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })
+        
+      $("#loadMorePosts").click(function () 
+        $.post("getmoreposts",{skipNum : skipNum},(foundPosts)=>{
+            console.log(foundPosts.length);
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                  skipNum += 1;
+                }	
+            }
+        })        
+      });
+
+      $("#sortByDate").click(()=>{
+        $.post("getsortedbydateposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
             if(foundPosts.length > 0){
                 for(let i = 0; i < foundPosts.length; i++) {
                   addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -65,10 +93,20 @@
                 $("#postContainer").append("No posts available");
             }
         })
-        
-      $("#loadMorePosts").click(function () {
-          
-      });
+      })
+
+      $("#sortByPopularity").click(()=>{
+        $.post("getsortedbyscoreposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })      
+      })
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
@@ -83,7 +121,7 @@
         arrowUpward.className = "material-icons md-18 md-dark up";
         arrowUpward.innerHTML = "arrow_upward";
         var voteValue = document.createElement("span");
-		voteValue.className = "votes";
+		    voteValue.className = "votes";
         voteValue.innerHTML = postScore;
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
@@ -95,8 +133,8 @@
         personIcon.className = "material-icons md-18 md-dark";
         personIcon.innerHTML = "person_outline";
         var postTitleContainer = document.createElement("h5");
-		var postTitleLink = document.createElement("a");
-		postTitleLink.setAttribute("href", "post?id="+postID);
+		    var postTitleLink = document.createElement("a");
+		    postTitleLink.setAttribute("href", "post?id="+postID);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleLink.innerHTML = postTitle;
         var postContent = document.createElement("div");
@@ -120,7 +158,7 @@
         voteBox.append(voteValue);
         voteBox.append(arrowDownward);
         flexRow.append(voteBox);
-		postTitleContainer.append(postTitleLink);
+		    postTitleContainer.append(postTitleLink);
         flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
         commentNumberContainer.append(commentIcon);

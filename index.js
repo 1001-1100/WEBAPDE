@@ -57,6 +57,7 @@ var Post = mongoose.model("postList",{
 	postDescription: String,
 	postAuthor: String,
 	postDate: String,
+	postDateRaw: Date,
 	postScore: Number,
 	commentNumber: Number,
 	comment: [{
@@ -235,6 +236,7 @@ express()
 			postDescription: req.body.postDescription,
 			postAuthor: req.session.username,
 			postDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
+			postDateRaw: dateNow,
 			postScore: 0,
 			commentNumber: 0,
             comment: []
@@ -254,10 +256,32 @@ express()
     //AJAX CALLS
 
 	.get('/getposts', (req, res) => {
-		var findPosts = Post.find()
+		var findPosts = Post.find().limit(5)
 		findPosts.then((foundPosts)=>{
             res.send(foundPosts)
 		})
+	})
+
+	.post('/getmoreposts', urlencoder, (req, res) => {
+		console.log(req.body.skipNum);
+		var findPosts = Post.find().skip(req.body.skipNum).limit(5)
+		findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+		})
+	})
+	
+    .get('/getsortedbyscoreposts', urlencoder, (req, res) => {
+        var findPosts = Post.find({}).sort({postScore : -1}).limit(5)
+        findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+        })
+	})
+	
+    .get('/getsortedbydateposts', urlencoder, (req, res) => {
+        var findPosts = Post.find({}).sort({postDateRaw : -1}).limit(5)
+        findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+        })
     })
 
     .post('/getonepost', urlencoder, (req, res) => {
