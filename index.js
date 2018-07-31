@@ -9,6 +9,8 @@ const cookieparser = require("cookie-parser")
 const PORT = process.env.PORT || 5000
 const bcrypt = require("bcrypt")
 const mongoose = require("mongoose") 
+
+/** MODEL IMPORTS **/
 const User = require("./model/user.js").User
 const Post = require("./model/post.js").Post
 const Comment = require("./model/comment.js").Comment
@@ -19,7 +21,8 @@ hbs.registerPartials(path.join(__dirname,'/views/partials'))
 const urlencoder = bodyparser.urlencoded({
 	extended: false
 })
-/** Connect to mLab Database (heroku_0n46js2x)
+/** 
+	Connect to mLab Database (heroku_0n46js2x)
     Username: Nine
     Password: trexfire6
 
@@ -212,8 +215,7 @@ express()
 	})
 
 	.post('/getmoreposts', urlencoder, (req, res) => {
-		console.log(req.body.skipNum);
-		var findPosts = Post.find().skip(req.body.skipNum).limit(5)
+		var findPosts = Post.find().skip(parseInt(req.body.skipNum)).limit(5)
 		findPosts.then((foundPosts)=>{
             res.send(foundPosts)
 		})

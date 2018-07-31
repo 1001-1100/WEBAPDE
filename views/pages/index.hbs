@@ -63,49 +63,49 @@
             if(foundPosts.length > 0){
                 for(let i = 0; i < foundPosts.length; i++) {
                   addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                  skipNum += 1;
                 }	
             }else{	
                 $("#postContainer").append("No posts available");
             }
         })
         
-//      $("#loadMorePosts").click(function () 
-//        $.post("getmoreposts",{skipNum : skipNum},(foundPosts)=>{
-//            console.log(foundPosts.length);
-//            if(foundPosts.length > 0){
-//                for(let i = 0; i < foundPosts.length; i++) {
-//                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-//                  skipNum += 1;
-//                }	
-//            }
-//        })        
-//      });
-//
-//      $("#sortByDate").click(()=>{
-//        $.post("getsortedbydateposts",{},(foundPosts)=>{
-//            $("#postContainer").empty();
-//            if(foundPosts.length > 0){
-//                for(let i = 0; i < foundPosts.length; i++) {
-//                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-//                }	
-//            }else{	
-//                $("#postContainer").append("No posts available");
-//            }
-//        })
-//      })
-//
-//      $("#sortByPopularity").click(()=>{
-//        $.post("getsortedbyscoreposts",{},(foundPosts)=>{
-//            $("#postContainer").empty();
-//            if(foundPosts.length > 0){
-//                for(let i = 0; i < foundPosts.length; i++) {
-//                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-//                }	
-//            }else{	
-//                $("#postContainer").append("No posts available");
-//            }
-//        })      
-//      })
+      $("#loadMorePosts").click(function () {
+        $.post("getmoreposts",{skipNum},(foundPosts)=>{
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                  skipNum += 1;
+                }	
+            }
+        })        
+      });
+
+      $("#sortByDate").click(()=>{
+        $.get("getsortedbydateposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })
+      })
+
+      $("#sortByPopularity").click(()=>{
+        $.get("getsortedbyscoreposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })      
+      })
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
