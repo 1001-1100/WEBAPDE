@@ -172,7 +172,30 @@
             addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
           }
         } else {
-          $("#postContainer").append("No posts available");
+          var noPosts = document.createElement("div");
+          noPosts.className = "comment-container";
+          var icon = document.createElement("i");
+          icon.className = "material-icons md-dark md-92 flex-fill";
+          icon.innerHTML = "sentiment_very_dissatisfied";
+          var content = document.createElement("div");
+          content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
+          var text = document.createElement("h2");
+          text.className = "flex-fill text-center";
+          text.innerHTML = "No posts yet...";
+          var subtext = document.createElement("h6");
+          subtext.className = "mt-1 flex-fill text-center subheading";
+
+          var username = "{{uname}}";
+          if (username)
+            subtext.innerHTML = "This place feels empty, why not start a discussion?";
+          else
+            subtext.innerHTML = "Login or register to start a discussion now.";
+          content.append(icon);
+          content.append(text);
+          content.append(subtext);
+          noPosts.append(content);
+          noPosts.id = "noPosts";
+          $("#postContainer").append(noPosts);
         }
       })
 
