@@ -127,6 +127,10 @@ body a {
   color: rgba(0, 0, 0, 0.34);
 }
 
+.material-icons.md-red {
+  color: rgba(255, 0, 0, 0.78);
+}
+
 .avatar {
   width: 200px;
   height: 250px;

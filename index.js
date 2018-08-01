@@ -305,4 +305,9 @@ express()
 		})
 	})
 
+	.use("*", (req, res) => {
+		console.log("USE * ")
+		res.render('./pages/error.hbs')
+	})
+
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`))
