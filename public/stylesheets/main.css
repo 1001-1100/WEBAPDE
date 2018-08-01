@@ -131,6 +131,10 @@ body a {
   color: rgba(255, 0, 0, 0.78);
 }
 
+.material-icons.md-orange {
+  color: #FB8C00;
+}
+
 .avatar {
   width: 200px;
   height: 250px;
