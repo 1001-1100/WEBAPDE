@@ -111,6 +111,10 @@ body a {
   color: #3C8AFF;
 }
 
+.material-icons.md-92 {
+  font-size: 92px;
+}
+
 .material-icons.md-18 {
   font-size: 18px;
 }
@@ -131,4 +135,9 @@ body a {
 .delete {
   float: right;
   cursor: pointer;
+}
+
+.subheading {
+  font-weight: normal;
+  color: rgba(0, 0, 0, 0.7);
 }
