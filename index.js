@@ -126,7 +126,7 @@ express()
 					uname: req.session.username
 				})
 			} else {
-				res.send("Not found.")
+				res.render('./pages/error.hbs')
 			}
 		})
 	})
@@ -306,7 +306,6 @@ express()
 	})
 
 	.use("*", (req, res) => {
-		console.log("USE * ")
 		res.render('./pages/error.hbs')
 	})
 
