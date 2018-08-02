@@ -57,13 +57,7 @@
   <script>
     $(document).ready(function () {
         $.get("getposts",{},(foundPosts)=>{
-            if(foundPosts.length > 0){
-                for(let i = 0; i < foundPosts.length; i++) {
-                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                }	
-            }else{	
-                $("#postContainer").append("No posts available");
-            }
+          
         })
         
       $("#loadMorePosts").click(function () {
@@ -139,6 +133,28 @@
 
         $("#postContainer").append(mediaPost);
       }
+      // SEARCHIN USING AJAX
+       $("#searchbtn").on("click", function(evt){
+               evt.preventDefault();
+
+        var keyword = $('#inputSearch').val();
+          
+              $.post("searchkeyword",{  
+                keyword : keyword
+              
+                },(foundPosts)=>{
+                  $("#postContainer").empty();
+                  if(foundPosts){
+                      
+                      for(let i = 0; i < foundPosts.length; i++) {
+                        addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                      }	
+
+                  }else{	
+                      $("#postContainer").append("No posts available");
+                  }
+              })
+        });
     });
   </script>
 

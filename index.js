@@ -12,17 +12,23 @@ const urlencoder = bodyparser.urlencoded({
 })
 const PORT = process.env.PORT || 5000
 const bcrypt = require("bcrypt")
-const mongoose = require("mongoose")     
+const mongoose = require("mongoose")   
+const fs = require('fs');
+var multer = require('multer');
 mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js2x',
 {
     useNewUrlParser:true
 })
-var User = mongoose.model("userList",{
+
+var UserSchema = mongoose.Schema({
 	emailAddress : String,
 	username : String,
 	password : String,
 	shortBio : String,
-	avatar: String,
+	avatar: {
+		data: Buffer,
+		contentType: String
+	},
 	post: [{
 		postID: String,
 		postTitle: String,
@@ -40,6 +46,8 @@ var User = mongoose.model("userList",{
 		commentScore: Number
 	}]
 })
+
+var User = mongoose.model("userList", UserSchema)
 
 var Comment = mongoose.model("commentList",{
     postID: String,
@@ -70,8 +78,10 @@ var Post = mongoose.model("postList",{
 		}]
 	}]
 })
-
+	
 express()
+
+
 	.use(session({
 		saveUninitialized: true,
 		resave: true,
@@ -173,55 +183,56 @@ express()
 
 	.get('/signin', (req, res) => res.render("./pages/signin.hbs"))
 
-	.post('/signedin', urlencoder, (req, res) => {
-		var findUser = User.findOne({
-			username : req.body.username,
-		})
-		findUser.then((foundUser)=>{
-			if(foundUser){
-				bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
-					if(msg){
-						req.session.username = req.body.username
-						res.redirect("/")
-					}else{
+	// .post('/signedin', urlencoder, (req, res) => {
+	// 	var findUser = User.findOne({
+	// 		username : req.body.username,
+	// 	})
+	// 	findUser.then((foundUser)=>{
+	// 		if(foundUser){
+	// 			bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
+	// 				if(msg){
+	// 					req.session.username = req.body.username
+	// 					res.redirect("/")
+	// 				}else{
 						
-					}
-				})
-			}else{
-				res.send("User not found")
-			}
-		})
-	})
+	// 				}
+	// 			})
+	// 		}else{
+	// 			res.send("User not found")
+	// 		}
+	// 	})
+	// })
 	.post('/logout', (req, res) => {
 		req.session.destroy()
 		res.redirect("/")
 	})
-	.post('/registered', urlencoder, (req, res) => {
-		var findUser = User.findOne({
-			username : req.body.username
-		})
-		findUser.then((foundUser)=>{
-			if(foundUser){
-				res.send("User already exists")
-			}else{
-				bcrypt.hash(req.body.password,12).then((hashed)=>{
-					var hashedPassword = hashed
-					var newUser = new User({
-						emailAddress : req.body.emailAddress,
-						username : req.body.username,
-						password : hashedPassword,
-						shortBio : req.body.shortBio,
-						avatar: req.body.avatar
-					})
-					newUser.save().then((msg)=>{
-						req.session.username = req.body.username
-						res.redirect("/")
-					})
-				})
-			}
-		})
-	})
+	// .post('/registered', urlencoder, (req, res) => {
+	// 	var findUser = User.findOne({
+	// 		username : req.body.username
+	// 	})
+	// 	findUser.then((foundUser)=>{
+	// 		if(foundUser){
+	// 			res.send("User already exists")
+	// 		}else{
+	// 			bcrypt.hash(req.body.password,12).then((hashed)=>{
+	// 				var hashedPassword = hashed
+	// 				var newUser = new User({
+	// 					emailAddress : req.body.emailAddress,
+	// 					username : req.body.username,
+	// 					password : hashedPassword,
+	// 					shortBio : req.body.shortBio,
+	// 					avatar: req.body.avatar
+	// 				})
+	// 				newUser.save().then((msg)=>{
+	// 					req.session.username = req.body.username
+	// 					res.redirect("/")
+	// 				})
+	// 			})
+	// 		}
+	// 	})
+	// })
 
+	.get('/about', (req,res) => res.render("./pages/about.hbs"))
 	.get('/site-map', urlencoder, (req, res) => res.render("./pages/sitemap.hbs"))
 	.get('/register', (req, res) => res.render("./pages/register.hbs"))
 	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
@@ -264,8 +275,93 @@ express()
         var findPost = Post.findOne({ _id : req.body.postID})
         findPost.then((foundPost)=>{
             res.send(foundPost)
-        })
-    })
+		})
+		
+	})
+	
+	.post('/checkaccount', urlencoder, (req, res) =>{
+		var findUser = User.findOne({username: req.body.uname})
+
+		findUser.then((foundUser)=>{
+			if(foundUser){
+
+				bcrypt.compare(req.body.pword, foundUser.password).then((msg)=>{
+					if(msg){
+						req.session.username = req.body.uname
+						res.send(foundUser);
+					}else{
+						res.send(null);
+					}
+				})
+			}else{
+				res.send(null);
+			}
+		})
+
+	})
+
+	.post('/checkregisteraccount', urlencoder, (req, res) =>{
+	
+		var findUser = User.findOne({username: req.body.uname}) // (name in db): req.body.(name passed from client)
+		var findEmail = User.findOne({emailAddress: req.body.email}) // (name in db): req.body.(name passed from client)
+
+		findUser.then((foundUser)=>{
+			findEmail.then((foundEmail)=>{
+
+			
+			
+				if(foundUser){ // only username matched in db
+						res.send("1")
+						console.log("in checkregisteraccount - if");	
+				}
+				else if(foundEmail){ // only email matched in db
+						res.send("2")
+						console.log("in checkregisteraccount - if");
+				}
+				else{
+					console.log("in checkregisteraccount - else");
+					bcrypt.hash(req.body.password,12).then((hashed)=>{
+						var hashedPassword = hashed
+						var newUser = new User({
+							emailAddress : req.body.email,
+							username : req.body.uname,
+							password : hashedPassword,
+							shortBio : req.body.bio,
+						
+						})
+					
+						newUser.save().then((msg)=>{
+							req.session.username = req.body.uname
+							res.send(null);
+						})
+					})
+				}
+			})
+		})
+
+	})
+
+	.post('/searchkeyword', urlencoder, (req, res) =>{
+		var findPost = Post.find({postDescription: {$regex:req.body.keyword ,$options:"$i"}})
+
+		var findPost2 = Post.find({postTitle: {$regex:req.body.keyword ,$options:"$i"}})
+		let check = 0;
+		console.log("im in /searchkeyword " + req.body.keyword);
+		findPost.then((foundPosts)=>{
+			findPost2.then((foundPosts2)=>{
+				if(foundPosts || foundPosts2){
+					console.log(foundPosts)
+					console.log("foundPosts not nullll");
+					res.send(foundPosts.concat(foundPosts2));
+					
+				}else{
+					console.log("foundPosts nullll");
+					res.send(null);
+				}
+			})
+		})
+
+	})
 
     .get('/getcomment', urlencoder, (req, res) => {
 		var findComment = Comment.find({ _id : req.body.commentID})

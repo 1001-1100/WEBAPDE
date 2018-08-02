@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  {{> headerResources}}
+  <title>The Forum</title>
+
+  <style>
+    span{
+      padding-left:30px;
+    }
+    div{
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+   {{#if username}}
+	{{> signedNavBar}}	
+  {{else}}
+	{{> unsignedNavBar}}
+  {{/if}}
+  <main role="main" class="container">
+    <div class="starter-template ">
+      <h2>About The Developers</h2>
+
+     
+      <div>
+          <span>
+                <img src = "./kaye.JPG"width="300" height="350" >
+          </span>
+        
+          <span>
+              <img src = "./josh1.jpg" width="300" height="350">
+          </span>
+         
+            <span>
+              <img src = "./kaye.JPG"width="300" height="350">
+            </span>
+          <div>
+            Description here
+
+          </div>  
+        
+      </div>
+      <br>
+      <h2>About the Site </h2>
+      <div>
+        <p>This website is one of the minumum requirements for WEBAPDE. The Forum allows you to interact and discuss with other people on absolutely anything similar to Reddit</p>
+
+
+
+      </div>
+      {{!-- <ul class="list-group list-group-flush">
+
+        <li class="list-group-item">
+          <a href="/">Home</li>
+        <li class="list-group-item">
+          <a href="/user-profile">User Profile</li>
+        <li class="list-group-item">
+          <a href="/signin">Login</li>
+        <li class="list-group-item">
+          <a href="/register">Register</li>
+        <li class="list-group-item">
+          <a href="/newpost">Create Post</li>
+        <li class="list-group-item">
+          <a href="/editpost">Edit Post</li>
+        <li class="list-group-item">
+          <a href="/post">View Post</li>
+      </ul> --}}
+    </div>
+  </main>
+
+
+</body>
+
+</html>
