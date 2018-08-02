@@ -31,7 +31,7 @@ const urlencoder = bodyparser.urlencoded({
     Password: kayenicojosh116
 **/
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js2x',
+mongoose.connect('mongodb://localhost:27017/heroku_0n46js2x',
 {
     useNewUrlParser:true
 })

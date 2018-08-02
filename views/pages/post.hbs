@@ -48,10 +48,11 @@
             navContainer.className = "nav-item active mt-2";
             var infoSpan = document.createElement("span");
             infoSpan.className = "info";
-            var replyLink = document.createElement("button");
-            replyLink.id = "replyLink123";
-            //replyLink.setAttribute("href", "javascript:void(0)");
-            //replyLink.setAttribute("data-id", commentID);
+            infoSpan.id = "replyLink"
+            var replyLink = document.createElement("a");
+            replyLink.setAttribute("href","#");
+            replyLink.id = "replyLink"
+            replyLink.setAttribute("data-id", commentID);
             var commentIcon = document.createElement("i");
             commentIcon.className = "material-icons md-16 md-dark";
             commentIcon.innerHTML = "comment";
@@ -77,6 +78,9 @@
             wholeCommentContainer.append(mainCommentContainer);
             
             $("#allComments").append(wholeCommentContainer);
+            $("#replyLink").click(function(){
+                alert("Hi");
+            })
         }
 
         function addNestedComment(commentContainer, commentID, commentContent, commentAuthor, commentDate, commentScore){
@@ -119,7 +123,6 @@
             infoSpan.className = "info";
             infoSpan.id = commentID+"info";
             var replyLink = document.createElement("a");
-            var replyLinkID = commentID+"info";
             replyLink.id = "replyLink"
             replyLink.setAttribute("onclick", "showReplyNestedComment();");
             replyLink.setAttribute("href", "javascript:void(0)");
@@ -147,14 +150,14 @@
             mainCommentContainer.append(commentBodyContainer);
             
             $(commentContainer).append(mainCommentContainer);
+            $("#replyLink").click(function(){
+                alert("Hi");
+            })
         }
 
-    function showReplyNestedComment(){
-
-    }
-
 		function createNewComment(){
-			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
+            var postIDVar = "{{postID}}"
+			$.post("createnewcomment",{ postID: postIDVar, commentContent: $("#commentContent").val() },(newComment)=>{
 				$("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{commentNumber}}+newComments+" comments");
@@ -168,7 +171,7 @@
       }else{
         $("#submitButton").attr("disabled","disabled");
       }
-    }
+    }	
 	
   	</script>
 
@@ -228,24 +231,23 @@
   <script>
     $(document).ready(function () {
 
-        $.post("getonepost",{ postID: "{{postID}}" },(foundPost)=>{
+        var postIDVar = "{{postID}}"
+        $.post("getonepost",{ postID: postIDVar },(foundPost)=>{
             if(foundPost.comment.length > 0){
                 for(let i = 0 ; i < foundPost.comment.length ; i++){
                     addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
-                }                
+                }
             }else{             
                 var noComments = document.createElement("div");
                 noComments.innerHTML = "No comments.";
 				        noComments.id = "noComment";
                 $("#allComments").append(noComments);
-            }
-        });
-
-        $("#replyLink123").click(()=>{
-          alert("Hi");
-        });
-		
+            }                        
+        })
+        
     });
+            
+
   </script>
 
 </body>
