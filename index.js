@@ -28,7 +28,7 @@ const urlencoder = bodyparser.urlencoded({
 
     Admin Account:
     Username: heroku_0n46js2x
-    Password: nicokayejosh116
+    Password: kayenicojosh116
 **/
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js2x',
