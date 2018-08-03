@@ -3,60 +3,220 @@
 
 <head>
   {{> headerResources}}
-  <style>
-	.submitLink {
-	  background-color: transparent;
-	  text-decoration: underline;
-	  border: none;
-	  color: blue;
-	  cursor: pointer;
-	}
-  </style>
+
   <title>The Forum</title>
+
+  <link href="./stylesheets/loading.css" rel="stylesheet">
+
+  <style>
+    .submitLink {
+      background-color: transparent;
+      text-decoration: underline;
+      border: none;
+      color: blue;
+      cursor: pointer;
+    }
+
+    #loading-posts {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
-  {{#if uname}}
-	{{> signedNavBar}}	
-  {{else}}
-	{{> unsignedNavBar}}
-  {{/if}}
+  {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="starter-template">
-		
-	  {{#if uname}}
+
+      {{#if uname}}
       <div class="sort d-flex flex-fill-1 mb-3">
-        <a href="/newpost" class="mr-auto btn btn-outline-primary">
+        <a href="/newpost" class="mr-auto btn btn-outline-success">
           <i class="material-icons md-18">add</i> Create post</a>
 
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Date Created</a>
-          <a class="dropdown-item" href="#">Popularity</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
         </div>
       </div>
-	  {{else}}
+      {{else}}
       <div class="sort d-flex flex-fill-1 flex-row-reverse">
         <button class="btn btn-outline-secondary dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Date Created</a>
-          <a class="dropdown-item" href="#">Popularity</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
         </div>
-      </div>		
-	  {{/if}}
-		
-      <ul id="postContainer" class="list-unstyled"></ul>
+      </div>
+      {{/if}}
+
+      <ul id="postContainer" class="list-unstyled">
+      </ul>
+
+      <div id="loading-posts">
+        <div class="d-flex flex-row mb-3 media post">
+          <div class="mr-3 actions">
+            <i class="material-icons md-18 md-dark">arrow_upward</i>
+            <span class="votes1"></span>
+            <i class="material-icons md-18 md-dark">arrow_downward</i>
+          </div>
+          <div class="d-flex flex-column ml-1">
+            <div class="text">
+              <div class="title"></div>
+              <div class="text-line"></div>
+              <div class="text-line"></div>
+              <div>
+                <span class="text-footer1"></span>
+                <span class="text-footer2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row mb-3 media post">
+          <div class="mr-3 actions">
+            <i class="material-icons md-18 md-dark">arrow_upward</i>
+            <span class="votes1"></span>
+            <i class="material-icons md-18 md-dark">arrow_downward</i>
+          </div>
+          <div class="d-flex flex-column ml-1">
+            <div class="text">
+              <div class="title"></div>
+              <div class="text-line"></div>
+              <div class="text-line"></div>
+              <div>
+                <span class="text-footer1"></span>
+                <span class="text-footer2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row mb-3 media post">
+          <div class="mr-3 actions">
+            <i class="material-icons md-18 md-dark">arrow_upward</i>
+            <span class="votes1"></span>
+            <i class="material-icons md-18 md-dark">arrow_downward</i>
+          </div>
+          <div class="d-flex flex-column ml-1">
+            <div class="text">
+              <div class="title"></div>
+              <div class="text-line"></div>
+              <div class="text-line"></div>
+              <div>
+                <span class="text-footer1"></span>
+                <span class="text-footer2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row mb-3 media post">
+          <div class="mr-3 actions">
+            <i class="material-icons md-18 md-dark">arrow_upward</i>
+            <span class="votes1"></span>
+            <i class="material-icons md-18 md-dark">arrow_downward</i>
+          </div>
+          <div class="d-flex flex-column ml-1">
+            <div class="text">
+              <div class="title"></div>
+              <div class="text-line"></div>
+              <div class="text-line"></div>
+              <div>
+                <span class="text-footer1"></span>
+                <span class="text-footer2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-row mb-3 media post">
+          <div class="mr-3 actions">
+            <i class="material-icons md-18 md-dark">arrow_upward</i>
+            <span class="votes1"></span>
+            <i class="material-icons md-18 md-dark">arrow_downward</i>
+          </div>
+          <div class="d-flex flex-column ml-1">
+            <div class="text">
+              <div class="title"></div>
+              <div class="text-line"></div>
+              <div class="text-line"></div>
+              <div>
+                <span class="text-footer1"></span>
+                <span class="text-footer2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
     </div>
   </main>
-    
+
   {{> scriptResources}}
-    
+
   <script>
     $(document).ready(function () {
-        $.get("getposts",{},(foundPosts)=>{
+    
+      var skipNum = 0;
+
+      $(document).ajaxStart(function () {
+        $("#loading-posts").css("display", "block");
+      });
+
+      $(document).ajaxComplete(function () {
+        $("#loading-posts").css("display", "none");
+      });
+
+      $.get("getposts", {}, (foundPosts) => {
+        if (foundPosts.length > 0) {
+          for (let i = 0; i < foundPosts.length; i++) {
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            skipNum += 1;
+          }
+        } else {
+          var noPosts = document.createElement("div");
+          noPosts.className = "comment-container";
+          var icon = document.createElement("i");
+          icon.className = "material-icons md-orange md-92 flex-fill";
+          icon.innerHTML = "sentiment_very_dissatisfied";
+          var content = document.createElement("div");
+          content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
+          var text = document.createElement("h2");
+          text.className = "flex-fill text-center";
+          text.innerHTML = "No posts yet...";
+          var subtext = document.createElement("h6");
+          subtext.className = "mt-1 flex-fill text-center subheading";
+
+          var username = "{{uname}}";
+          if (username)
+            subtext.innerHTML = "This place feels empty, why not start a discussion?";
+          else
+            subtext.innerHTML = "Login or register to start a discussion now.";
+          content.append(icon);
+          content.append(text);
+          content.append(subtext);
+          noPosts.append(content);
+          noPosts.id = "noPosts";
+          $("#postContainer").append(noPosts);
+        }
+      })
+        
+      $("#loadMorePosts").click(function () {
+        $.post("getmoreposts",{skipNum},(foundPosts)=>{
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                  skipNum += 1;
+                }	
+            }
+        })
+      })       
+
+      $("#sortByDate").click(()=>{
+        $.get("getsortedbydateposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
             if(foundPosts.length > 0){
                 for(let i = 0; i < foundPosts.length; i++) {
                   addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -65,10 +225,20 @@
                 $("#postContainer").append("No posts available");
             }
         })
-        
-      $("#loadMorePosts").click(function () {
-          
-      });
+      })
+
+      $("#sortByPopularity").click(()=>{
+        $.get("getsortedbyscoreposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })      
+      })
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
@@ -83,7 +253,7 @@
         arrowUpward.className = "material-icons md-18 md-dark up";
         arrowUpward.innerHTML = "arrow_upward";
         var voteValue = document.createElement("span");
-		voteValue.className = "votes";
+        voteValue.className = "votes";
         voteValue.innerHTML = postScore;
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
@@ -95,8 +265,8 @@
         personIcon.className = "material-icons md-18 md-dark";
         personIcon.innerHTML = "person_outline";
         var postTitleContainer = document.createElement("h5");
-		var postTitleLink = document.createElement("a");
-		postTitleLink.setAttribute("href", "post?id="+postID);
+        var postTitleLink = document.createElement("a");
+        postTitleLink.setAttribute("href", "post?id=" + postID);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleLink.innerHTML = postTitle;
         var postContent = document.createElement("div");
@@ -109,28 +279,28 @@
         spanComment.className = "mr-3";
         var commentNumberContainer = document.createElement("a");
         commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post?id="+postID+"#comments");
+        commentNumberContainer.setAttribute("href", "post?id=" + postID + "#comments");
         var spanUsername = document.createElement("span");
         spanUsername.className = "p-1";
         var userName = document.createElement("a");
         userName.innerHTML = postAuthor;
-        userName.setAttribute("href", "user-profile?u="+postAuthor);
+        userName.setAttribute("href", "user-profile?u=" + postAuthor);
 
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);
         voteBox.append(arrowDownward);
         flexRow.append(voteBox);
-		postTitleContainer.append(postTitleLink);
+        postTitleContainer.append(postTitleLink);
         flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
         commentNumberContainer.append(commentIcon);
-        commentNumberContainer.append(" "+commentNumber+" Comments");
+        commentNumberContainer.append(" " + commentNumber + " Comments");
         spanComment.append(commentNumberContainer);
         spanInfo.append(spanComment);
         spanUsername.append(personIcon);
         spanUsername.append("Posted by ");
         spanUsername.append(userName);
-        spanUsername.append(" at "+postDate);
+        spanUsername.append(" at " + postDate);
         spanInfo.append(spanUsername);
         postInfo.append(spanInfo);
         flexColumn.append(postInfo);
@@ -139,6 +309,28 @@
 
         $("#postContainer").append(mediaPost);
       }
+      // SEARCHIN USING AJAX
+       $("#searchbtn").on("click", function(evt){
+               evt.preventDefault();
+
+        var keyword = $('#inputSearch').val();
+          
+              $.post("searchkeyword",{  
+                keyword : keyword
+              
+                },(foundPosts)=>{
+                  $("#postContainer").empty();
+                  if(foundPosts){
+                      
+                      for(let i = 0; i < foundPosts.length; i++) {
+                        addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                      }	
+
+                  }else{	
+                      $("#postContainer").append("No posts available");
+                  }
+              })
+        });
     });
   </script>
 

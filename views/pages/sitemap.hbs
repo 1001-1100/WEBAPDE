@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  {{> unsignedNavBar}}
+  {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="starter-template ">
       <h1>Site Map</h1>

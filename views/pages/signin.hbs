@@ -8,43 +8,87 @@
 </head>
 
 <body class="text-center">
-    <form class="form-signin" action="signedin" method="post">
+    <form class="form-signin" method="post">
         <img class="mb-4 rounded-circle" src="https://scontent.fmnl4-2.fna.fbcdn.net/v/t1.0-9/35558047_2339044482777767_8428509173892775936_n.jpg?_nc_cat=0&oh=a3503251e265c5abc115c7995cbfccf6&oe=5BDED365"
             width="72" height="72">
         <div class="h4 mb-3 font-weight-normal">Sign in to your account</div>
         <div class="form-group">
             <label for="inputUsername">Username</label>
-            <input name="username" type="text" class="form-control" required autofocus>
+            <input id="username-signin" name="username" type="text" class="form-control" required autofocus>
         </div>
         <div class="form-group">
             <label for="inputPassword">Password</label>
-            <input name="password" type="password" id="inputPassword" class="form-control" required>
+            <input id="password-signin" name="password" type="password" id="inputPassword" class="form-control" required>
         </div>
 
         <div class="checkbox mb-3">
             <label>
-                <input type="checkbox" value="remember-me"> Remember me</label>
+                <input name="rememberMe" type="checkbox" value="remember-me"> Remember me</label>
         </div>
-        <button type="submit" class="nav-link btn btn-lg btn-primary btn-block">Sign in</button>
+        <button id = "signinbtn" class="nav-link btn btn-lg btn-primary btn-block">Sign in</button>
         <div class="mt-3 text-center">Don't have an account?
             <a href="/register">Register now</a>
         </div>
     </form>
+    {{!-- MODAL --}}
+    <div class="modal fade" id = "errorModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Username or Password Incorrect</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                
+            </div>
+            <div class="modal-body">
+                <p>You entered an Incorrect Username or Password. Please Try Again </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Try Again</button>
+            </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <!-- Bootstrap core JavaScript
         ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-        crossorigin="anonymous"></script>
-
+        crossorigin="anonymous"></script> -->
+    {{> scriptResources}}
     <script>
         $(document).ready(function () {
+           
+           $("#signinbtn").on("click", function(evt){
+               evt.preventDefault();
+                var username = $("#username-signin").val();
+                var password = $("#password-signin").val();
 
-        });
+
+                $.post("checkaccount",{ uname:username, pword:password },(checkUser)=>{
+                    
+                    console.log("checkUser is " + checkUser);
+                    if(checkUser){
+                        console.log('in if checkUser');
+                        window.location.replace("/");
+
+                    }else{
+                        
+                        $("#errorModal").modal("show");
+              
+                    
+                    }
+                
+                
+                })
+             });
+
+             
+		
+    });
     </script>
 
 </body>
