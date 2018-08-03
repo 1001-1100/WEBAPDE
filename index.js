@@ -13,13 +13,10 @@ const fs = require('fs')
 const multer = require('multer')
 const mongoose = require("mongoose") 
 
-/** MODEL IMPORTS **/
-const User = require("./model/user.js").User
-const Post = require("./model/post.js").Post
-const Comment = require("./model/comment.js").Comment
-
 /** CONTROLLER IMPORTS **/
-
+const postController = require("./model/postController.js")
+const commentController = require("./model/commentController.js")
+const userController = require("./model/userController.js")
 
 /** SETUP **/
 
@@ -69,99 +66,24 @@ express()
 	})
 
 	.get('/post', (req, res) => {
-		var findPost = Post.findOne({
-			_id: req.query.id
-		})
-		findPost.then((foundPost) => {
-			if (foundPost) {
-				res.render("./pages/post.hbs", {
-					postID: foundPost._id,
-					postTitle: foundPost.postTitle,
-					postDescription: foundPost.postDescription,
-					postAuthor: foundPost.postAuthor,
-					postDate: foundPost.postDate,
-					postScore: foundPost.postScore,
-					commentNumber: foundPost.commentNumber,
-					uname: req.session.username
-				})
-			} else {
-				res.render('./pages/error.hbs')
-			}
-		})
+		postController.getPostPage(req, res)
+	})
+
+	.post('/createnewpost', urlencoder, (req, res) => {
+		postController.createPost(req, res)
 	})
 
 	.get('/user-profile', (req, res) => {
-		if (req.query.u) {
-			var findUser = User.findOne({
-				username: req.query.u,
-			})
-			findUser.then((foundUser) => {
-				if (foundUser) {
-					var findPosts = Post.find({
-						postAuthor: foundUser.username
-					}, {
-						_id: {
-							$slice: 5
-						}
-					})
-					findPosts.then((foundPosts) => {
-						var postIDs = []
-						var postTitles = []
-						var postDescriptions = []
-						var postAuthors = []
-						var postDates = []
-						var postScores = []
-						var commentNumbers = []
-						for (let i = 0; i < foundPosts.length; i++) {
-							postIDs.push(foundPosts[i]._id)
-							postTitles.push(foundPosts[i].postTitle)
-							postDescriptions.push(foundPosts[i].postDescription)
-							postAuthors.push(foundPosts[i].postAuthor)
-							postDates.push(foundPosts[i].postDate)
-							postScores.push(foundPosts[i].postScore)
-							commentNumbers.push(foundPosts[i].commentNumber)
-						}
-					})
-					res.render("./pages/user-profile.hbs", {
-						userHandle: "@" + foundUser.username,
-						userBioData: foundUser.shortBio,
-						uname: req.session.username
-					})
-				} else {
-					res.render('./pages/error.hbs')
-				}
-			})
-		} else {
-			res.redirect("user-profile?u=" + req.session.username)
-		}
+		userController.getUserProfile(req, res)
 	})
 
 	.get('/signin', (req, res) => res.render("./pages/signin.hbs"))
+	.get('/about', (req,res) => res.render("./pages/about.hbs"))
+	.get('/site-map', urlencoder, (req, res) => res.render("./pages/sitemap.hbs"))
+	.get('/register', (req, res) => res.render("./pages/register.hbs"))
+	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {uname: req.session.username}))
+	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
 
-	// .post('/signedin', urlencoder, (req, res) => {
-	// 	var findUser = User.findOne({
-	// 		username: req.body.username,
-	// 	})
-	// 	findUser.then((foundUser)=>{
-	// 		if(foundUser){
-	// 			bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
-	// 				if(msg){
-	// 					if(req.body.rememberMe){
-	// 						req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
-	// 						req.session.maxAge = 1000 * 60 * 60 * 24 * 3
-	// 					}
-	// 					req.session.rememberMe = req.body.rememberMe
-	// 					req.session.username = req.body.username
-	// 					res.redirect("/")
-	// 				} else {
-
-	// 				}
-	// 			})
-	// 		} else {
-	// 			res.send("User not found")
-	// 		}
-	// 	})
-	// })
 
 	.post('/logout', (req, res) => {
 		req.session.destroy()
@@ -169,231 +91,51 @@ express()
 		res.redirect("/")
 	})
 
-	// .post('/registered', urlencoder, (req, res) => {
-	// 	var findUser = User.findOne({
-	// 		username: req.body.username
-	// 	})
-	// 	findUser.then((foundUser) => {
-	// 		if (foundUser) {
-	// 			res.send("User already exists")
-	// 		} else {
-	// 			bcrypt.hash(req.body.password, 12).then((hashed) => {
-	// 				var hashedPassword = hashed
-	// 				var newUser = new User({
-	// 					emailAddress: req.body.emailAddress,
-	// 					username: req.body.username,
-	// 					password: hashedPassword,
-	// 					shortBio: req.body.shortBio,
-	// 					avatar: req.body.avatar
-	// 				})
-	// 				newUser.save().then((msg)=>{
-	// 					req.session.rememberMe = req.body.rememberMe
-	// 					req.session.username = req.body.username
-	// 					res.redirect("/")
-	// 				})
-	// 			})
-	// 		}
-	// 	})
-	// })
-
-	.get('/about', (req,res) => res.render("./pages/about.hbs"))
-	.get('/site-map', urlencoder, (req, res) => res.render("./pages/sitemap.hbs"))
-	.get('/register', (req, res) => res.render("./pages/register.hbs"))
-	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
-		uname: req.session.username
-	}))
-
-	.post('/createnewpost', urlencoder, (req, res) => {
-		var dateNow = new Date()
-		var newPost = new Post({
-			postTitle: req.body.postTitle,
-			postDescription: req.body.postDescription,
-			postAuthor: req.session.username,
-			postDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
-			postDateRaw: dateNow,
-			postScore: 0,
-			commentNumber: 0,
-			comment: []
-		})
-		newPost.save().then((msg) => {
-			var newPostLink = "post?id=" + newPost._id
-			res.redirect(newPostLink)
-		})
-	})
-
-	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
-
-	.get('/coolz', (req, res) => {
-		res.send(cool())
-	})
-
 /** AJAX CALLS **/
 
+	// POSTS //
+	
 	.get('/getposts', (req, res) => {
-		var findPosts = Post.find().limit(5)
-		findPosts.then((foundPosts)=>{
-            res.send(foundPosts)
-		})
+		postController.returnPosts(req, res)
 	})
 
     .post('/getonepost', urlencoder, (req, res) => {
-        var findPost = Post.findOne({ _id : req.body.postID})
-        findPost.then((foundPost)=>{
-            res.send(foundPost)
-		})
-		
+		postController.returnSinglePost(req,res)
 	})
-	
-	.post('/checkaccount', urlencoder, (req, res) =>{
-		var findUser = User.findOne({username: req.body.uname})
-
-		findUser.then((foundUser)=>{
-			if(foundUser){
-
-				bcrypt.compare(req.body.pword, foundUser.password).then((msg)=>{
-					if(msg){
-						if(req.body.rememberMe){
-							req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
-							req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
-						}
-						req.session.rememberMe = req.body.rememberMe
-						req.session.username = req.body.uname
-						res.send(foundUser);
-					}else{
-						res.send(null);
-					}
-				})
-			}else{
-				res.send(null);
-			}
-		})
-
-	})
-
-	.post('/checkregisteraccount', urlencoder, (req, res) =>{
-	
-		var findUser = User.findOne({username: req.body.uname}) // (name in db): req.body.(name passed from client)
-		var findEmail = User.findOne({emailAddress: req.body.email}) // (name in db): req.body.(name passed from client)
-
-		findUser.then((foundUser)=>{
-			findEmail.then((foundEmail)=>{
-
-				if(foundUser){ // only username matched in db
-						res.send("1")
-						console.log("in checkregisteraccount - if");	
-				}
-				else if(foundEmail){ // only email matched in db
-						res.send("2")
-						console.log("in checkregisteraccount - if");
-				}
-				else{
-					console.log("in checkregisteraccount - else");
-					bcrypt.hash(req.body.password,12).then((hashed)=>{
-						var hashedPassword = hashed
-						var newUser = new User({
-							emailAddress : req.body.email,
-							username : req.body.uname,
-							password : hashedPassword,
-							shortBio : req.body.bio,
-						})
-					
-						newUser.save().then((msg)=>{
-							if(req.body.rememberMe){
-								req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
-								req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
-							}
-							req.session.rememberMe = req.body.rememberMe
-							req.session.username = req.body.uname
-							res.send(null);
-						})
-					})
-				}
-			})
-		})
-
-	})
-
 	.post('/searchkeyword', urlencoder, (req, res) =>{
-		var findPost = Post.find({postDescription: {$regex:req.body.keyword ,$options:"$i"}})
-
-		var findPost2 = Post.find({postTitle: {$regex:req.body.keyword ,$options:"$i"}})
-		let check = 0;
-		console.log("im in /searchkeyword " + req.body.keyword);
-		findPost.then((foundPosts)=>{
-			findPost2.then((foundPosts2)=>{
-				if(foundPosts || foundPosts2){
-					console.log(foundPosts)
-					console.log("foundPosts not nullll");
-					res.send(foundPosts.concat(foundPosts2));
-					
-				}else{
-					console.log("foundPosts nullll");
-					res.send(null);
-				}
-			})
-		})
-
+		postController.returnSearchResults(req, res)
 	})
 
 	.post('/getmoreposts', urlencoder, (req, res) => {
-		var findPosts = Post.find().skip(parseInt(req.body.skipNum)).limit(5)
-		findPosts.then((foundPosts)=>{
-            res.send(foundPosts)
-		})
+		postController.returnMorePosts(req, res)
 	})
 	
     .get('/getsortedbyscoreposts', urlencoder, (req, res) => {
-        var findPosts = Post.find({}).sort({postScore : -1}).limit(5)
-        findPosts.then((foundPosts)=>{
-            res.send(foundPosts)
-        })
+		postController.returnSortedByScorePosts(req, res)
 	})
 	
     .get('/getsortedbydateposts', urlencoder, (req, res) => {
-        var findPosts = Post.find({}).sort({postDateRaw : -1}).limit(5)
-        findPosts.then((foundPosts)=>{
-            res.send(foundPosts)
-        })
+		postController.returnSortedByDatePosts(req, res)
     })
 
-	.post('/getonepost', urlencoder, (req, res) => {
-		var findPost = Post.findOne({
-			_id: req.body.postID
-		})
-		findPost.then((foundPost) => {
-			res.send(foundPost)
-		})
+	// USERS //
+
+	.post('/checkaccount', urlencoder, (req, res) =>{
+		userController.returnLoginUser(req, res)
 	})
 
+	.post('/checkregisteraccount', urlencoder, (req, res) =>{
+		userController.returnRegisterUser(req, res)
+	})
+
+	// COMMENTS //
+
 	.get('/getcomment', urlencoder, (req, res) => {
-		var findComment = Comment.find({
-			_id: req.body.commentID
-		})
-		findComment.then((foundComment) => {
-			res.send(foundComment)
-		})
+		commentController.returnComment(req, res)
 	})
 
 	.post('/createnewcomment', urlencoder, (req, res) => {
-		var dateNow = new Date()
-		var findPost = Post.findOne({
-			_id: req.body.postID
-		})
-		findPost.then((foundPost) => {
-			var newComment = new Comment({
-				postID: foundPost._id,
-				commentContent: req.body.commentContent,
-				commentAuthor: req.session.username,
-				commentDate: (dateNow.getMonth() + 1) + "/" + dateNow.getDate() + "/" + dateNow.getFullYear() + " " + dateNow.toLocaleTimeString(),
-				commentScore: 0,
-				nestedComments: []
-			})
-			foundPost.comment.push(newComment)
-			foundPost.commentNumber += 1
-			foundPost.save().then((msg) => {
-				res.send(newComment)
-			})
-		})
+		commentController.returnNewComment(req, res)
 	})
 	
 /** FOR ERRORS, ALWAYS KEEP AT THE END **/
