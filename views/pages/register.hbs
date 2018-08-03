@@ -9,7 +9,7 @@
 
 <body class="text-center">
 
-  <form action="registered" class="form-register" method="post">
+  <form class="form-register" method="post">
 	<img class="mb-4 rounded-circle" src="./kaye.JPG" width="72" height="72">
     <div class="h4 mb-3 font-weight-normal">Register a new account</div>
     <div class="form-group">
@@ -36,10 +36,14 @@
       <div class="input-group-prepend">
         <span class="input-group-text">Avatar</span>
       </div>
-      <div class="text-left custom-file">
-        <input name="avatar" type="file" class="custom-file-input" id="inputAvatar">
-        <label class="custom-file-label" for="inputAvatar">Choose file</label>
-      </div>
+        
+          <div class="text-left custom-file">
+          
+              <input name="avatar" type="file" class="custom-file-input" id="inputAvatar">
+              <label class="custom-file-label" for="inputAvatar">Choose file</label>
+          
+          </div>
+        
     </div>
 
     <!-- <p style="text-align: left; margin-left: 5px"> Choose Avatar</p> -->
@@ -51,17 +55,149 @@
         <input name="rememberMe" type="checkbox" value="remember-me"> Remember me
       </label>
     </div>
-    <button type="submit" class="nav-link btn btn-lg btn-primary btn-block">Register</button>
+    <button id ="registerbtn" class="nav-link btn btn-lg btn-primary btn-block">Register</button>
   </form>
 
-  {{> scriptResources}}
+ <div class="modal fade" id = "errorModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Username or Email Unavailable</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                
+            </div>
+            <div class="modal-body">
+                <p class = "modal-body">You entered an Exisiting Username or Email. Please Try Again </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Try Again</button>
+            </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
+ {{> scriptResources}}
+ 
   <script>
     $(document).ready(function () {
 
+        $("#registerbtn").on("click", function(evt){
+               evt.preventDefault();
+
+                // set to back to default black
+                $('label[for=inputUsername]').css({color:'black'});
+                $('label[for=inputEmail]').css({color:'red'});     
+                $('label[for=inputPassword]').css({color:'black'});
+                $('label[for=inputConfirmPassword]').css({color:'black'});
+
+                var username = $("#inputUsername").val();
+                var password = $("#inputPassword").val();
+                var email2 = $("#inputEmail").val();
+                var cpassword = $("#inputConfirmPassword").val();
+                var bio = $("#inputBio").val();
+                var avatar = $("#inputAvatar").val();
+                console.log("avatar is " + avatar);
+                var file = document.getElementById("inputAvatar");
+                 for (var i = 0; i < file.files.length; i++) {
+                    console.log(file.files[i].name);
+                }
+
+                if(!username || !password || !email2 || !cpassword ){
+                  var data = "Cannot leave blank";
+                  var myHeading = "<p>" + data +"</p>";
+                  $(".modal-body").html(myHeading); 
+                  $("#errorModal").modal("show");
+                  if(!username){
+                    
+                    $('label[for=inputUsername]').css({color:'red'});
+                  }else if(!password){
+                    
+                    $('label[for=inputPassword]').css({color:'red'});
+                  }else if(!email2){
+                    
+                    $('label[for=inputEmail]').css({color:'red'});
+                  }
+                  else if(!cpassword){
+                    
+                    $('label[for=inputConfirmPassword]').css({color:'red'});
+                  }
+
+                }
+                else if(password != cpassword){
+                  var data = "Password must match. Kindly check";
+                  var myHeading = "<p>" + data +"</p>";
+                  $(".modal-body").html(myHeading); 
+                  $("#errorModal").modal("show");
+
+                  $('label[for=inputPassword]').css({color:'red'});
+                  $('label[for=inputConfirmPassword]').css({color:'red'});
+                }else{
+
+                    $.post("checkregisteraccount",{  
+                      uname:username, 
+                      email: email2,
+                      password:password,
+                      bio:bio,
+                      avatar: avatar
+
+                    },(checkUser)=>{
+                        
+                        console.log("checkUser is " + checkUser);
+                        if(checkUser == "1"){
+                            console.log('checkUser == 1');
+                            
+                            $("#errorModal").modal("show");
+                            $('label[for=inputUsername]').css({color:'red'});
+                             $('label[for=inputEmail]').css({color:'black'});
+                           
+                        
+                        }else if (checkUser == "2"){
+                           console.log('checkUser == 2');
+                            $('label[for=inputUsername]').css({color:'black'});
+                            $('label[for=inputEmail]').css({color:'red'});
+                        
+                            $("#errorModal").modal("show");
+
+                        }else{
+                          console.log("User creds are unique");
+                          window.location.replace("/");
+                  
+                        
+                        }
+                    
+                    
+                    })
+                  }
+             });
+
+
+       $('#inputAvatar').on('change',function(){
+                //get the file name
+                var fileName = $('input[type=file]').val().split('\\').pop();
+                
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
     });
   </script>
 
 </body>
 
 </html>
+{{!-- 
+    $(".downloadupaddinvoice").click(function(){
+          var filename = $('#inputAvatar').val();
+
+          if (filename == "" || filename == null) {
+              alert('Error');
+          }else {
+              var file = document.getElementById('inputAvatar').files[0];      
+              var filename = document.getElementById('inputAvatar').files[0].name;      
+              var blob = new Blob([file]);
+              var url  = URL.createObjectURL(blob);
+
+              $(this).attr({ 'download': filename, 'href': url});  
+              filename = "";
+          }
+
+      })   --}}
