@@ -18,6 +18,9 @@ const User = require("./model/user.js").User
 const Post = require("./model/post.js").Post
 const Comment = require("./model/comment.js").Comment
 
+/** CONTROLLER IMPORTS **/
+
+
 /** SETUP **/
 
 hbs.registerPartials(path.join(__dirname,'/views/partials'))
@@ -56,8 +59,8 @@ express()
 	
 	.get('/', urlencoder, (req, res) => {
 		if(req.session.rememberMe){
-			req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
-			req.session.maxAge = 1000 * 60 * 60 * 24 * 3
+			req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
+			req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
 		}
         res.render("./pages/index.hbs", {
             uname: req.session.username,
@@ -249,6 +252,11 @@ express()
 
 				bcrypt.compare(req.body.pword, foundUser.password).then((msg)=>{
 					if(msg){
+						if(req.body.rememberMe){
+							req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
+							req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
+						}
+						req.session.rememberMe = req.body.rememberMe
 						req.session.username = req.body.uname
 						res.send(foundUser);
 					}else{
@@ -270,8 +278,6 @@ express()
 		findUser.then((foundUser)=>{
 			findEmail.then((foundEmail)=>{
 
-			
-			
 				if(foundUser){ // only username matched in db
 						res.send("1")
 						console.log("in checkregisteraccount - if");	
@@ -289,10 +295,14 @@ express()
 							username : req.body.uname,
 							password : hashedPassword,
 							shortBio : req.body.bio,
-						
 						})
 					
 						newUser.save().then((msg)=>{
+							if(req.body.rememberMe){
+								req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
+								req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
+							}
+							req.session.rememberMe = req.body.rememberMe
 							req.session.username = req.body.uname
 							res.send(null);
 						})
