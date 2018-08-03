@@ -167,9 +167,9 @@
 				$("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{commentNumber}}+newComments+" comments");
-        console.log(newComment._id);
 				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
 			})
+      $("#submitButton").attr("disabled","disabled");
 		}
     
     function checkCommentBox(){
