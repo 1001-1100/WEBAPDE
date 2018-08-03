@@ -14,7 +14,9 @@
   </style>
 
   <script>
+
     var username = "{{uname}}";
+    var newComments = 0;
 
     function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
       var wholeCommentContainer = document.createElement("div");
@@ -160,13 +162,12 @@
       $(commentContainer).append(mainCommentContainer);
     }
 
-
 		function createNewComment(){
-            var postIDVar = "{{postID}}"
-			$.post("createnewcomment",{ postID: postIDVar, commentContent: $("#commentContent").val() },(newComment)=>{
+			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
 				$("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{commentNumber}}+newComments+" comments");
+        console.log(newComment._id);
 				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
 			})
 		}
@@ -389,20 +390,6 @@
           $("#allComments").append(noComments);
         }
       })
-      
-        var postIDVar = "{{postID}}"
-        $.post("getonepost",{ postID: postIDVar },(foundPost)=>{
-            if(foundPost.comment.length > 0){
-                for(let i = 0 ; i < foundPost.comment.length ; i++){
-                    addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
-                }
-            }else{             
-                var noComments = document.createElement("div");
-                noComments.innerHTML = "No comments.";
-				        noComments.id = "noComment";
-                $("#allComments").append(noComments);
-            }                        
-        })
         
     });
             
