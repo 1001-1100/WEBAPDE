@@ -52,7 +52,7 @@
 
     <div class="checkbox mb-3">
       <label>
-        <input name="rememberMe" type="checkbox" value="remember-me"> Remember me
+        <input name="rememberMe" id ="inputRemember" type="checkbox" value="remember-me"> Remember me
       </label>
     </div>
     <button id ="registerbtn" class="nav-link btn btn-lg btn-primary btn-block">Register</button>
@@ -96,6 +96,9 @@
                 var cpassword = $("#inputConfirmPassword").val();
                 var bio = $("#inputBio").val();
                 var avatar = $("#inputAvatar").val();
+                if ($("#inputRemember").is(":checked")){
+                  var rememberMe = $("#remember-signin").val();
+                }
                 console.log("avatar is " + avatar);
                 var file = document.getElementById("inputAvatar");
                  for (var i = 0; i < file.files.length; i++) {
@@ -138,8 +141,8 @@
                       email: email2,
                       password:password,
                       bio:bio,
-                      avatar: avatar
-
+                      avatar: avatar,
+                      rememberMe
                     },(checkUser)=>{
                         
                         console.log("checkUser is " + checkUser);
