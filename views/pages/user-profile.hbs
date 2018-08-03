@@ -3,20 +3,16 @@
 
 <head>
   {{> headerResources}}
+  <title>The Forum</title>
   <style type="text/css">
     .comment-container {
       margin-bottom: 10px;
     }
   </style>
-  <title>The Forum</title>
 </head>
 
 <body>
-  {{#if uname}}
-	{{> signedNavBar}}	
-  {{else}}
-	{{> unsignedNavBar}}
-  {{/if}}
+  {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="row starter-template">
       <div class="col-lg-3">
@@ -42,6 +38,7 @@
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="user-posts" role="tabpanel" aria-labelledby="user-posts-tab">
             <ul id="postContainer" class="list-unstyled"></ul>
+
             <div id="loadMorePosts" class="btn btn-outline-primary">See more posts</div>
           </div>
 
@@ -113,127 +110,151 @@
             </div>
             </div>
   </main>
-  <!-- /.container -->
-
-  <!-- Bootstrap core JavaScript
-        ================================================== -->
-  <!-- Placed at the end of the document so the pages load faster -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-    crossorigin="anonymous"></script>
+  {{> scriptResources}}
 
   <script>
     $(document).ready(function () {
-		var postIDs = []
-		var postTitles = []
-		var postDescriptions = []
-		var postAuthors = []
-		var postDates = []
-		var postScores = []
-		var commentNumbers = []
-		{{#each postIDs}}
-        	postIDs.push("{{this}}")
-    	{{/each}}
-		{{#each postTitles}}
-        	postTitles.push("{{this}}")
-    	{{/each}}
-		{{#each postDescriptions}}
-        	postDescriptions.push("{{this}}")
-    	{{/each}}
-		{{#each postAuthors}}
-        	postAuthors.push("{{this}}")
-    	{{/each}}
-		{{#each postDates}}
-        	postDates.push("{{this}}")
-    	{{/each}}
-		{{#each postScores}}
-        	postScores.push("{{this}}")
-    	{{/each}}
-		{{#each commentNumbers}}
-        	commentNumbers.push("{{this}}")
-    	{{/each}}
-	
-		if(postIDs.length > 0){
-			for (let i = 0; i < postIDs.length; i++) {
-			  addPost(postIDs[i], postTitles[i], postDescriptions[i], postAuthors[i], postDates[i], postScores[i], commentNumbers[i]);
-			}	
-		}else{	
-			$("#postContainer").append("No posts available");
-		}
-      $("#loadMorePosts").click(function () {
-      });
-		  
-      function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
-        var mediaPost = document.createElement("div");
-        mediaPost.className = "media post";
-        var flexRow = document.createElement("div");
-        flexRow.className = "d-flex flex-row";
-        var flexColumn = document.createElement("div");
-        flexColumn.className = "media-body d-flex flex-column";
-        var voteBox = document.createElement("div");
-        voteBox.className = "mr-3 actions flex-column";
-        var arrowUpward = document.createElement("i");
-        arrowUpward.className = "material-icons md-18 md-dark up";
-        arrowUpward.innerHTML = "arrow_upward";
-        var voteValue = document.createElement("span");
-		voteValue.className = "votes";
-        voteValue.innerHTML = postScore;
-        var arrowDownward = document.createElement("i");
-        arrowDownward.className = "material-icons md-18 md-dark down";
-        arrowDownward.innerHTML = "arrow_downward";
-        var commentIcon = document.createElement("i");
-        commentIcon.className = "material-icons md-16 md-dark";
-        commentIcon.innerHTML = "comment";
-        var personIcon = document.createElement("i");
-        personIcon.className = "material-icons md-18 md-dark";
-        personIcon.innerHTML = "person_outline";
-        var postTitleContainer = document.createElement("a");
-		postTitleContainer.setAttribute("href", "post?id="+postIDs);
-        postTitleContainer.className = "mt-0 mb-1";
-        postTitleContainer.innerHTML = postTitle;
-        var postContent = document.createElement("div");
-        postContent.innerHTML = postDescription;
-        var postInfo = document.createElement("div");
-        postInfo.className = "p-1 flex-fill";
-        var spanInfo = document.createElement("span");
-        spanInfo.className = "info";
-        var spanComment = document.createElement("span");
-        spanComment.className = "mr-3";
-        var commentNumberContainer = document.createElement("a");
-        commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post?id="+postIDs+"#comments");
-        var spanUsername = document.createElement("span");
-        spanUsername.className = "p-1";
-        var userName = document.createElement("a");
-        userName.innerHTML = postAuthor;
-        userName.setAttribute("href", "user-profile?u="+postAuthor);
+      var noPosts = document.createElement("div");
+      noPosts.className = "comment-container";
+      var icon = document.createElement("i");
+      icon.className = "material-icons md-orange md-92 flex-fill";
+      icon.innerHTML = "sentiment_very_dissatisfied";
+      var content = document.createElement("div");
+      content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
+      var text = document.createElement("h2");
+      text.className = "flex-fill text-center";
+      text.innerHTML = "No comments yet...";
+      var subtext = document.createElement("h6");
+      subtext.className = "mt-1 flex-fill text-center subheading";
+      subtext.innerHTML = "Looks like this user hasn't posted anything.";
+      content.append(icon);
+      content.append(text);
+      content.append(subtext);
+      noPosts.append(content);
+      noPosts.id = "noPost";
+      $("#postContainer").append(noPosts);
 
-        voteBox.append(arrowUpward);
-        voteBox.append(voteValue);
-        voteBox.append(arrowDownward);
-        flexRow.append(voteBox);
-        flexColumn.append(postTitleContainer);
-        flexColumn.append(postContent);
-        commentNumberContainer.append(commentIcon);
-        commentNumberContainer.append(" "+commentNumber+" Comments");
-        spanComment.append(commentNumberContainer);
-        spanInfo.append(spanComment);
-        spanUsername.append(personIcon);
-        spanUsername.append("Posted by ");
-        spanUsername.append(userName);
-        spanUsername.append(" at "+postDate);
-        spanInfo.append(spanUsername);
-        postInfo.append(spanInfo);
-        flexColumn.append(postInfo);
-        flexRow.append(flexColumn);
-        mediaPost.append(flexRow);
+      var postIDs = []
+      var postTitles = []
+      var postDescriptions = []
+      var postAuthors = []
+      var postDates = []
+      var postScores = []
+      var commentNumbers = []
+      { { #each postIDs } }
+      postIDs.push("{{this}}")
+      {
+        {
+          /each}}
+          { { #each postTitles } }
+          postTitles.push("{{this}}")
+          {
+            {
+              /each}}
+              { { #each postDescriptions } }
+              postDescriptions.push("{{this}}")
+              {
+                {
+                  /each}}
+                  { { #each postAuthors } }
+                  postAuthors.push("{{this}}")
+                  {
+                    {
+                      /each}}
+                      { { #each postDates } }
+                      postDates.push("{{this}}")
+                      {
+                        {
+                          /each}}
+                          { { #each postScores } }
+                          postScores.push("{{this}}")
+                          {
+                            {
+                              /each}}
+                              { { #each commentNumbers } }
+                              commentNumbers.push("{{this}}")
+                              {
+                                {
+                                  /each}}
 
-        $("#postContainer").append(mediaPost);
-      }
-    });
+                                  if (postIDs.length > 0) {
+                                    for (let i = 0; i < postIDs.length; i++) {
+                                      addPost(postIDs[i], postTitles[i], postDescriptions[i], postAuthors[i], postDates[i], postScores[i], commentNumbers[i]);
+                                    }
+                                  } else {
+                                    $("#postContainer").append("No posts available");
+                                  }
+                                  $("#loadMorePosts").click(function () {
+                                  });
+
+                                  function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
+                                    var mediaPost = document.createElement("div");
+                                    mediaPost.className = "media post";
+                                    var flexRow = document.createElement("div");
+                                    flexRow.className = "d-flex flex-row";
+                                    var flexColumn = document.createElement("div");
+                                    flexColumn.className = "media-body d-flex flex-column";
+                                    var voteBox = document.createElement("div");
+                                    voteBox.className = "mr-3 actions flex-column";
+                                    var arrowUpward = document.createElement("i");
+                                    arrowUpward.className = "material-icons md-18 md-dark up";
+                                    arrowUpward.innerHTML = "arrow_upward";
+                                    var voteValue = document.createElement("span");
+                                    voteValue.className = "votes";
+                                    voteValue.innerHTML = postScore;
+                                    var arrowDownward = document.createElement("i");
+                                    arrowDownward.className = "material-icons md-18 md-dark down";
+                                    arrowDownward.innerHTML = "arrow_downward";
+                                    var commentIcon = document.createElement("i");
+                                    commentIcon.className = "material-icons md-16 md-dark";
+                                    commentIcon.innerHTML = "comment";
+                                    var personIcon = document.createElement("i");
+                                    personIcon.className = "material-icons md-18 md-dark";
+                                    personIcon.innerHTML = "person_outline";
+                                    var postTitleContainer = document.createElement("a");
+                                    postTitleContainer.setAttribute("href", "post?id=" + postIDs);
+                                    postTitleContainer.className = "mt-0 mb-1";
+                                    postTitleContainer.innerHTML = postTitle;
+                                    var postContent = document.createElement("div");
+                                    postContent.innerHTML = postDescription;
+                                    var postInfo = document.createElement("div");
+                                    postInfo.className = "p-1 flex-fill";
+                                    var spanInfo = document.createElement("span");
+                                    spanInfo.className = "info";
+                                    var spanComment = document.createElement("span");
+                                    spanComment.className = "mr-3";
+                                    var commentNumberContainer = document.createElement("a");
+                                    commentNumberContainer.innerHTML = " ";
+                                    commentNumberContainer.setAttribute("href", "post?id=" + postIDs + "#comments");
+                                    var spanUsername = document.createElement("span");
+                                    spanUsername.className = "p-1";
+                                    var userName = document.createElement("a");
+                                    userName.innerHTML = postAuthor;
+                                    userName.setAttribute("href", "user-profile?u=" + postAuthor);
+
+                                    voteBox.append(arrowUpward);
+                                    voteBox.append(voteValue);
+                                    voteBox.append(arrowDownward);
+                                    flexRow.append(voteBox);
+                                    flexColumn.append(postTitleContainer);
+                                    flexColumn.append(postContent);
+                                    commentNumberContainer.append(commentIcon);
+                                    commentNumberContainer.append(" " + commentNumber + " Comments");
+                                    spanComment.append(commentNumberContainer);
+                                    spanInfo.append(spanComment);
+                                    spanUsername.append(personIcon);
+                                    spanUsername.append("Posted by ");
+                                    spanUsername.append(userName);
+                                    spanUsername.append(" at " + postDate);
+                                    spanInfo.append(spanUsername);
+                                    postInfo.append(spanInfo);
+                                    flexColumn.append(postInfo);
+                                    flexRow.append(flexColumn);
+                                    mediaPost.append(flexRow);
+
+                                    $("#postContainer").append(mediaPost);
+                                  }
+                                });
   </script>
 
 </body>
