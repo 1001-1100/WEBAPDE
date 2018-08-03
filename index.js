@@ -9,8 +9,8 @@ const cookieparser = require("cookie-parser")
 const PORT = process.env.PORT || 5000
 const bcrypt = require("bcrypt")
 const sass = require('node-sass')
-const fs = require('fs');
-const multer = require('multer');
+const fs = require('fs')
+const multer = require('multer')
 const mongoose = require("mongoose") 
 
 /** MODEL IMPORTS **/
@@ -135,30 +135,30 @@ express()
 
 	.get('/signin', (req, res) => res.render("./pages/signin.hbs"))
 
-	.post('/signedin', urlencoder, (req, res) => {
-		var findUser = User.findOne({
-			username: req.body.username,
-		})
-		findUser.then((foundUser)=>{
-			if(foundUser){
-				bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
-					if(msg){
-						if(req.body.rememberMe){
-							req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
-							req.session.maxAge = 1000 * 60 * 60 * 24 * 3
-						}
-						req.session.rememberMe = req.body.rememberMe
-						req.session.username = req.body.username
-						res.redirect("/")
-					} else {
+	// .post('/signedin', urlencoder, (req, res) => {
+	// 	var findUser = User.findOne({
+	// 		username: req.body.username,
+	// 	})
+	// 	findUser.then((foundUser)=>{
+	// 		if(foundUser){
+	// 			bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
+	// 				if(msg){
+	// 					if(req.body.rememberMe){
+	// 						req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
+	// 						req.session.maxAge = 1000 * 60 * 60 * 24 * 3
+	// 					}
+	// 					req.session.rememberMe = req.body.rememberMe
+	// 					req.session.username = req.body.username
+	// 					res.redirect("/")
+	// 				} else {
 
-					}
-				})
-			} else {
-				res.send("User not found")
-			}
-		})
-	})
+	// 				}
+	// 			})
+	// 		} else {
+	// 			res.send("User not found")
+	// 		}
+	// 	})
+	// })
 
 	.post('/logout', (req, res) => {
 		req.session.destroy()
@@ -166,32 +166,32 @@ express()
 		res.redirect("/")
 	})
 
-	.post('/registered', urlencoder, (req, res) => {
-		var findUser = User.findOne({
-			username: req.body.username
-		})
-		findUser.then((foundUser) => {
-			if (foundUser) {
-				res.send("User already exists")
-			} else {
-				bcrypt.hash(req.body.password, 12).then((hashed) => {
-					var hashedPassword = hashed
-					var newUser = new User({
-						emailAddress: req.body.emailAddress,
-						username: req.body.username,
-						password: hashedPassword,
-						shortBio: req.body.shortBio,
-						avatar: req.body.avatar
-					})
-					newUser.save().then((msg)=>{
-						req.session.rememberMe = req.body.rememberMe
-						req.session.username = req.body.username
-						res.redirect("/")
-					})
-				})
-			}
-		})
-	})
+	// .post('/registered', urlencoder, (req, res) => {
+	// 	var findUser = User.findOne({
+	// 		username: req.body.username
+	// 	})
+	// 	findUser.then((foundUser) => {
+	// 		if (foundUser) {
+	// 			res.send("User already exists")
+	// 		} else {
+	// 			bcrypt.hash(req.body.password, 12).then((hashed) => {
+	// 				var hashedPassword = hashed
+	// 				var newUser = new User({
+	// 					emailAddress: req.body.emailAddress,
+	// 					username: req.body.username,
+	// 					password: hashedPassword,
+	// 					shortBio: req.body.shortBio,
+	// 					avatar: req.body.avatar
+	// 				})
+	// 				newUser.save().then((msg)=>{
+	// 					req.session.rememberMe = req.body.rememberMe
+	// 					req.session.username = req.body.username
+	// 					res.redirect("/")
+	// 				})
+	// 			})
+	// 		}
+	// 	})
+	// })
 
 	.get('/about', (req,res) => res.render("./pages/about.hbs"))
 	.get('/site-map', urlencoder, (req, res) => res.render("./pages/sitemap.hbs"))
