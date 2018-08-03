@@ -4,82 +4,43 @@ const path = require('path')
 const bodyparser = require("body-parser")
 const request = require('request')
 const hbs = require("hbs")
-hbs.registerPartials(path.join(__dirname, '/views/partials'))
 const session = require("express-session")
 const cookieparser = require("cookie-parser")
-const urlencoder = bodyparser.urlencoded({
-	extended: false
-})
 const PORT = process.env.PORT || 5000
 const bcrypt = require("bcrypt")
 const sass = require('node-sass')
-const mongoose = require("mongoose")
+const mongoose = require("mongoose") 
+
+/** MODEL IMPORTS **/
+const User = require("./model/user.js").User
+const Post = require("./model/post.js").Post
+const Comment = require("./model/comment.js").Comment
+
+/** SETUP **/
+
+hbs.registerPartials(path.join(__dirname,'/views/partials'))
+const urlencoder = bodyparser.urlencoded({
+	extended: false
+})
+/** 
+	Connect to mLab Database (heroku_0n46js2x)
+    Username: Nine
+    Password: trexfire6
+    Admin Account:
+    Username: heroku_0n46js2x
+    Password: kayenicojosh116
+**/
+mongoose.Promise = global.Promise
 mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js2x', {
 	useNewUrlParser: true
-})
-var User = mongoose.model("userList", {
-	emailAddress: String,
-	username: String,
-	password: String,
-	shortBio: String,
-	avatar: String,
-	post: [{
-		postID: String,
-		postTitle: String,
-		postDescription: String,
-		postAuthor: String,
-		postDate: String,
-		postScore: Number,
-		commentNumber: Number
-	}],
-	comment: [{
-		commentID: String,
-		commentContent: String,
-		commentAuthor: String,
-		commentDate: String,
-		commentScore: Number
-	}]
-})
-
-var Comment = mongoose.model("commentList", {
-	postID: String,
-	commentContent: String,
-	commentAuthor: String,
-	commentDate: String,
-	commentScore: Number,
-	nestedComments: [{
-		commentID: String
-	}]
-})
-
-var Post = mongoose.model("postList", {
-	postTitle: String,
-	postDescription: String,
-	postAuthor: String,
-	postDate: String,
-	postScore: Number,
-	commentNumber: Number,
-	comment: [{
-		postID: String,
-		commentContent: String,
-		commentAuthor: String,
-		commentDate: String,
-		commentScore: Number,
-		nestedComments: [{
-			commentID: String
-		}]
-	}]
 })
 
 express()
 	.use(session({
-		saveUninitialized: true,
+		saveUninitialized: false,
 		resave: true,
 		secret: "nicokayejosh",
-		name: "Nico's Cookie",
-		cookie: {
-			maxAge: 1000 * 60 * 60 * 24 * 7 * 3
-		}
+		name: "Nico's Cookie"
 	}))
 
 	.use(cookieparser())
@@ -88,26 +49,18 @@ express()
 	.set('views', path.join(__dirname, 'views'))
 	.set('view engine', 'hbs')
 
+/** ROUTES **/
+	
 	.get('/', urlencoder, (req, res) => {
-		res.render("./pages/index.hbs", {
-			uname: req.session.username,
+		if(req.session.rememberMe){
+			req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
+			req.session.maxAge = 1000 * 60 * 60 * 24 * 3
+		}
+        res.render("./pages/index.hbs", {
+            uname: req.session.username,
 			face: cool()
-		})
+        })
 	})
-
-	/*
-	commentContent: String,
-	commentAuthor: String,
-	commentDate: String,
-	commentScore: Number,
-	comment: [{
-		commentID: String,
-		commentContent: String,
-		commentAuthor: String,
-		commentDate: String,
-		commentScore: Number
-	}]
-	*/
 
 	.get('/post', (req, res) => {
 		var findPost = Post.findOne({
@@ -183,10 +136,15 @@ express()
 		var findUser = User.findOne({
 			username: req.body.username,
 		})
-		findUser.then((foundUser) => {
-			if (foundUser) {
-				bcrypt.compare(req.body.password, foundUser.password).then((msg) => {
-					if (msg) {
+		findUser.then((foundUser)=>{
+			if(foundUser){
+				bcrypt.compare(req.body.password, foundUser.password).then((msg)=>{
+					if(msg){
+						if(req.body.rememberMe){
+							req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 3)
+							req.session.maxAge = 1000 * 60 * 60 * 24 * 3
+						}
+						req.session.rememberMe = req.body.rememberMe
 						req.session.username = req.body.username
 						res.redirect("/")
 					} else {
@@ -200,6 +158,7 @@ express()
 	})
 	.post('/logout', (req, res) => {
 		req.session.destroy()
+		res.clearCookie("Nico's Cookie")
 		res.redirect("/")
 	})
 	.post('/registered', urlencoder, (req, res) => {
@@ -219,7 +178,8 @@ express()
 						shortBio: req.body.shortBio,
 						avatar: req.body.avatar
 					})
-					newUser.save().then((msg) => {
+					newUser.save().then((msg)=>{
+						req.session.rememberMe = req.body.rememberMe
 						req.session.username = req.body.username
 						res.redirect("/")
 					})
@@ -240,7 +200,8 @@ express()
 			postTitle: req.body.postTitle,
 			postDescription: req.body.postDescription,
 			postAuthor: req.session.username,
-			postDate: (dateNow.getMonth() + 1) + "/" + dateNow.getDate() + "/" + dateNow.getFullYear() + " " + dateNow.toLocaleTimeString(),
+			postDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
+			postDateRaw: dateNow,
 			postScore: 0,
 			commentNumber: 0,
 			comment: []
@@ -257,14 +218,35 @@ express()
 		res.send(cool())
 	})
 
-	//AJAX CALLS
+/** AJAX CALLS **/
 
 	.get('/getposts', (req, res) => {
-		var findPosts = Post.find()
-		findPosts.then((foundPosts) => {
-			res.send(foundPosts)
+		var findPosts = Post.find().limit(5)
+		findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
 		})
 	})
+
+	.post('/getmoreposts', urlencoder, (req, res) => {
+		var findPosts = Post.find().skip(parseInt(req.body.skipNum)).limit(5)
+		findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+		})
+	})
+	
+    .get('/getsortedbyscoreposts', urlencoder, (req, res) => {
+        var findPosts = Post.find({}).sort({postScore : -1}).limit(5)
+        findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+        })
+	})
+	
+    .get('/getsortedbydateposts', urlencoder, (req, res) => {
+        var findPosts = Post.find({}).sort({postDateRaw : -1}).limit(5)
+        findPosts.then((foundPosts)=>{
+            res.send(foundPosts)
+        })
+    })
 
 	.post('/getonepost', urlencoder, (req, res) => {
 		var findPost = Post.findOne({
@@ -284,29 +266,28 @@ express()
 		})
 	})
 
-	.post('/createnewcomment', urlencoder, (req, res) => {
-		var dateNow = new Date()
-		var findPost = Post.findOne({
-			_id: req.body.postID
-		})
-		findPost.then((foundPost) => {
-			var newComment = new Comment({
-				postID: foundPost._id,
-				commentContent: req.body.commentContent,
-				commentAuthor: req.session.username,
-				commentDate: (dateNow.getMonth() + 1) + "/" + dateNow.getDate() + "/" + dateNow.getFullYear() + " " + dateNow.toLocaleTimeString(),
-				commentScore: 0,
-				nestedComments: []
-			})
-			foundPost.comment.push(newComment)
-			foundPost.save().then((msg) => {
-				res.send(newComment)
-			})
-		})
-	})
-
 	.use("*", (req, res) => {
 		res.render('./pages/error.hbs')
 	})
+
+    .post('/createnewcomment', urlencoder, (req, res) => {
+        var dateNow = new Date()
+        var findPost = Post.findOne({ _id : req.body.postID})
+        findPost.then((foundPost)=>{  
+            var newComment = new Comment({
+                postID: foundPost._id,
+                commentContent: req.body.commentContent,
+                commentAuthor: req.session.username,
+                commentDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
+                commentScore: 0,
+                nestedComments: []
+            })
+			foundPost.comment.push(newComment)
+			foundPost.commentNumber += 1
+            foundPost.save().then((msg)=>{
+            	res.send(newComment)
+            })
+        })
+	})	
 
 	.listen(PORT, () => console.log(`Listening on ${ PORT }`))

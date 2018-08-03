@@ -4,7 +4,7 @@
 <head>
   {{> headerResources}}
   <title>The Forum</title>
-
+  
   <link href="./stylesheets/loading.css" rel="stylesheet">
 
   <style>
@@ -160,15 +160,27 @@
       $(commentContainer).append(mainCommentContainer);
     }
 
-    function createNewComment() {
-      $.post("createnewcomment", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
-        $("#commentContent").val("");
-        addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
-      })
-    }
+
+		function createNewComment(){
+            var postIDVar = "{{postID}}"
+			$.post("createnewcomment",{ postID: postIDVar, commentContent: $("#commentContent").val() },(newComment)=>{
+				$("#commentContent").val("");
+        newComments += 1;
+        $("#commentNumber").html({{commentNumber}}+newComments+" comments");
+				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+			})
+		}
+    
+    function checkCommentBox(){
+      if($("#commentContent").val().trim() != ""){
+        $("#submitButton").removeAttr("disabled");
+      }else{
+        $("#submitButton").attr("disabled","disabled");
+      }
+    }	
 
   </script>
-
+  
 </head>
 
 <body>
@@ -189,7 +201,7 @@
             <span class="info">
               <span class="p-2">
                 <i class="material-icons md-16 md-dark">comment</i>
-                <a href="#comments">{{commentNumber}} comments</a>
+                <a id="commentNumber" href="#comments">{{commentNumber}} comments</a>
               </span>
               <span class="p-2">
                 <i class="material-icons md-18 md-dark">person_outline</i> Posted by
@@ -205,9 +217,9 @@
           <a href="user-profile?u={{uname}}">{{uname}}</a>
         </h5>
         <div class="container-fluid">
-          <textarea id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
+          <textarea oninput="checkCommentBox();" id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
         </div>
-        <button onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
+        <button disabled id="submitButton" onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
       </div>
       {{else}}
       <div class="postcomment">
@@ -335,7 +347,6 @@
 
   {{> scriptResources}}
 
-
   <script>
     $(document).ready(function () {
       $(document).ajaxStart(function () {
@@ -378,8 +389,24 @@
           $("#allComments").append(noComments);
         }
       })
-
+      
+        var postIDVar = "{{postID}}"
+        $.post("getonepost",{ postID: postIDVar },(foundPost)=>{
+            if(foundPost.comment.length > 0){
+                for(let i = 0 ; i < foundPost.comment.length ; i++){
+                    addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
+                }
+            }else{             
+                var noComments = document.createElement("div");
+                noComments.innerHTML = "No comments.";
+				        noComments.id = "noComment";
+                $("#allComments").append(noComments);
+            }                        
+        })
+        
     });
+            
+
   </script>
 
 </body>

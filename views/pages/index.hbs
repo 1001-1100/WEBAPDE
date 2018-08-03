@@ -35,8 +35,8 @@
 
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Date Created</a>
-          <a class="dropdown-item" href="#">Popularity</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
         </div>
       </div>
       {{else}}
@@ -44,8 +44,8 @@
         <button class="btn btn-outline-secondary dropdown-toggle mb-3" type="button" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">Sort posts by</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" href="#">Date Created</a>
-          <a class="dropdown-item" href="#">Popularity</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
+          <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
         </div>
       </div>
       {{/if}}
@@ -158,6 +158,9 @@
 
   <script>
     $(document).ready(function () {
+
+      var skipNum = 0;
+
       $(document).ajaxStart(function () {
         $("#loading-posts").css("display", "block");
       });
@@ -170,6 +173,7 @@
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
             addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            skipNum += 1;
           }
         } else {
           var noPosts = document.createElement("div");
@@ -198,10 +202,42 @@
           $("#postContainer").append(noPosts);
         }
       })
-
+        
       $("#loadMorePosts").click(function () {
+        $.post("getmoreposts",{skipNum},(foundPosts)=>{
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                  skipNum += 1;
+                }	
+            }
+        })        
 
-      });
+      $("#sortByDate").click(()=>{
+        $.get("getsortedbydateposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })
+      })
+
+      $("#sortByPopularity").click(()=>{
+        $.get("getsortedbyscoreposts",{},(foundPosts)=>{
+            $("#postContainer").empty();
+            if(foundPosts.length > 0){
+                for(let i = 0; i < foundPosts.length; i++) {
+                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+                }	
+            }else{	
+                $("#postContainer").append("No posts available");
+            }
+        })      
+      })
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
