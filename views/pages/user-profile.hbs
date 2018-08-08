@@ -8,6 +8,10 @@
     .comment-container {
       margin-bottom: 10px;
     }
+
+    .icons{
+      position: right;
+    }
   </style>
 </head>
 
@@ -114,6 +118,29 @@
 
   <script>
     $(document).ready(function () {
+
+      var username = "{{uname}}";
+      console.log("username is " + username);
+
+
+      $.post("loaduserposts",{  
+        username : username
+      
+        },(foundUser)=>{
+          $("#postContainer").empty();
+          if(foundUser){
+                for(let i = 0; i < foundUser[0].post.length; i++) {
+                  addPost(foundUser[0].post[i]._id, foundUser[0].post[i].postTitle, foundUser[0].post[i].postDescription, foundUser[0].post[i].postAuthor, foundUser[0].post[i].postDate, foundUser[0].post[i].postScore, foundUser[0].post[i].commentNumber);
+                }	
+          }else{	  
+                addNoPosts()
+          }
+      })
+      
+
+/////////////////////////////////////////////////////////////////
+
+function addNoPosts(){
       var noPosts = document.createElement("div");
       noPosts.className = "comment-container";
       var icon = document.createElement("i");
@@ -123,7 +150,7 @@
       content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
       var text = document.createElement("h2");
       text.className = "flex-fill text-center";
-      text.innerHTML = "No comments yet...";
+      text.innerHTML = "No posts yet...";
       var subtext = document.createElement("h6");
       subtext.className = "mt-1 flex-fill text-center subheading";
       subtext.innerHTML = "Looks like this user hasn't posted anything.";
@@ -133,7 +160,8 @@
       noPosts.append(content);
       noPosts.id = "noPost";
       $("#postContainer").append(noPosts);
-
+}
+/*
       var postIDs = []
       var postTitles = []
       var postDescriptions = []
@@ -186,75 +214,127 @@
                                   }
                                   $("#loadMorePosts").click(function () {
                                   });
+*/
+          function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
+            var mediaPost = document.createElement("div");
+            mediaPost.className = "media post";
+            var flexRow = document.createElement("div");
+            flexRow.className = "d-flex flex-row";
+            var flexColumn = document.createElement("div");
+            flexColumn.className = "media-body d-flex flex-column";
+            var voteBox = document.createElement("div");
+            voteBox.className = "mr-3 actions flex-column";
+            var arrowUpward = document.createElement("i");
+            arrowUpward.className = "material-icons md-18 md-dark up";
+            arrowUpward.innerHTML = "arrow_upward";
+            var voteValue = document.createElement("span");
+            voteValue.className = "votes";
+            voteValue.innerHTML = postScore;
+            var arrowDownward = document.createElement("i");
+            arrowDownward.className = "material-icons md-18 md-dark down";
+            arrowDownward.innerHTML = "arrow_downward";
+            var commentIcon = document.createElement("i");
+            commentIcon.className = "material-icons md-16 md-dark";
+            commentIcon.innerHTML = "comment";
+            var personIcon = document.createElement("i");
+            personIcon.className = "material-icons md-18 md-dark";
+            personIcon.innerHTML = "person_outline";
+            var postTitleContainer = document.createElement("a");
+            postTitleContainer.setAttribute("href", "post?id=" + postIDs);
+            postTitleContainer.className = "mt-0 mb-1";
+            postTitleContainer.innerHTML = postTitle;
+            var postContent = document.createElement("div");
+            postContent.innerHTML = postDescription;
+            var postInfo = document.createElement("div");
+            postInfo.className = "p-1 flex-fill";
+            var spanInfo = document.createElement("span");
+            spanInfo.className = "info";
+            var spanComment = document.createElement("span");
+            spanComment.className = "mr-3";
+            var commentNumberContainer = document.createElement("a");
+            commentNumberContainer.innerHTML = " ";
+            commentNumberContainer.setAttribute("href", "post?id=" + postIDs + "#comments");
+            var spanUsername = document.createElement("span");
+            spanUsername.className = "p-1";
+            var userName = document.createElement("a");
+            userName.innerHTML = postAuthor;
+            userName.setAttribute("href", "user-profile?u=" + postAuthor);
 
-                                  function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
-                                    var mediaPost = document.createElement("div");
-                                    mediaPost.className = "media post";
-                                    var flexRow = document.createElement("div");
-                                    flexRow.className = "d-flex flex-row";
-                                    var flexColumn = document.createElement("div");
-                                    flexColumn.className = "media-body d-flex flex-column";
-                                    var voteBox = document.createElement("div");
-                                    voteBox.className = "mr-3 actions flex-column";
-                                    var arrowUpward = document.createElement("i");
-                                    arrowUpward.className = "material-icons md-18 md-dark up";
-                                    arrowUpward.innerHTML = "arrow_upward";
-                                    var voteValue = document.createElement("span");
-                                    voteValue.className = "votes";
-                                    voteValue.innerHTML = postScore;
-                                    var arrowDownward = document.createElement("i");
-                                    arrowDownward.className = "material-icons md-18 md-dark down";
-                                    arrowDownward.innerHTML = "arrow_downward";
-                                    var commentIcon = document.createElement("i");
-                                    commentIcon.className = "material-icons md-16 md-dark";
-                                    commentIcon.innerHTML = "comment";
-                                    var personIcon = document.createElement("i");
-                                    personIcon.className = "material-icons md-18 md-dark";
-                                    personIcon.innerHTML = "person_outline";
-                                    var postTitleContainer = document.createElement("a");
-                                    postTitleContainer.setAttribute("href", "post?id=" + postIDs);
-                                    postTitleContainer.className = "mt-0 mb-1";
-                                    postTitleContainer.innerHTML = postTitle;
-                                    var postContent = document.createElement("div");
-                                    postContent.innerHTML = postDescription;
-                                    var postInfo = document.createElement("div");
-                                    postInfo.className = "p-1 flex-fill";
-                                    var spanInfo = document.createElement("span");
-                                    spanInfo.className = "info";
-                                    var spanComment = document.createElement("span");
-                                    spanComment.className = "mr-3";
-                                    var commentNumberContainer = document.createElement("a");
-                                    commentNumberContainer.innerHTML = " ";
-                                    commentNumberContainer.setAttribute("href", "post?id=" + postIDs + "#comments");
-                                    var spanUsername = document.createElement("span");
-                                    spanUsername.className = "p-1";
-                                    var userName = document.createElement("a");
-                                    userName.innerHTML = postAuthor;
-                                    userName.setAttribute("href", "user-profile?u=" + postAuthor);
+           
+            var icondelete = document.createElement("i");
+            icondelete.innerHTML = "delete";
+            icondelete.className = "material-icons md-16 md-dark icons";
+            var iconedit = document.createElement("i");
+            iconedit.innerHTML = "edit";
+            iconedit.className = "material-icons md-16 md-dark icons";
 
-                                    voteBox.append(arrowUpward);
-                                    voteBox.append(voteValue);
-                                    voteBox.append(arrowDownward);
-                                    flexRow.append(voteBox);
-                                    flexColumn.append(postTitleContainer);
-                                    flexColumn.append(postContent);
-                                    commentNumberContainer.append(commentIcon);
-                                    commentNumberContainer.append(" " + commentNumber + " Comments");
-                                    spanComment.append(commentNumberContainer);
-                                    spanInfo.append(spanComment);
-                                    spanUsername.append(personIcon);
-                                    spanUsername.append("Posted by ");
-                                    spanUsername.append(userName);
-                                    spanUsername.append(" at " + postDate);
-                                    spanInfo.append(spanUsername);
-                                    postInfo.append(spanInfo);
-                                    flexColumn.append(postInfo);
-                                    flexRow.append(flexColumn);
-                                    mediaPost.append(flexRow);
+            var deletespan = document.createElement("span");
+            deletespan.className = "deleteSpan";
+            deletespan.setAttribute("data-id", postIDs);
+            deletespan.addEventListener("click", function(){
+            //  var id = $(this).attr("data-id")
+           //   console.log("ID of post is " + id);
+              deletePost(postIDs);
+            })
 
-                                    $("#postContainer").append(mediaPost);
-                                  }
-                                });
+            var editspan = document.createElement("span");
+          //  var edita = document.createElement("a");
+            editspan.append(iconedit);
+            deletespan.append(icondelete);
+
+
+            voteBox.append(arrowUpward);
+            voteBox.append(voteValue);
+            voteBox.append(arrowDownward);
+            flexRow.append(voteBox);
+            flexColumn.append(postTitleContainer);
+            flexColumn.append(postContent);
+            commentNumberContainer.append(commentIcon);
+            commentNumberContainer.append(" " + commentNumber + " Comments");
+            spanComment.append(commentNumberContainer);
+            spanInfo.append(spanComment);
+            spanUsername.append(personIcon);
+            spanUsername.append("Posted by ");
+            spanUsername.append(userName);
+            spanUsername.append(" at " + postDate);
+            spanInfo.append(spanUsername);
+            postInfo.append(spanInfo);
+            flexColumn.append(postInfo);
+            flexRow.append(flexColumn);
+            mediaPost.append(flexRow);
+             flexRow.append(editspan);
+            flexRow.append(deletespan);
+
+            $("#postContainer").append(mediaPost);
+          }
+
+
+           
+
+            function deletePost(postID){          
+               var username = "{{uname}}";
+                      $("#postContainer").empty();              
+                  $.post("deletepost",{  
+                     id: postID,
+                     username: username
+                  },(deletedPost)=>{
+
+                      if(deletedPost){
+                        
+                            for(let i = 0; i < deletedPost.post.length; i++) {
+                              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber);
+                            }	
+                         
+
+                      }else{	
+                           addNoPosts()
+                      }
+
+                    
+                  })
+           
+            }
+        });
   </script>
 
 </body>
