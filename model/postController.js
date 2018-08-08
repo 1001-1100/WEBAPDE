@@ -138,10 +138,10 @@ module.exports.returnAfterDeleting = function returnAfterDeletingPosts(req, res)
 	console.log("in returnAfterDeleting, postid = " + postid);
 
 
-	// Post.remove( { _id : postid 
-	// }).then(()=>{
+	Post.remove( { _id : postid 
+	}).then(()=>{
 
-	// })
+	})
 
 
 	var updatedList = User.findOne({username: username})
