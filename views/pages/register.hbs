@@ -9,8 +9,8 @@
 
 <body class="text-center">
 
-  <form class="form-register" method="post">
-    <img class="mb-4 rounded-circle" src="./kaye.JPG" width="72" height="72">
+  <form action="registeraccount" id="registerform" class="form-register" method="post" enctype="multipart/form-data">
+	<img class="mb-4 rounded-circle" src="./kaye.JPG" width="72" height="72">
     <div class="h4 mb-3 font-weight-normal">Register a new account</div>
     <div class="form-group">
       <label for="inputEmail">Email address</label>
@@ -36,13 +36,14 @@
       <div class="input-group-prepend">
         <span class="input-group-text">Avatar</span>
       </div>
-
-      <div class="text-left custom-file">
-
-        <input name="avatar" type="file" class="custom-file-input" id="inputAvatar">
-        <label class="custom-file-label" for="inputAvatar">Choose file</label>
-
-      </div>
+        
+          <div class="text-left custom-file">
+          
+              <input name="avatar" type="file">  
+              {{!-- <input name="avatar" type="file" class="custom-file-input" id="inputAvatar">
+              <label class="custom-file-label" for="inputAvatar">Choose file</label> --}}
+          
+          </div>
 
     </div>
 
@@ -84,106 +85,91 @@
   <script>
     $(document).ready(function () {
 
-      $("#registerbtn").on("click", function (evt) {
-        evt.preventDefault();
+        $("#registerbtn").on("click", function(evt){
+               evt.preventDefault();
 
-        // set to back to default black
-        $('label[for=inputUsername]').css({ color: 'black' });
-        $('label[for=inputEmail]').css({ color: 'red' });
-        $('label[for=inputPassword]').css({ color: 'black' });
-        $('label[for=inputConfirmPassword]').css({ color: 'black' });
+                // set to back to default black
+                $('label[for=inputUsername]').css({color:'black'});
+                $('label[for=inputEmail]').css({color:'red'});     
+                $('label[for=inputPassword]').css({color:'black'});
+                $('label[for=inputConfirmPassword]').css({color:'black'});
 
-        var username = $("#inputUsername").val();
-        var password = $("#inputPassword").val();
-        var email2 = $("#inputEmail").val();
-        var cpassword = $("#inputConfirmPassword").val();
-        var bio = $("#inputBio").val();
-        var avatar = $("#inputAvatar").val();
-        if ($("#inputRemember").is(":checked")) {
-          var rememberMe = $("#remember-signin").val();
-        }
-        console.log("avatar is " + avatar);
-        var file = document.getElementById("inputAvatar");
-        for (var i = 0; i < file.files.length; i++) {
-          console.log(file.files[i].name);
-        }
+                var username = $("#inputUsername").val();
+                var password = $("#inputPassword").val();
+                var email2 = $("#inputEmail").val();
+                var cpassword = $("#inputConfirmPassword").val();
 
-        if (!username || !password || !email2 || !cpassword) {
-          var data = "Please fill in all required fields.";
-          var myHeading = "<p class='text-left'>" + data + "</p>";
-          $(".modal-body").html(myHeading);
-          $("#errorModal").modal("show");
-          if (!username) {
+                if(!username || !password || !email2 || !cpassword ){
+                  var data = "Cannot leave blank";
+                  var myHeading = "<p>" + data +"</p>";
+                  $(".modal-body").html(myHeading); 
+                  $("#errorModal").modal("show");
+                  if(!username){
+                    
+                    $('label[for=inputUsername]').css({color:'red'});
+                  }else if(!password){
+                    
+                    $('label[for=inputPassword]').css({color:'red'});
+                  }else if(!email2){
+                    
+                    $('label[for=inputEmail]').css({color:'red'});
+                  }
+                  else if(!cpassword){
+                    
+                    $('label[for=inputConfirmPassword]').css({color:'red'});
+                  }
 
-            $('label[for=inputUsername]').css({ color: 'red' });
-          } else if (!password) {
+                }
+                else if(password != cpassword){
+                  var data = "Password must match. Kindly check";
+                  var myHeading = "<p>" + data +"</p>";
+                  $(".modal-body").html(myHeading); 
+                  $("#errorModal").modal("show");
 
-            $('label[for=inputPassword]').css({ color: 'red' });
-          } else if (!email2) {
+                  $('label[for=inputPassword]').css({color:'red'});
+                  $('label[for=inputConfirmPassword]').css({color:'red'});
+                }else{
 
-            $('label[for=inputEmail]').css({ color: 'red' });
-          }
-          else if (!cpassword) {
+                    $.post("checkregisteraccount",{  
+                      uname:username, 
+                      email: email2,
+                      password:password
+                    },(checkUser)=>{
+                        
+                        if(checkUser == "1"){
 
-            $('label[for=inputConfirmPassword]').css({ color: 'red' });
-          }
+                            
+                            $("#errorModal").modal("show");
+                            $('label[for=inputUsername]').css({color:'red'});
+                             $('label[for=inputEmail]').css({color:'black'});
+                           
+                        
+                        }else if (checkUser == "2"){
+                          
+                            $("#errorModal").modal("show");
+                            $('label[for=inputUsername]').css({color:'black'});
+                            $('label[for=inputEmail]').css({color:'red'});
 
-        }
-        else if (password != cpassword) {
-          var data = "Passwords must match.";
-          var myHeading = "<p class='text-left'>" + data + "</p>";
-          $(".modal-body").html(myHeading);
-          $("#errorModal").modal("show");
+                        }else{
 
-          $('label[for=inputPassword]').css({ color: 'red' });
-          $('label[for=inputConfirmPassword]').css({ color: 'red' });
-        } else {
-
-          $.post("checkregisteraccount", {
-            uname: username,
-            email: email2,
-            password: password,
-            bio: bio,
-            avatar: avatar,
-            rememberMe
-          }, (checkUser) => {
-
-            console.log("checkUser is " + checkUser);
-            if (checkUser == "1") {
-              console.log('checkUser == 1');
-
-              $("#errorModal").modal("show");
-              $('label[for=inputUsername]').css({ color: 'red' });
-              $('label[for=inputEmail]').css({ color: 'black' });
-
-
-            } else if (checkUser == "2") {
-              console.log('checkUser == 2');
-              $('label[for=inputUsername]').css({ color: 'black' });
-              $('label[for=inputEmail]').css({ color: 'red' });
-
-              $("#errorModal").modal("show");
-
-            } else {
-              console.log("User creds are unique");
-              window.location.replace("/");
+                            $('#registerform').submit();
+                  
+                        
+                        }
+                    
+                    
+                    })
+                  }
+             });
 
 
-            }
-
-
-          })
-        }
-      });
-
-
-      $('#inputAvatar').on('change', function () {
-        //get the file name
-        var fileName = $('input[type=file]').val().split('\\').pop();
-
-        //replace the "Choose a file" label
-        $(this).next('.custom-file-label').html(fileName);
-      })
+       $('#inputAvatar').on('change',function(){
+                //get the file name
+                var fileName = $('input[type=file]').val().split('\\').pop();
+                
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
     });
   </script>
 

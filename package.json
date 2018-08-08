@@ -8,8 +8,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "node test.js",
-    "sass:compile": "node-sass --include-path sass ./public/stylesheets/loading.scss ./public/stylesheets/loading.css"
+    "test": "node test.js"
   },
   "dependencies": {
     "bcrypt": "^3.0.0",
@@ -23,7 +22,6 @@
     "http": "0.0.0",
     "mongoose": "^5.2.5",
     "multer": "^1.3.1",
-    "node-sass": "^4.9.2",
     "path": "^0.12.7"
   },
   "devDependencies": {

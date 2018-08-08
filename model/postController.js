@@ -26,6 +26,7 @@ module.exports.getPostPage = function getPostPage(req, res){
 
 module.exports.createPost = function createPost(req, res){
 	var dateNow = new Date()
+	var POSTID
 		var newPost = new Post({
 			postTitle: req.body.postTitle,
 			postDescription: req.body.postDescription,
@@ -36,10 +37,27 @@ module.exports.createPost = function createPost(req, res){
 			commentNumber: 0,
 			comment: []
 		})
+
+
 		newPost.save().then((msg) => {
-			var newPostLink = "post?id=" + newPost._id
-			res.redirect(newPostLink)
+			POSTID = newPost._id
+
+			console.log("")
 		})
+
+	
+		var findUser = User.findOne({
+			username: req.session.username
+		})
+
+		findUser.then((foundUser) => {
+			foundUser.post.push(newPost)
+			foundUser.save().then((msg) => {
+				
+			var newPostLink = "post?id=" + newPost._id
+				res.redirect(newPostLink)
+			})
+		})	
 }
 
 module.exports.returnPosts = function returnPosts(req, res){
@@ -96,4 +114,56 @@ module.exports.returnSearchResults = function returnSearchedPosts(req, res){
 			}
 		})
 	})
+}
+
+module.exports.returnLoadUserPosts = function returnLoadUserPosts(req, res){
+
+	var username = req.body.username;
+	console.log("returnLoadUserPosts");
+	var findPost = User.find({username: username})
+
+	findPost.then((foundPosts)=>{
+		if(foundPosts) 
+			res.send(foundPosts)
+	
+	})
+
+
+}
+
+module.exports.returnAfterDeleting = function returnAfterDeletingPosts(req, res){
+
+	var postid = req.body.id
+	var username = req.body.username
+	console.log("in returnAfterDeleting, postid = " + postid);
+
+
+	// Post.remove( { _id : postid 
+	// }).then(()=>{
+
+	// })
+
+
+	var updatedList = User.findOne({username: username})
+
+	updatedList.then((foundUser)=>{
+
+		if(foundUser){
+			for(let i = 0; i <foundUser.post.length; i++){
+			//	console.log(foundUser[0].post.length);
+			//	console.log(foundUser[0].post[i]._id);
+				if(foundUser.post[i]._id == postid){
+					foundUser.post.splice(i, 1); // removes the post in the 'post' array of the user
+				//	foundUser.post
+					res.send(foundUser); 
+				}
+			}
+		}
+		foundUser.save().then((msg) => {
+			
+			})
+
+	})
+
+		
 }

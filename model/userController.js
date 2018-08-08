@@ -1,6 +1,9 @@
 const Post = require("./models/post.js").Post
 const Comment = require("./models/comment.js").Comment
 const User = require("./models/user.js").User
+const fs = require('fs')
+const multer = require('multer')
+const upload = multer({dest: './public/avatars'})
 const bcrypt = require("bcrypt")
 
 module.exports.getUserProfile = function getUserProfile(req, res){
@@ -38,7 +41,8 @@ module.exports.getUserProfile = function getUserProfile(req, res){
 				res.render("./pages/user-profile.hbs", {
 					userHandle: "@" + foundUser.username,
 					userBioData: foundUser.shortBio,
-					uname: req.session.username
+					uname: req.session.username,
+					avatar: foundUser.avatar
 				})
 			} else {
 				res.render('./pages/error.hbs')
@@ -80,35 +84,38 @@ module.exports.returnRegisterUser = function returnRegisterUser(req, res){
 		findEmail.then((foundEmail)=>{
 
 			if(foundUser){ // only username matched in db
+					console.log("in checkregisteraccount - if")	
 					res.send("1")
-					console.log("in checkregisteraccount - if");	
 			}
 			else if(foundEmail){ // only email matched in db
+					console.log("in checkregisteraccount - if")
 					res.send("2")
-					console.log("in checkregisteraccount - if");
+			}else{
+				res.send("3")
 			}
-			else{
-				console.log("in checkregisteraccount - else");
-				bcrypt.hash(req.body.password,12).then((hashed)=>{
-					var hashedPassword = hashed
-					var newUser = new User({
-						emailAddress : req.body.email,
-						username : req.body.uname,
-						password : hashedPassword,
-						shortBio : req.body.bio,
-					})
-				
-					newUser.save().then((msg)=>{
-						if(req.body.rememberMe){
-							req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
-							req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
-						}
-						req.session.rememberMe = req.body.rememberMe
-						req.session.username = req.body.uname
-						res.send(null);
-					})
-				})
+		})
+	})
+}
+
+module.exports.registerUser = function registerUser(req, res, filename){
+	bcrypt.hash(req.body.password,12).then((hashed)=>{
+		var hashedPassword = hashed
+		var newUser = new User({
+			emailAddress : req.body.emailAddress,
+			username : req.body.username,
+			password : hashedPassword,
+			shortBio : req.body.shortBio,
+			avatar: filename
+		})
+
+		newUser.save().then((msg)=>{
+			if(req.body.rememberMe){
+				req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
+				req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
 			}
+			req.session.rememberMe = req.body.rememberMe
+			req.session.username = req.body.username
+			res.redirect("/");
 		})
 	})
 }
