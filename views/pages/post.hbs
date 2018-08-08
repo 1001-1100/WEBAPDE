@@ -4,7 +4,7 @@
 <head>
   {{> headerResources}}
   <title>The Forum</title>
-  
+
   <link href="./stylesheets/loading.css" rel="stylesheet">
 
   <style>
@@ -57,16 +57,50 @@
       var commentContentContainer = document.createElement("div");
       commentContentContainer.innerHTML = commentContent;
       var navContainer = document.createElement("div");
-      navContainer.className = "nav-item active mt-2";
+      navContainer.className = "mt-2";
       var infoSpan = document.createElement("span");
       infoSpan.className = "info";
       var replyLink = document.createElement("a");
-      replyLink.setAttribute("href", "");
+      replyLink.setAttribute("href", "#");
+      replyLink.setAttribute("data-id", commentID);
+      replyLink.addEventListener("click", function () {
+        var id = $(this).attr("data-id")
+        console.log("Reply clicked, id=" + id);
+
+        var addCommentContainer = document.createElement("div")
+
+        var txtComment = document.createElement("textarea")
+        txtComment.setAttribute("oninput", "checkCommentBox();")
+        txtComment.className = "form-control mt-2"
+        txtComment.type = "text"
+        txtComment.placeholder = "Type a comment"
+
+        var btnSubmit = document.createElement("button")
+        btnSubmit.disabled = true
+        btnSubmit.setAttribute("onclick", "createNewComment()")
+        btnSubmit.className = "btn btn-primary mt-2"
+        btnSubmit.innerHTML = "Submit"
+
+        var txtCommentContainer = document.createElement("div")
+        txtCommentContainer.className = "container-fluid"
+
+        txtCommentContainer.append(txtComment)
+        txtCommentContainer.append(btnSubmit)
+
+        addCommentContainer.append(txtCommentContainer)
+
+        $(txtCommentContainer).appendTo(txtContainer).hide().slideDown(500)
+      }, {
+          once: true
+        })
+
       var commentIcon = document.createElement("i");
       commentIcon.className = "material-icons md-16 md-dark";
       commentIcon.innerHTML = "comment";
       var replyText = document.createElement("span");
       replyText.innerHTML = "Reply";
+
+      var txtContainer = document.createElement("div")
 
       voteContainer.append(upArrow);
       voteContainer.append(downArrow);
@@ -84,6 +118,7 @@
       commentBodyContainer.append(flexContainer);
       commentBodyContainer.append(commentContentContainer);
       commentBodyContainer.append(navContainer);
+      commentBodyContainer.append(txtContainer)
       mainCommentContainer.append(voteContainer);
       mainCommentContainer.append(commentBodyContainer);
       wholeCommentContainer.append(mainCommentContainer);
@@ -133,12 +168,46 @@
       var infoSpan = document.createElement("span");
       infoSpan.className = "info";
       var replyLink = document.createElement("a");
-      replyLink.setAttribute("href", "");
+      replyLink.setAttribute("href", "#");
+      replyLink.setAttribute("data-id", commentID);
+      replyLink.addEventListener("click", function (e) {
+        var id = $(this).attr("data-id")
+        console.log("Reply clicked, id=" + id);
+
+        var addCommentContainer = document.createElement("div")
+
+        var txtComment = document.createElement("textarea")
+        txtComment.setAttribute("oninput", "checkCommentBox();")
+        txtComment.className = "form-control mt-2"
+        txtComment.type = "text"
+        txtComment.placeholder = "Type a comment"
+
+        var btnSubmit = document.createElement("button")
+        btnSubmit.disabled = true
+        btnSubmit.setAttribute("onclick", "createNewComment()")
+        btnSubmit.className = "btn btn-primary mt-2"
+        btnSubmit.innerHTML = "Submit"
+
+        var txtCommentContainer = document.createElement("div")
+        txtCommentContainer.className = "container-fluid"
+
+        txtCommentContainer.append(txtComment)
+        txtCommentContainer.append(btnSubmit)
+
+        addCommentContainer.append(txtCommentContainer)
+
+        $(txtCommentContainer).appendTo(txtContainer).hide().slideDown(500)
+      }, {
+          once: true
+        })
+
       var commentIcon = document.createElement("i");
       commentIcon.className = "material-icons md-16 md-dark";
       commentIcon.innerHTML = "comment";
       var replyText = document.createElement("span");
       replyText.innerHTML = " Reply";
+
+      var txtContainer = document.createElement("div")
 
       voteContainer.append(upArrow);
       voteContainer.append(downArrow);
@@ -156,32 +225,34 @@
       commentBodyContainer.append(flexContainer);
       commentBodyContainer.append(commentContentContainer);
       commentBodyContainer.append(navContainer);
+      commentBodyContainer.append(txtContainer)
       mainCommentContainer.append(voteContainer);
       mainCommentContainer.append(commentBodyContainer);
 
       $(commentContainer).append(mainCommentContainer);
     }
 
-		function createNewComment(){
-			$.post("createnewcomment",{ postID: "{{postID}}", commentContent: $("#commentContent").val() },(newComment)=>{
-				$("#commentContent").val("");
+    function createNewComment() {
+      $.post("createnewcomment", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
+        $("#commentContent").val("");
         newComments += 1;
-        $("#commentNumber").html({{commentNumber}}+newComments+" comments");
-				addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
-			})
-      $("#submitButton").attr("disabled","disabled");
+        $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
+      addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+    })
+    $("#submitButton").attr("disabled", "disabled");
 		}
-    
-    function checkCommentBox(){
-      if($("#commentContent").val().trim() != ""){
+
+    function checkCommentBox() {
+      if ($("#commentContent").val().trim() != "") {
         $("#submitButton").removeAttr("disabled");
-      }else{
-        $("#submitButton").attr("disabled","disabled");
+      } else {
+        $("#submitButton").attr("disabled", "disabled");
       }
-    }	
+    }
+
 
   </script>
-  
+
 </head>
 
 <body>
@@ -357,6 +428,16 @@
         $("#loading-comments").css("display", "none");
       });
 
+      /*
+            $("body").click(function (e) {
+              if (($(e.target).hasClass("testing")) || $(e.target).parents(".testing").length) {
+                var id = e.currentTarget.getAttribute('id')
+      
+                console.log("Reply clicked, id=" + id);
+              }
+            });
+      */
+
       $.post("getonepost", { postID: "{{postID}}" }, (foundPost) => {
         if (foundPost.comment.length > 0) {
           for (let i = 0; i < foundPost.comment.length; i++) {
@@ -390,7 +471,7 @@
         }
       })
     });
-            
+
 
   </script>
 

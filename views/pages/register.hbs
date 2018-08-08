@@ -109,8 +109,8 @@
         }
 
         if (!username || !password || !email2 || !cpassword) {
-          var data = "Cannot leave blank";
-          var myHeading = "<p>" + data + "</p>";
+          var data = "Please fill in all required fields.";
+          var myHeading = "<p class='text-left'>" + data + "</p>";
           $(".modal-body").html(myHeading);
           $("#errorModal").modal("show");
           if (!username) {
@@ -130,8 +130,8 @@
 
         }
         else if (password != cpassword) {
-          var data = "Password must match. Kindly check";
-          var myHeading = "<p>" + data + "</p>";
+          var data = "Passwords must match.";
+          var myHeading = "<p class='text-left'>" + data + "</p>";
           $(".modal-body").html(myHeading);
           $("#errorModal").modal("show");
 

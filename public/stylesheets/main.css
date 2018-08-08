@@ -32,6 +32,11 @@ body a {
   mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 50%, transparent);
 }
 
+/* .media-body .info {
+  position: relative;
+  z-index: 1000;
+} */
+
 .media-body .info a:hover {
   text-decoration: none;
 }
@@ -55,6 +60,8 @@ body a {
   background-color: white;
   padding: 10px;
   margin-bottom: 5px;
+  position: relative;
+  z-index: 0;
 }
 
 .postcomment {
