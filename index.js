@@ -8,7 +8,6 @@ const session = require("express-session")
 const cookieparser = require("cookie-parser")
 const PORT = process.env.PORT || 5000
 const bcrypt = require("bcrypt")
-const sass = require('node-sass')
 const fs = require('fs')
 const multer = require('multer')
 const mongoose = require("mongoose") 
@@ -106,8 +105,18 @@ express()
 		postController.returnSearchResults(req, res)
 	})
 
+	.post('/loaduserposts', urlencoder, (req, res) =>{
+		
+		console.log("loaduserPosts");
+		postController.returnLoadUserPosts(req,res)
+	})
+
 	.post('/getmoreposts', urlencoder, (req, res) => {
 		postController.returnMorePosts(req, res)
+	})
+
+	.post('/deletepost', urlencoder, (req, res) =>{
+		postController.returnAfterDeleting(req, res)
 	})
 	
     .get('/getsortedbyscoreposts', urlencoder, (req, res) => {
@@ -116,7 +125,9 @@ express()
 	
     .get('/getsortedbydateposts', urlencoder, (req, res) => {
 		postController.returnSortedByDatePosts(req, res)
-    })
+	})
+	
+
 
 	// USERS //
 

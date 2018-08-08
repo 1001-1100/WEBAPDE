@@ -7,13 +7,28 @@ var userSchema = mongoose.Schema({
 	shortBio : String,
 	avatar: String,
 	post: [{
-		postID: String,
-		postTitle: String,
+		postTitle: {
+			type: String,
+			required: true,
+			minlength: 6,
+			trim: true
+		},
 		postDescription: String,
 		postAuthor: String,
 		postDate: String,
+		postDateRaw: Date,
 		postScore: Number,
-		commentNumber: Number
+		commentNumber: Number,
+		comment: [{
+			postID: String,
+			commentContent: String,
+			commentAuthor: String,
+			commentDate: String,
+			commentScore: Number,
+			nestedComments: [{
+				commentID: String
+			}]
+		}]
 	}],
 	comment: [{
 		commentID: String,
