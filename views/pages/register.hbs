@@ -3,7 +3,7 @@
 
 <head>
   {{> headerResources}}
-	<link href="./stylesheets/register.css" rel="stylesheet">
+  <link href="./stylesheets/register.css" rel="stylesheet">
   <title>The Forum</title>
 </head>
 
@@ -44,7 +44,7 @@
               <label class="custom-file-label" for="inputAvatar">Choose file</label> --}}
           
           </div>
-        
+
     </div>
 
     <!-- <p style="text-align: left; margin-left: 5px"> Choose Avatar</p> -->
@@ -53,32 +53,35 @@
 
     <div class="checkbox mb-3">
       <label>
-        <input name="rememberMe" id ="inputRemember" type="checkbox" value="remember-me"> Remember me
+        <input name="rememberMe" id="inputRemember" type="checkbox" value="remember-me"> Remember me
       </label>
     </div>
-    <button id ="registerbtn" class="nav-link btn btn-lg btn-primary btn-block">Register</button>
+    <button id="registerbtn" class="nav-link btn btn-lg btn-primary btn-block">Register</button>
   </form>
 
- <div class="modal fade" id = "errorModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Username or Email Unavailable</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                
-            </div>
-            <div class="modal-body">
-                <p class = "modal-body">You entered an Exisiting Username or Email. Please Try Again </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Try Again</button>
-            </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+  <div class="modal fade" id="errorModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Registration error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
- {{> scriptResources}}
- 
+        </div>
+        <div class="modal-body">
+          <p class="text-left">A user with the same username or email already exists. Please try again.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" data-dismiss="modal">Retry</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  {{> scriptResources}}
+
   <script>
     $(document).ready(function () {
 
@@ -173,20 +176,7 @@
 </body>
 
 </html>
-{{!-- 
-    $(".downloadupaddinvoice").click(function(){
-          var filename = $('#inputAvatar').val();
-
-          if (filename == "" || filename == null) {
-              alert('Error');
-          }else {
-              var file = document.getElementById('inputAvatar').files[0];      
-              var filename = document.getElementById('inputAvatar').files[0].name;      
-              var blob = new Blob([file]);
-              var url  = URL.createObjectURL(blob);
-
-              $(this).attr({ 'download': filename, 'href': url});  
-              filename = "";
-          }
-
-      })   --}}
+{{!-- $(".downloadupaddinvoice").click(function(){ var filename = $('#inputAvatar').val(); if (filename == "" || filename
+== null) { alert('Error'); }else { var file = document.getElementById('inputAvatar').files[0]; var filename = document.getElementById('inputAvatar').files[0].name;
+var blob = new Blob([file]); var url = URL.createObjectURL(blob); $(this).attr({ 'download': filename, 'href': url}); filename
+= ""; } }) --}}

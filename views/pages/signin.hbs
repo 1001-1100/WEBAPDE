@@ -3,7 +3,7 @@
 
 <head>
     {{> headerResources}}
-	<link href="./stylesheets/signin.css" rel="stylesheet">
+    <link href="./stylesheets/signin.css" rel="stylesheet">
     <title>The Forum</title>
 </head>
 
@@ -23,61 +23,64 @@
 
         <div class="checkbox mb-3">
             <label>
-                <input id="remember-signin" name="rememberMe" type="checkbox" value="remember-me"> Remember me</label>
+                <input id="remember-signin" name="rememberMe" type="checkbox" value="remember-me">Remember me</label>
         </div>
-        <button id = "signinbtn" class="nav-link btn btn-lg btn-primary btn-block">Sign in</button>
+        <button id="signinbtn" class="nav-link btn btn-lg btn-primary btn-block">Sign in</button>
         <div class="mt-3 text-center">Don't have an account?
             <a href="/register">Register now</a>
         </div>
     </form>
     {{!-- MODAL --}}
-    <div class="modal fade" id = "errorModal">
+    <div class="modal fade" id="errorModal">
         <div class="modal-dialog">
             <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Username or Password Incorrect</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                
+                <div class="modal-header">
+                    <h4 class="modal-title">Login error</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+                </div>
+                <div class="modal-body">
+                    <p class="text-left">You entered an invalid username or password. Please try again.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Retry</button>
+                </div>
             </div>
-            <div class="modal-body">
-                <p>You entered an Incorrect Username or Password. Please Try Again </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Try Again</button>
-            </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 
     {{> scriptResources}}
-    
+
     <script>
         $(document).ready(function () {
-           
-           $("#signinbtn").on("click", function(evt){
-               evt.preventDefault();
+
+            $("#signinbtn").on("click", function (evt) {
+                evt.preventDefault();
                 var username = $("#username-signin").val();
                 var password = $("#password-signin").val();
-                if($("#remember-signin").is(":checked")){
+                if ($("#remember-signin").is(":checked")) {
                     var rememberMe = $("#remember-signin").val();
                 }
-                $.post("checkaccount",{ uname:username, pword:password, rememberMe },(checkUser)=>{
-                    
+                $.post("checkaccount ", { uname: username, pword: password, rememberMe }, (checkUser) => {
+
                     console.log("checkUser is " + checkUser);
-                    if(checkUser){
+                    if (checkUser) {
                         console.log('in if checkUser');
                         window.location.replace("/");
-                    }else{
+                    } else {
                         $("#errorModal").modal("show");
                     }
-                
-                
-                })
-             });
 
-             
-		
-    });
+
+                })
+            });
+
+
+
+        });
     </script>
 
 </body>
