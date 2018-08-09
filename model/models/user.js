@@ -37,16 +37,16 @@ var userSchema = mongoose.Schema({
 		commentDate: String,
 		commentScore: Number
 	}],
-	upvotedPosts: [{
+	upvotedPost: [{
 		postID: String
 	}],
-	downvotedPosts: [{
+	downvotedPost: [{
 		postID: String
 	}],
-	upvotedComments: [{
+	upvotedComment: [{
 		commentID: String
 	}],
-	downvotedComments: [{
+	downvotedComment: [{
 		commentID: String
 	}]
 })
