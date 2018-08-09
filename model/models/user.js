@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 
 var userSchema = mongoose.Schema({
-	emailAddress : String,
-	username : String,
-	password : String,
-	shortBio : String,
+	emailAddress: String,
+	username: String,
+	password: String,
+	shortBio: String,
 	avatar: String,
 	post: [{
 		postTitle: {
@@ -36,11 +36,23 @@ var userSchema = mongoose.Schema({
 		commentAuthor: String,
 		commentDate: String,
 		commentScore: Number
+	}],
+	upvotedPost: [{
+		postID: String
+	}],
+	downvotedPost: [{
+		postID: String
+	}],
+	upvotedComment: [{
+		commentID: String
+	}],
+	downvotedComment: [{
+		commentID: String
 	}]
 })
 
-var User = mongoose.model("userList",userSchema)
+var User = mongoose.model("userList", userSchema)
 
 module.exports = {
-    User
+	User
 }

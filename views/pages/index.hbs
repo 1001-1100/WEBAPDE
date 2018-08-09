@@ -158,10 +158,10 @@
 
   <script>
     $(document).ready(function () {
-    
+
       var skipNum = 0;
 
-      function addNoPosts(){
+      function addNoPosts() {
         var noPosts = document.createElement("div");
         noPosts.className = "comment-container";
         var icon = document.createElement("i");
@@ -185,7 +185,7 @@
         content.append(subtext);
         noPosts.append(content);
         noPosts.id = "noPosts";
-        $("#postContainer").append(noPosts);        
+        $("#postContainer").append(noPosts);
       }
 
       $(document).ajaxStart(function () {
@@ -206,44 +206,44 @@
           addNoPosts();
         }
       })
-        
-      $("#loadMorePosts").click(function () {
-        $.post("getmoreposts",{skipNum},(foundPosts)=>{
-            if(foundPosts.length > 0){
-                for(let i = 0; i < foundPosts.length; i++) {
-                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                  skipNum += 1;
-                }	
-            }
-        })
-      })       
 
-      $("#sortByDate").click(()=>{
-        $.get("getsortedbydateposts",{},(foundPosts)=>{
-            $("#postContainer").empty();
-            skipNum = 0;
-            if(foundPosts.length > 0){
-                for(let i = 0; i < foundPosts.length; i++) {
-                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                }	
-            }else{	
-                addNoPosts();
+      $("#loadMorePosts").click(function () {
+        $.post("getmoreposts", { skipNum }, (foundPosts) => {
+          if (foundPosts.length > 0) {
+            for (let i = 0; i < foundPosts.length; i++) {
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              skipNum += 1;
             }
+          }
         })
       })
 
-      $("#sortByPopularity").click(()=>{
-        $.get("getsortedbyscoreposts",{},(foundPosts)=>{
-            $("#postContainer").empty();
-            skipNum = 0;
-            if(foundPosts.length > 0){
-                for(let i = 0; i < foundPosts.length; i++) {
-                  addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                }	
-            }else{	
-                addNoPosts();
+      $("#sortByDate").click(() => {
+        $.get("getsortedbydateposts", {}, (foundPosts) => {
+          $("#postContainer").empty();
+          skipNum = 0;
+          if (foundPosts.length > 0) {
+            for (let i = 0; i < foundPosts.length; i++) {
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
             }
-        })      
+          } else {
+            addNoPosts();
+          }
+        })
+      })
+
+      $("#sortByPopularity").click(() => {
+        $.get("getsortedbyscoreposts", {}, (foundPosts) => {
+          $("#postContainer").empty();
+          skipNum = 0;
+          if (foundPosts.length > 0) {
+            for (let i = 0; i < foundPosts.length; i++) {
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            }
+          } else {
+            addNoPosts();
+          }
+        })
       })
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
@@ -316,27 +316,95 @@
         $("#postContainer").append(mediaPost);
       }
       // SEARCHIN USING AJAX
-       $("#searchbtn").on("click", function(evt){
-               evt.preventDefault();
+      $("#searchbtn").on("click", function (evt) {
+        evt.preventDefault();
 
         var keyword = $('#inputSearch').val();
-          
-              $.post("searchkeyword",{  
-                keyword : keyword
-              
-                },(foundPosts)=>{
-                  $("#postContainer").empty();
-                  if(foundPosts){
-                      
-                      for(let i = 0; i < foundPosts.length; i++) {
-                        addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                      }	
 
-                  }else{	
-                      $("#postContainer").append("No posts available");
-                  }
-              })
-        });
+        $.post("searchkeyword", {
+          keyword: keyword
+
+        }, (foundPosts) => {
+          $("#postContainer").empty();
+          if (foundPosts) {
+
+            for (let i = 0; i < foundPosts.length; i++) {
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            }
+
+          } else {
+            $("#postContainer").append("No posts available");
+          }
+        })
+      });
+
+      function upvotePost(postID) {
+        var username = "{{uname}}";
+
+        if (!username) {
+          //add modal
+        } else {
+          $.post("upPost", {
+            id: postID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+              //set to orange
+            }
+          })
+        }
+      }
+
+      function downvotePost(postID) {
+        var username = "{{uname}}";
+
+        if (!username) {
+          //add modal
+        } else {
+          $.post("downPost", {
+            id: postID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+              //set to blue
+            }
+          })
+        }
+      }
+
+      function upvoteComment(commentID) {
+        var username = "{{uname}}";
+
+        if (!username) {
+          //add modal
+        } else {
+          $.post("upComment", {
+            id: commentID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+              //set to orange
+            }
+          })
+        }
+      }
+
+      function downvoteComment(commentID) {
+        var username = "{{uname}}";
+
+        if (!username) {
+          //add modal
+        } else {
+          $.post("downComment", {
+            id: commentID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+              //set to blue
+            }
+          })
+        }
+      }
     });
   </script>
 

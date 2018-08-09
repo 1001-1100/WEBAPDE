@@ -233,6 +233,7 @@
     }
 
     function createNewComment() {
+      $("#noComment").remove()
       $.post("createnewcomment", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
         $("#commentContent").val("");
         newComments += 1;
@@ -249,8 +250,6 @@
         $("#submitButton").attr("disabled", "disabled");
       }
     }
-
-
   </script>
 
 </head>

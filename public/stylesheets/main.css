@@ -147,7 +147,7 @@ body a {
   height: 250px;
 }
 
-.delete {
+.material-actions {
   float: right;
   cursor: pointer;
 }
