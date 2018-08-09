@@ -337,6 +337,10 @@
         })
 
         var editspan = document.createElement("span");
+        editSpan.addEventListener("click", function () {
+            window.location.href = "/editpost?id="+postIDs;
+        })
+
         //TODO
         //editspan.setAttribute("data-toggle", "modal");
         //editspan.setAttribute("data-target", "#editPostModal");
