@@ -4,6 +4,14 @@
 <head>
 	{{> headerResources}}
     <title>The Forum</title>
+
+    <script>
+        function onlick(){
+            $.post("editpost", {postID: "{{postID}}", postTitle: $("inputPostTitle").val(), postContent: $("inputPostContent").val()}, (editedPostLink) => {
+
+            })
+        }
+    </script>
 </head>
 
 <body>
@@ -34,27 +42,15 @@
                 <form>
                     <div class="ml-3 h2 mb-3">Edit post</div>
                     <div class="container-fluid">
-                        <input type="text" class="form-control" id="inputPostTitle" value="Do you find portrait mode worth it?" required>
-                        <textarea class="form-control mt-3" type="text" id="inputPostContent" rows="9">
-Debating whether upgrading my smartphone is worth it. Have a Nexus 6 that I’m really happy with except photos. Now I’m not too much into photography and it takes good photos but these new phones like the Pixel 2 have these great portrait modes, and I want to make myself look better for online shots. Is that alone a good enough reason to upgrade? Like is the difference magical or just hype (as in make someone meh looking look great)?
-</textarea>
+                        <input type="text" class="form-control" id="inputPostTitle" value="{{postTitle}}" required>
+                        <textarea class="form-control mt-3" type="text" id="inputPostContent" rows="9">{{postContent}}</textarea>
                     </div>
-                    <a class="btn btn-primary mt-2 ml-3" href="">Save</a>
+                    <a class="btn btn-primary mt-2 ml-3" onclick="editPost();">Save</a>
                 </form>
             </div>
         </div>
     </main>
-    <!-- /.container -->
-
-    <!-- Bootstrap core JavaScript
-        ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-        crossorigin="anonymous"></script>
+    {{> scriptResources}}
 
     <script>
         $(document).ready(function () {

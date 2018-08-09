@@ -24,6 +24,23 @@ module.exports.getPostPage = function getPostPage(req, res){
 	})
 }
 
+module.exports.getEditPostPage = function getEditPostPage(req, res){
+	var findPost = Post.findOne({
+		_id: req.query.id
+	})
+	findPost.then((foundPost) => {
+		if (foundPost) {
+			res.render("./pages/editpost.hbs", {
+				postID: foundPost._id,
+				postTitle: foundPost.postTitle,
+				postContent: foundPost.postDescription,
+			})
+		} else {
+			res.render('./pages/error.hbs')
+		}
+	})
+}
+
 module.exports.createPost = function createPost(req, res){
 	var dateNow = new Date()
 	var POSTID
@@ -58,6 +75,13 @@ module.exports.createPost = function createPost(req, res){
 				res.redirect(newPostLink)
 			})
 		})	
+}
+
+module.exports.editPost = function editPost(req, res){
+	Post.findByIdAndUpdate(req.body.postID, {postTitle: req.body.postTitle, postContent: req.body.postContent}, (err, todo) => {
+		var editedPostLink = "post?id=" + req.body.postID
+		res.redirect(editedPostLink)
+	})
 }
 
 module.exports.returnPosts = function returnPosts(req, res){

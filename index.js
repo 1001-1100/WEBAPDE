@@ -86,7 +86,9 @@ express()
 	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
 		uname: req.session.username
 	}))
-	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs"))
+	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs",{
+		
+	}))
 
 
 	.post('/logout', (req, res) => {
@@ -118,6 +120,10 @@ express()
 
 	.post('/getmoreposts', urlencoder, (req, res) => {
 		postController.returnMorePosts(req, res)
+	})
+
+	.post('/editedpost', urlencoder, (req, res) => {
+		postController.editPost(req, res)
 	})
 
 	.post('/deletepost', urlencoder, (req, res) => {
