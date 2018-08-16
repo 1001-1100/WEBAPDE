@@ -196,7 +196,7 @@
         $("#loading-posts").css("display", "none");
       });
 
-      $.get("getposts", {}, (foundPosts) => {
+      $.get("post/all", {}, (foundPosts) => {
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
             addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -208,7 +208,7 @@
       })
 
       $("#loadMorePosts").click(function () {
-        $.post("getmoreposts", { skipNum }, (foundPosts) => {
+        $.post("post/all/more", { skipNum }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
               addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -219,7 +219,7 @@
       })
 
       $("#sortByDate").click(() => {
-        $.get("getsortedbydateposts", {}, (foundPosts) => {
+        $.get("post/all/date", {}, (foundPosts) => {
           $("#postContainer").empty();
           skipNum = 0;
           if (foundPosts.length > 0) {
@@ -233,7 +233,7 @@
       })
 
       $("#sortByPopularity").click(() => {
-        $.get("getsortedbyscoreposts", {}, (foundPosts) => {
+        $.get("post/all/score", {}, (foundPosts) => {
           $("#postContainer").empty();
           skipNum = 0;
           if (foundPosts.length > 0) {
@@ -315,16 +315,13 @@
 
         $("#postContainer").append(mediaPost);
       }
-      // SEARCHIN USING AJAX
+      // SEARCHING USING AJAX
       $("#searchbtn").on("click", function (evt) {
         evt.preventDefault();
 
         var keyword = $('#inputSearch').val();
 
-        $.post("searchkeyword", {
-          keyword: keyword
-
-        }, (foundPosts) => {
+        $.get("/post/search/"+keyword, (foundPosts) => {
           $("#postContainer").empty();
           if (foundPosts) {
 
@@ -338,7 +335,7 @@
         })
       });
 
-      function upvotePost(postID) {
+      {{!-- function upvotePost(postID) {
         var username = "{{uname}}";
 
         if (!username) {
@@ -404,7 +401,7 @@
             }
           })
         }
-      }
+      } --}}
     });
   </script>
 

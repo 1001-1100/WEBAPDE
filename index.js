@@ -14,11 +14,7 @@ const upload = multer({
 	dest: path.join(__dirname, '/public')
 });
 const mongoose = require("mongoose")
-
-/** CONTROLLER IMPORTS **/
-const postController = require("./model/postController.js")
-const commentController = require("./model/commentController.js")
-const userController = require("./model/userController.js")
+const app = express()
 
 /** SETUP **/
 
@@ -39,151 +35,19 @@ mongoose.connect('mongodb://Nine:trexfire6@ds145951.mlab.com:45951/heroku_0n46js
 	useNewUrlParser: true
 })
 
-express()
+app.use(session({
+	saveUninitialized: false,
+	resave: true,
+	secret: "nicokayejosh",
+	name: "Nico's Cookie"
+}))
 
-	.use(session({
-		saveUninitialized: false,
-		resave: true,
-		secret: "nicokayejosh",
-		name: "Nico's Cookie"
-	}))
+app.use(cookieparser())
 
-	.use(cookieparser())
+app.use(express.static(path.join(__dirname, 'public')))
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'hbs')
 
-	.use(express.static(path.join(__dirname, 'public')))
-	.set('views', path.join(__dirname, 'views'))
-	.set('view engine', 'hbs')
+app.use(require("./controllers"))
 
-	/** ROUTES **/
-
-	.get('/', urlencoder, (req, res) => {
-		if (req.session.rememberMe) {
-			req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
-			req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
-		}
-		res.render("./pages/index.hbs", {
-			uname: req.session.username,
-			face: cool()
-		})
-	})
-
-	.get('/post', (req, res) => {
-		postController.getPostPage(req, res)
-	})
-
-	.post('/createnewpost', urlencoder, (req, res) => {
-		postController.createPost(req, res)
-	})
-
-	.get('/user-profile', (req, res) => {
-		userController.getUserProfile(req, res)
-	})
-
-	.get('/signin', (req, res) => res.render("./pages/signin.hbs"))
-	.get('/about', (req, res) => res.render("./pages/about.hbs"))
-	.get('/site-map', urlencoder, (req, res) => res.render("./pages/sitemap.hbs"))
-	.get('/register', (req, res) => res.render("./pages/register.hbs"))
-	.get('/newpost', (req, res) => res.render("./pages/newpost.hbs", {
-		uname: req.session.username
-	}))
-	.get('/editpost', (req, res) => res.render("./pages/editpost.hbs",{
-		
-	}))
-
-
-	.post('/logout', (req, res) => {
-		req.session.destroy()
-		res.clearCookie("Nico's Cookie")
-		res.redirect("/")
-	})
-
-	/** AJAX CALLS **/
-
-	// POSTS //
-
-	.get('/getposts', (req, res) => {
-		postController.returnPosts(req, res)
-	})
-
-	.post('/getonepost', urlencoder, (req, res) => {
-		postController.returnSinglePost(req, res)
-	})
-	.post('/searchkeyword', urlencoder, (req, res) => {
-		postController.returnSearchResults(req, res)
-	})
-
-	.post('/loaduserposts', urlencoder, (req, res) => {
-
-		console.log("loaduserPosts");
-		postController.returnLoadUserPosts(req, res)
-	})
-
-	.post('/getmoreposts', urlencoder, (req, res) => {
-		postController.returnMorePosts(req, res)
-	})
-
-	.post('/editedpost', urlencoder, (req, res) => {
-		postController.editPost(req, res)
-	})
-
-	.post('/deletepost', urlencoder, (req, res) => {
-		postController.returnAfterDeleting(req, res)
-	})
-
-	.get('/getsortedbyscoreposts', urlencoder, (req, res) => {
-		postController.returnSortedByScorePosts(req, res)
-	})
-
-	.get('/getsortedbydateposts', urlencoder, (req, res) => {
-		postController.returnSortedByDatePosts(req, res)
-	})
-
-
-
-	// USERS //
-
-	.post('/checkaccount', urlencoder, (req, res) => {
-		userController.returnLoginUser(req, res)
-	})
-
-	.post('/checkregisteraccount', urlencoder, (req, res) => {
-		userController.returnRegisterUser(req, res)
-	})
-
-	.post('/registeraccount', upload.single('avatar'), urlencoder, (req, res) => {
-		userController.registerUser(req, res, req.file.filename)
-	})
-
-	.post('/upPost', urlencoder, (req, res) => {
-		userController.upPost(req, res)
-	})
-
-	.post('/downPost', urlencoder, (req, res) => {
-		userController.downPost(req, res)
-	})
-
-	.post('/upComment', urlencoder, (req, res) => {
-		userController.upComment(req, res)
-	})
-
-	.post('/downComment', urlencoder, (req, res) => {
-		userController.downComment(req, res)
-	})
-
-	// COMMENTS //
-
-	.get('/getcomment', urlencoder, (req, res) => {
-		commentController.returnComment(req, res)
-	})
-
-	.post('/createnewcomment', urlencoder, (req, res) => {
-		commentController.returnNewComment(req, res)
-	})
-
-	/** FOR ERRORS, ALWAYS KEEP AT THE END **/
-
-	.use("*", (req, res) => {
-		res.render('./pages/error.hbs')
-	})
-
-	.listen(PORT, () => console.log(`Listening on ${ PORT }`))
+app.listen(PORT, () => console.log(`Listening on ${ PORT }`))
