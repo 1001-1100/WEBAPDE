@@ -234,13 +234,13 @@
 
     function createNewComment() {
       $("#noComment").remove()
-      $.post("createnewcomment", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
+      $.post("/comment/create", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-      addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
-    })
-    $("#submitButton").attr("disabled", "disabled");
+        addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+      })
+      $("#submitButton").attr("disabled", "disabled");
 		}
 
     function checkCommentBox() {
@@ -258,7 +258,7 @@
   {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="starter-template">
-      <!-- START OF POSTS SECTION -->
+      <!-- START OF POST SECTION -->
       <div class="media post">
         <div class="mr-3 actions">
           <i class="material-icons md-18 md-dark up">arrow_upward</i>
@@ -276,7 +276,7 @@
               </span>
               <span class="p-2">
                 <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                <a href="user-profile">{{postAuthor}}</a> at {{postDate}}
+                <a href="/user/{{postAuthor}}">{{postAuthor}}</a> at {{postDate}}
               </span>
           </div>
         </div>
@@ -285,7 +285,7 @@
       {{#if uname}}
       <div class="postcomment">
         <h5 class="mt-0 mb-1">Replying as
-          <a href="user-profile?u={{uname}}">{{uname}}</a>
+          <a href="/user/{{uname}}">{{uname}}</a>
         </h5>
         <div class="container-fluid">
           <textarea oninput="checkCommentBox();" id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
@@ -436,11 +436,10 @@
               }
             });
       */
-
-      $.post("getonepost", { postID: "{{postID}}" }, (foundPost) => {
-        if (foundPost.comment.length > 0) {
-          for (let i = 0; i < foundPost.comment.length; i++) {
-            addComment(foundPost.comment[i]._id, foundPost.comment[i].commentContent, foundPost.comment[i].commentAuthor, foundPost.comment[i].commentDate, foundPost.comment[i].commentScore);
+      $.post("/post/comments", {id: "{{postID}}"}, (comments) => {
+        if (comments.length > 0) {
+          for (let i = 0; i < comments.length; i++) {
+            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].commentDate, comments[i].commentScore);
           }
         } else {
           var noComments = document.createElement("div");
@@ -469,11 +468,14 @@
           $("#allComments").append(noComments);
         }
       })
+      
     });
 
 
   </script>
 
+  {{> globalScripts}}
+  
 </body>
 
 </html>

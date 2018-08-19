@@ -17,10 +17,10 @@
     <div class="row starter-template">
       <div class="col-lg-3">
         <div class="text-center mb-3 mt-5">
-          <img class="avatar img-thumbnail" src="{{user.avatar}}">
+          <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}">
         </div>
-        <div class="font-weight-bold">{{user.username}}</div>
-        <div class="description">{{user.shortBio}}</div>
+        <div class="font-weight-bold">{{username}}</div>
+        <div class="description">{{shortBio}}</div>
       </div>
 
       <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -175,11 +175,11 @@
   <script>
     $(document).ready(function () {
 
-      var username = "{{user.username}}";
+      var username = "{{username}}";
       console.log("username is " + username);
 
 
-      $.post("/post/user", {
+      $.post("/user/posts", {
         username: username
       }, (foundPosts) => {
         $("#postContainer").empty();

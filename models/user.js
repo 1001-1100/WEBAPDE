@@ -20,18 +20,18 @@ var userSchema = mongoose.Schema({
 		postScore: Number,
 		commentNumber: Number,
 		comment: [{
-			_postID: mongoose.Schema.Types.ObjectId,
+			_postID: mongoose.SchemaTypes.ObjectId,
 			commentContent: String,
 			commentAuthor: String,
 			commentDate: String,
 			commentScore: Number,
 			nestedComments: [{
-				_commentID: mongoose.Schema.Types.ObjectId
+				_commentID: mongoose.SchemaTypes.ObjectId
 			}]
 		}]
 	}],
 	comment: [{
-		_commentID: mongoose.Schema.Types.ObjectId,
+		_commentID: mongoose.SchemaTypes.ObjectId,
 		commentContent: String,
 		commentAuthor: String,
 		commentDate: String,

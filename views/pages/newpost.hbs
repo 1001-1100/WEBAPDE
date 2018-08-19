@@ -37,13 +37,15 @@
                         <input type="text" name="postTitle" class="form-control" id="inputPostTitle" placeholder="Title" required>
                         <textarea class="form-control mt-3" type="text" name="postDescription" id="inputPostContent" placeholder="Text (optional)" rows="9"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-2 ml-3" href="">Post</button>
+                    <button type="submit" class="btn btn-primary mt-2 ml-3">Post</button>
                 </form>
             </div>
         </div>
     </main>
     
     {{> scriptResources}}
+
+    {{> globalScripts}}
 
     <script>
         $(document).ready(function () {

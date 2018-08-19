@@ -14,7 +14,7 @@ var postSchema = mongoose.Schema({
 	postScore: Number,
 	commentNumber: Number,
 	comment: [{
-		postID: String,
+		_postID: mongoose.SchemaTypes.ObjectId,
 		commentContent: String,
 		commentAuthor: String,
 		commentDate: String,
@@ -41,7 +41,57 @@ exports.get = function (id) {
 
 exports.getAll = function () {
 	return new Promise(function (resolve, reject) {
-		Post.find().then((posts) => {
+		Post.find().limit(5).then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.getAllMore = function (skipNum) {
+	return new Promise(function (resolve, reject) {
+		Post.find().skip(skipNum).limit(5).then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.getSortedScore = function () {
+	return new Promise(function (resolve, reject) {
+		Post.find().sort({postScore : -1}).limit(5).then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.getSortedScoreMore = function (skipNum) {
+	return new Promise(function (resolve, reject) {
+		Post.find().sort({postScore : -1}).skip(skipNum).limit(5).then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.getSortedDate = function () {
+	return new Promise(function (resolve, reject) {
+		Post.find().sort({postDateRaw : -1}).limit(5).then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.getSortedDateMore = function (skipNum) {
+	return new Promise(function (resolve, reject) {
+		Post.find().sort({postDateRaw : -1}).skip(skipNum).limit(5).then((posts) => {
 			resolve(posts)
 		}, (err) => {
 			reject(err)
@@ -50,12 +100,30 @@ exports.getAll = function () {
 }
 
 exports.put = function (post) {
-	var p = new Post(post)
-    p.save().then((newPost)=>{
-      resolve(newPost)
-    }, (err)=>{
-      reject(err)
-    })
+	return new Promise(function (resolve, reject) {
+		var p = new Post(post)
+		p.save().then((newPost)=>{
+		  resolve(newPost)
+		}, (err)=>{
+		  reject(err)
+		})
+	})
+}
+
+exports.putComment = function (comment) {
+	return new Promise(function (resolve, reject) {
+		Post.findOne({
+			_id: comment._postID
+		}).then((post) => {
+			post.comment.push(comment)
+			post.commentNumber += 1
+			post.save().then((msg) => {
+				resolve(comment)
+			})
+		}, (err) => {
+			reject(err)
+		})
+	})
 }
 
 exports.edit = function (id, postTitle, postDescription) {

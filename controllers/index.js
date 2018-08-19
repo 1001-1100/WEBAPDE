@@ -14,7 +14,6 @@ router.get("/", (req, res) => {
     }
     res.render("./pages/index.hbs", {
         uname: req.session.username,
-        face: cool()
     })
 })
 
@@ -30,8 +29,17 @@ router.get("/register", (req, res) => {
     res.render("./pages/register.hbs")
 })
 
+router.post("/logout", (req, res) => {
+    req.session.destroy()
+    res.redirect("/")
+})
+
 router.get("/cool", (req,res) => {
     res.send(cool())
+})
+
+router.use("*", (req, res) => {
+    res.render('./pages/error.hbs')
 })
 
 module.exports = router

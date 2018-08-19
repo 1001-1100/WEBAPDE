@@ -156,6 +156,8 @@
 
   {{> scriptResources}}
 
+  {{> globalScripts}}
+
   <script>
     $(document).ready(function () {
 
@@ -197,6 +199,7 @@
       });
 
       $.get("/post/all", {}, (foundPosts) => {
+        $("#postContainer").empty();
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
             addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -219,12 +222,13 @@
       })
 
       $("#sortByDate").click(() => {
+        $("#postContainer").empty();
         $.get("/post/all/date", {}, (foundPosts) => {
-          $("#postContainer").empty();
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
               addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              skipNum += 1;
             }
           } else {
             addNoPosts();
@@ -233,12 +237,13 @@
       })
 
       $("#sortByPopularity").click(() => {
+        $("#postContainer").empty();
         $.get("/post/all/score", {}, (foundPosts) => {
-          $("#postContainer").empty();
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
               addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              skipNum += 1;
             }
           } else {
             addNoPosts();
@@ -315,25 +320,6 @@
 
         $("#postContainer").append(mediaPost);
       }
-      // SEARCHING USING AJAX
-      $("#searchbtn").on("click", function (evt) {
-        evt.preventDefault();
-
-        var keyword = $('#inputSearch').val();
-
-        $.get("/post/search/"+keyword, (foundPosts) => {
-          $("#postContainer").empty();
-          if (foundPosts) {
-
-            for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-            }
-
-          } else {
-            $("#postContainer").append("No posts available");
-          }
-        })
-      });
 
       {{!-- function upvotePost(postID) {
         var username = "{{uname}}";

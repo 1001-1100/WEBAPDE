@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
 const Comment = require("../models/comment.js")
+const Post = require("../models/post.js")
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -13,7 +14,7 @@ router.use(urlencoder)
 router.post("/create", (req,res) => {
 	var dateNow = new Date()
 	var newComment = {
-		postID: foundPost._id,
+		_postID: req.body.postID,
 		commentContent: req.body.commentContent,
 		commentAuthor: req.session.username,
 		commentDate: (dateNow.getMonth() + 1) + "/" + dateNow.getDate() + "/" + dateNow.getFullYear() + " " + dateNow.toLocaleTimeString(),
@@ -21,7 +22,9 @@ router.post("/create", (req,res) => {
 		nestedComments: []
 	}
 	Comment.put(newComment).then((newComment)=>{
-		res.send(newComment)
+		Post.putComment(newComment).then((newComment)=>{
+			res.send(newComment)
+		})
 	},(error)=>{
 
 	})

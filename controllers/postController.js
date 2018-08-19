@@ -47,7 +47,7 @@ router.post("/create", (req,res) =>{
 	Post.put(newPost).then((newPost)=>{
 		res.redirect("/post/"+newPost._id)
 	},(error)=>{
-
+		res.redirect("/post/create")
 	})
 })
 
@@ -75,8 +75,24 @@ router.get("/all/score", (req,res) =>{
 	})
 })
 
-router.get("/all/more", (req,res) =>{
+router.post("/all/more", (req,res) =>{
 	Post.getAllMore(parseInt(req.body.skipNum)).then((posts)=>{
+		res.send(posts)
+	},(error)=>{
+
+	})
+})
+
+router.get("/all/date/more", (req,res) =>{
+	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts)=>{
+		res.send(posts)
+	},(error)=>{
+
+	})
+})
+
+router.get("/all/score/more", (req,res) =>{
+	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts)=>{
 		res.send(posts)
 	},(error)=>{
 
@@ -99,7 +115,15 @@ router.post("/user", (req,res) => {
 	})
 })
 
-router.get("delete/:id", (req,res) => {
+router.post("/comments", (req,res) => {
+	Post.get(req.body.id).then((post)=>{
+		res.send(post.comment)
+	},(error)=>{
+
+	})
+})
+
+router.get("/delete/:id", (req,res) => {
 	Post.delete(req.params.id).then((result)=>{
 		res.send(result)
 	},(error)=>{
@@ -110,7 +134,14 @@ router.get("delete/:id", (req,res) => {
 router.get("/:id", (req,res) => {
 	Post.get(req.params.id).then((post)=>{
 		res.render("./pages/post", {
-			post
+			uname: req.session.username,
+			postID: post._id,
+			postTitle: post.postTitle,
+			postDescription: post.postDescription,
+			postAuthor: post.postAuthor,
+			postScore: post.postScore,
+			postDate: post.postDate,
+			commentNumber: post.commentNumber
 		})
 	},(error)=>{
 

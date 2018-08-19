@@ -10,9 +10,6 @@ const PORT = process.env.PORT || 5000
 const bcrypt = require("bcrypt")
 const fs = require('fs')
 const multer = require('multer')
-const upload = multer({
-	dest: path.join(__dirname, '/public')
-});
 const mongoose = require("mongoose")
 const app = express()
 

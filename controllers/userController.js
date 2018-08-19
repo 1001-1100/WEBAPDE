@@ -11,10 +11,16 @@ const urlencoder = bodyparser.urlencoded({
 router.use(urlencoder)
 
 const bcrypt = require("bcrypt")
+const path = require("path")
 const fs = require('fs')
 const multer = require('multer')
+const upload_path = path.join("./", "/public/uploads")
 const upload = multer({
-	dest: './public/avatars'
+	dest: upload_path,
+	limits: {
+		fileSize : 10000000,
+		files : 2
+	}
 })
 
 router.get("/", (req,res) => {
@@ -64,12 +70,17 @@ router.post("/checkregister", (req,res) => {
 router.post("/register", upload.single('avatar'), (req,res) => {
 	bcrypt.hash(req.body.password, 12).then((hashed) => {
 		var hashedPassword = hashed
+		console.log(req.file)
+		var filename = "default"
+		if(req.file){
+			filename = req.file.filename
+		}
 		var newUser = {
 			emailAddress: req.body.emailAddress,
 			username: req.body.username,
 			password: hashedPassword,
 			shortBio: req.body.shortBio,
-			avatar: req.file.filename
+			avatar: filename
 		}
 		User.put(newUser).then((user)=>{
 			if (req.body.rememberMe) {
@@ -85,10 +96,32 @@ router.post("/register", upload.single('avatar'), (req,res) => {
 	})
 })
 
+router.post("/posts", (req,res) => {
+	User.get(req.body.username).then((user)=>{
+		res.send(user.post)
+	},(error)=>{
+
+	})
+})
+
+router.post("/comments", (req,res) => {
+	User.get(req.body.username).then((user)=>{
+		res.send(user.comment)
+	},(error)=>{
+
+	})
+})
+
+router.get("/avatar/:filename", (req,res) => {
+	fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
+})
+
 router.get("/:username", (req,res) => {
 	User.get(req.params.username).then((user)=>{
 		res.render("./pages/user-profile", {
-			user
+			avatar: user.avatar,
+			username: user.username,
+			shortBio: user.shortBio
 		})
 	},(error)=>{
 

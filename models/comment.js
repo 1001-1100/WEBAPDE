@@ -1,13 +1,13 @@
 const mongoose = require("mongoose")
 
 var commentSchema = mongoose.Schema({
-    postID: String,
+    _postID: mongoose.SchemaTypes.ObjectId,
 	commentContent: String,
 	commentAuthor: String,
 	commentDate: String,
 	commentScore: Number,
 	nestedComments: [{
-		commentID: String
+		_commentID: mongoose.SchemaTypes.ObjectId
 	}]
 })
 
@@ -26,10 +26,12 @@ exports.get = function (id) {
 }
 
 exports.put = function (comment) {
-	var c = new Comment(comment)
-    c.save().then((newComment)=>{
-      resolve(newComment)
-    }, (err)=>{
-      reject(err)
-    })
+	return new Promise(function (resolve, reject) {
+		var c = new Comment(comment)
+		c.save().then((newComment)=>{
+			resolve(newComment)
+		}, (err)=>{
+			reject(err)
+		})
+	})
 }
