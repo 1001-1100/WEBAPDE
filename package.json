@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "WEBAPDE",
   "engines": {
-    "node": "10.6.0"
+    "node": "8.9.1"
   },
   "main": "index.js",
   "scripts": {
