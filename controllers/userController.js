@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
 const User = require("../models/user.js")
+const app = express()
 
 const urlencoder = bodyparser.urlencoded({
 	extended : true
@@ -16,14 +17,8 @@ const upload = multer({
 	dest: './public/avatars'
 })
 
-router.get("/:id", (req,res) => {
-	User.get(req.params.id).then((user)=>{
-		res.render("./pages/user-profile", {
-			user
-		})
-	},(error)=>{
-
-	})
+router.get("/", (req,res) => {
+	res.redirect("/user/"+req.session.username)
 })
 
 router.post("/login", (req,res) => {
@@ -76,11 +71,27 @@ router.post("/register", upload.single('avatar'), (req,res) => {
 			shortBio: req.body.shortBio,
 			avatar: req.file.filename
 		}
-		User.put(newUser).then((msg)=>{
+		User.put(newUser).then((user)=>{
+			if (req.body.rememberMe) {
+				req.session.cookie.expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 * 3)
+				req.session.maxAge = 1000 * 60 * 60 * 24 * 7 * 3
+			}
+			req.session.rememberMe = req.body.rememberMe
+			req.session.username = req.body.username
 			res.redirect("/")
 		},(error)=>{
 
 		})
+	})
+})
+
+router.get("/:username", (req,res) => {
+	User.get(req.params.username).then((user)=>{
+		res.render("./pages/user-profile", {
+			user
+		})
+	},(error)=>{
+
 	})
 })
 

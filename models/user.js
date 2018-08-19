@@ -41,10 +41,10 @@ var userSchema = mongoose.Schema({
 
 var User = mongoose.model("userList", userSchema)
 
-exports.get = function (id) {
+exports.get = function (username) {
 	return new Promise(function (resolve, reject) {
 		User.findOne({
-			_id: id
+			username
 		}).then((user) => {
 			resolve(user)
 		}, (err) => {
@@ -54,12 +54,14 @@ exports.get = function (id) {
 }
 
 exports.put = function (user) {
-	var u = new User(user)
-    u.save().then((newUser)=>{
-      resolve(newUser)
-    }, (err)=>{
-      reject(err)
-    })
+	return new Promise(function (resolve, reject) {
+		var u = new User(user)
+		u.save().then((newUser)=>{
+		  resolve(newUser)
+		}, (err)=>{
+		  reject(err)
+		})
+	})
 }
 
 exports.authenticate = function (username) {

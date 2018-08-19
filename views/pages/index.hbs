@@ -30,7 +30,7 @@
 
       {{#if uname}}
       <div class="sort d-flex flex-fill-1 mb-3">
-        <a href="/newpost" class="mr-auto btn btn-outline-success">
+        <a href="post/create" class="mr-auto btn btn-outline-success">
           <i class="material-icons md-18">add</i> Create post</a>
 
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
@@ -196,7 +196,7 @@
         $("#loading-posts").css("display", "none");
       });
 
-      $.get("post/all", {}, (foundPosts) => {
+      $.get("/post/all", {}, (foundPosts) => {
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
             addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -208,7 +208,7 @@
       })
 
       $("#loadMorePosts").click(function () {
-        $.post("post/all/more", { skipNum }, (foundPosts) => {
+        $.post("/post/all/more", { skipNum }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
               addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
@@ -219,7 +219,7 @@
       })
 
       $("#sortByDate").click(() => {
-        $.get("post/all/date", {}, (foundPosts) => {
+        $.get("/post/all/date", {}, (foundPosts) => {
           $("#postContainer").empty();
           skipNum = 0;
           if (foundPosts.length > 0) {
@@ -233,7 +233,7 @@
       })
 
       $("#sortByPopularity").click(() => {
-        $.get("post/all/score", {}, (foundPosts) => {
+        $.get("/post/all/score", {}, (foundPosts) => {
           $("#postContainer").empty();
           skipNum = 0;
           if (foundPosts.length > 0) {
@@ -272,7 +272,7 @@
         personIcon.innerHTML = "person_outline";
         var postTitleContainer = document.createElement("h5");
         var postTitleLink = document.createElement("a");
-        postTitleLink.setAttribute("href", "post?id=" + postID);
+        postTitleLink.setAttribute("href", "post/" + postID);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleLink.innerHTML = postTitle;
         var postContent = document.createElement("div");
@@ -285,12 +285,12 @@
         spanComment.className = "mr-3";
         var commentNumberContainer = document.createElement("a");
         commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post?id=" + postID + "#comments");
+        commentNumberContainer.setAttribute("href", "post/" + postID + "#comments");
         var spanUsername = document.createElement("span");
         spanUsername.className = "p-1";
         var userName = document.createElement("a");
         userName.innerHTML = postAuthor;
-        userName.setAttribute("href", "user-profile?u=" + postAuthor);
+        userName.setAttribute("href", "user/" + postAuthor);
 
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);

@@ -2,20 +2,13 @@ const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
 const Comment = require("../models/comment.js")
+const app = express()
 
 const urlencoder = bodyparser.urlencoded({
 	extended : true
 })
 
 router.use(urlencoder)
-
-router.get("/:id", (req,res) => {
-	Comment.get(req.params.id).then((comment)=>{
-		res.send(comment)
-	},(error)=>{
-		res.send(null)
-	})	
-})
 
 router.post("/create", (req,res) => {
 	var dateNow = new Date()
@@ -32,6 +25,14 @@ router.post("/create", (req,res) => {
 	},(error)=>{
 
 	})
+})
+
+router.get("/:id", (req,res) => {
+	Comment.get(req.params.id).then((comment)=>{
+		res.send(comment)
+	},(error)=>{
+		res.send(null)
+	})	
 })
 
 module.exports = router

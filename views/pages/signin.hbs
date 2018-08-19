@@ -64,7 +64,7 @@
                 if ($("#remember-signin").is(":checked")) {
                     var rememberMe = $("#remember-signin").val();
                 }
-                $.post("checkaccount ", { uname: username, pword: password, rememberMe }, (checkUser) => {
+                $.post("user/login", { uname: username, pword: password, rememberMe }, (checkUser) => {
 
                     console.log("checkUser is " + checkUser);
                     if (checkUser) {

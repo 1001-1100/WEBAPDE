@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
 const Post = require("../models/post.js")
+const app = express()
 
 const urlencoder = bodyparser.urlencoded({
 	extended : true
@@ -9,11 +10,9 @@ const urlencoder = bodyparser.urlencoded({
 
 router.use(urlencoder)
 
-router.get("/:id", (req,res) => {
-	Post.get(req.params.id).then((post)=>{
-		res.render("./pages/post", {
-			post
-		})
+router.post("/edit", (req,res) =>{
+	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
+		res.redirect("post/"+postID)
 	},(error)=>{
 
 	})
@@ -24,14 +23,6 @@ router.get("/edit/:id", (req,res) =>{
 		res.render("./pages/editpost", {
 			post
 		})
-	},(error)=>{
-
-	})
-})
-
-router.post("/edit", (req,res) =>{
-	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-		res.redirect("post/"+postID)
 	},(error)=>{
 
 	})
@@ -54,7 +45,7 @@ router.post("/create", (req,res) =>{
 		comment: []
 	}
 	Post.put(newPost).then((newPost)=>{
-		res.redirect("post/"+newPost._id)
+		res.redirect("/post/"+newPost._id)
 	},(error)=>{
 
 	})
@@ -100,19 +91,29 @@ router.get("/search/:searchTerm", (req,res) => {
 	})
 })
 
-router.get("/user/:userID", (req,res) => {
-	Post.search(req.params.userID).then((posts)=>{
+router.post("/user", (req,res) => {
+	Post.search(req.body.username).then((posts)=>{
 		res.send(posts)
 	},(error)=>{
 
 	})
 })
 
-router.get("/delete/:id", (req,res) => {
+router.get("delete/:id", (req,res) => {
 	Post.delete(req.params.id).then((result)=>{
 		res.send(result)
 	},(error)=>{
 		res.send(null)
+	})
+})
+
+router.get("/:id", (req,res) => {
+	Post.get(req.params.id).then((post)=>{
+		res.render("./pages/post", {
+			post
+		})
+	},(error)=>{
+
 	})
 })
 

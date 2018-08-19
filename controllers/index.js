@@ -18,6 +18,18 @@ router.get("/", (req, res) => {
     })
 })
 
+router.get("/about", (req, res) => {
+    res.render("./pages/about.hbs")
+})
+
+router.get("/signin", (req, res) => {
+    res.render("./pages/signin.hbs")
+})
+
+router.get("/register", (req, res) => {
+    res.render("./pages/register.hbs")
+})
+
 router.get("/cool", (req,res) => {
     res.send(cool())
 })
