@@ -15,15 +15,16 @@ var userSchema = mongoose.Schema({
 		},
 		postDescription: String,
 		postAuthor: String,
-		postDate: String,
-		postDateRaw: Date,
+		postDateString: String,
+		postDate: Date,
 		postScore: Number,
 		commentNumber: Number,
 		comment: [{
 			_postID: mongoose.SchemaTypes.ObjectId,
 			commentContent: String,
 			commentAuthor: String,
-			commentDate: String,
+			commentDateString: String,
+			commentDate: Date,
 			commentScore: Number,
 			nestedComments: [{
 				_commentID: mongoose.SchemaTypes.ObjectId
@@ -34,7 +35,8 @@ var userSchema = mongoose.Schema({
 		_commentID: mongoose.SchemaTypes.ObjectId,
 		commentContent: String,
 		commentAuthor: String,
-		commentDate: String,
+		commentDateString: String,
+		commentDate: Date,
 		commentScore: Number
 	}],
 })
@@ -60,6 +62,34 @@ exports.put = function (user) {
 		  resolve(newUser)
 		}, (err)=>{
 		  reject(err)
+		})
+	})
+}
+
+exports.putPost = function (post) {
+	return new Promise(function (resolve, reject) {
+		User.findOneAndUpdate({
+			username: post.postAuthor
+		}, {
+			$push: {post: post}
+		}).then((msg) => {
+			resolve(post)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.putComment = function (comment) {
+	return new Promise(function (resolve, reject) {
+		User.findOneAndUpdate({
+			username: comment.commentAuthor
+		}, {
+			$push: {comment: comment}
+		}).then((msg) => {
+			resolve(comment)
+		}, (err) => {
+			reject(err)
 		})
 	})
 }

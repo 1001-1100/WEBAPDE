@@ -103,66 +103,7 @@
           </div>
 
           <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
-            <ul class="list-unstyled">
-              <li class="comment-container">
-                <div class="media comment ml-3">
-                  <div class="mr-3 commentactions">
-                    <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                    <i class="material-icons md-18 md-dark down">arrow_downward</i>
-                  </div>
-                  <div class="media-body">
-                    <div class="d-flex">
-                      <h6 class="mt-0">
-                        <b>Kansei_Drift</b>
-                      </h6>
-                      <span class="ml-2 points">12 points</span>
-                      <span class="ml-2">·</span>
-                      <span class="ml-2 points">
-                        <a href="/post">07/01/18 22:50</a>
-                      </span>
-                    </div>
-                    Falling may cause long term damages. Tread with caution!
-              </li>
-
-              <li class="comment-container">
-                <div class="media comment ml-3">
-                  <div class="mr-3 commentactions">
-                    <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                    <i class="material-icons md-18 md-dark down">arrow_downward</i>
-                  </div>
-                  <div class="media-body">
-                    <div class="d-flex">
-                      <h6 class="mt-0">
-                        <b>Kansei_Drift</b>
-                      </h6>
-                      <span class="ml-2 points">12 points</span>
-                      <span class="ml-2">·</span>
-                      <span class="ml-2 points">
-                        <a href="/post">07/01/18 22:50</a>
-                      </span>
-                    </div>
-                    Falling may cause long term damages. Tread with caution!
-              </li>
-
-              <li class="comment-container">
-                <div class="media comment ml-3">
-                  <div class="mr-3 commentactions">
-                    <i class="material-icons md-18 md-dark up">arrow_upward</i>
-                    <i class="material-icons md-18 md-dark down">arrow_downward</i>
-                  </div>
-                  <div class="media-body">
-                    <div class="d-flex">
-                      <h6 class="mt-0">
-                        <b>Kansei_Drift</b>
-                      </h6>
-                      <span class="ml-2 points">12 points</span>
-                      <span class="ml-2">·</span>
-                      <span class="ml-2 points">
-                        <a href="/post">07/01/18 22:50</a>
-                      </span>
-                    </div>
-                    Falling may cause long term damages. Tread with caution!
-              </li>
+            <ul id="commentContainer" class="list-unstyled"></ul>
               <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
             </ul>
             </div>
@@ -176,19 +117,31 @@
     $(document).ready(function () {
 
       var username = "{{username}}";
-      console.log("username is " + username);
 
+      $("#postContainer").empty();
+      $("#commentContainer").empty();
 
       $.post("/user/posts", {
         username: username
       }, (foundPosts) => {
-        $("#postContainer").empty();
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts._id, foundPosts.postTitle, foundPosts.postDescription, foundPosts.postAuthor, foundPosts.postDate, foundPosts.postScore, foundPosts.commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
           }
         } else {
           addNoPosts()
+        }
+      })
+
+      $.post("/user/comments", {
+        username: username
+      }, (foundComments) => {
+        if (foundComments.length > 0) {
+          for (let i = 0; i < foundComments.length; i++) {
+            addComment(foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].commentDate, foundComments[i].commentScore);
+          }
+        } else {
+
         }
       })
 
@@ -216,60 +169,7 @@
         noPosts.id = "noPost";
         $("#postContainer").append(noPosts);
       }
-      /*
-            var postIDs = []
-            var postTitles = []
-            var postDescriptions = []
-            var postAuthors = []
-            var postDates = []
-            var postScores = []
-            var commentNumbers = []
-            { { #each postIDs } }
-            postIDs.push("{{this}}")
-            {
-              {
-                /each}}
-                { { #each postTitles } }
-                postTitles.push("{{this}}")
-                {
-                  {
-                    /each}}
-                    { { #each postDescriptions } }
-                    postDescriptions.push("{{this}}")
-                    {
-                      {
-                        /each}}
-                        { { #each postAuthors } }
-                        postAuthors.push("{{this}}")
-                        {
-                          {
-                            /each}}
-                            { { #each postDates } }
-                            postDates.push("{{this}}")
-                            {
-                              {
-                                /each}}
-                                { { #each postScores } }
-                                postScores.push("{{this}}")
-                                {
-                                  {
-                                    /each}}
-                                    { { #each commentNumbers } }
-                                    commentNumbers.push("{{this}}")
-                                    {
-                                      {
-                                        /each}}
-      
-                                        if (postIDs.length > 0) {
-                                          for (let i = 0; i < postIDs.length; i++) {
-                                            addPost(postIDs[i], postTitles[i], postDescriptions[i], postAuthors[i], postDates[i], postScores[i], commentNumbers[i]);
-                                          }
-                                        } else {
-                                          $("#postContainer").append("No posts available");
-                                        }
-                                        $("#loadMorePosts").click(function () {
-                                        });
-      */
+
       function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");
         mediaPost.className = "media post";
@@ -295,7 +195,7 @@
         personIcon.className = "material-icons md-18 md-dark";
         personIcon.innerHTML = "person_outline";
         var postTitleContainer = document.createElement("a");
-        postTitleContainer.setAttribute("href", "post?id=" + postIDs);
+        postTitleContainer.setAttribute("href", "/post/" + postIDs);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleContainer.innerHTML = postTitle;
         var postContent = document.createElement("div");
@@ -308,12 +208,12 @@
         spanComment.className = "mr-3";
         var commentNumberContainer = document.createElement("a");
         commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post?id=" + postIDs + "#comments");
+        commentNumberContainer.setAttribute("href", "/post/" + postIDs + "#comments");
         var spanUsername = document.createElement("span");
         spanUsername.className = "p-1";
         var userName = document.createElement("a");
         userName.innerHTML = postAuthor;
-        userName.setAttribute("href", "user-profile?u=" + postAuthor);
+        userName.setAttribute("href", "/user/" + postAuthor);
 
 
         var icondelete = document.createElement("i");
@@ -337,7 +237,7 @@
 
         var editspan = document.createElement("span");
         editspan.addEventListener("click", function () {
-            window.location.href = "/editpost?id="+postIDs;
+            window.location.href = "/post/editpost/"+postIDs;
         })
 
         //TODO
@@ -370,6 +270,114 @@
         flexRow.append(deletespan);
 
         $("#postContainer").append(mediaPost);
+      }
+
+      function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
+        var wholeCommentContainer = document.createElement("div");
+        wholeCommentContainer.className = "comment-container";
+        var mainCommentContainer = document.createElement("div");
+        mainCommentContainer.className = "media comment ml-3";
+        var voteContainer = document.createElement("div");
+        voteContainer.className = "mr-3 commentactions";
+        var upArrow = document.createElement("i");
+        upArrow.className = "material-icons md-18 md-dark up";
+        upArrow.innerHTML = "arrow_upward";
+        var downArrow = document.createElement("i");
+        downArrow.className = "material-icons md-18 md-dark down";
+        downArrow.innerHTML = "arrow_downward";
+        var commentBodyContainer = document.createElement("div");
+        if (username)
+          commentBodyContainer.className = "media-body";
+        else
+          commentBodyContainer.className = "media-body mb-3";
+        commentBodyContainer.id = commentID;
+        var flexContainer = document.createElement("div");
+        flexContainer.className = "d-flex";
+        var userNameContainer = document.createElement("h6");
+        userNameContainer.className = "mt-0";
+        var userName = document.createElement("a");
+        userName.setAttribute("href", "user-profile?u=" + commentAuthor);
+        userName.setAttribute("style", "color : #000000;");
+        userName.innerHTML = commentAuthor;
+        var commentScoreContainer = document.createElement("span");
+        commentScoreContainer.className = "ml-2 points";
+        commentScoreContainer.innerHTML = commentScore + " points";
+        var separator = document.createElement("span");
+        separator.className = "ml-2";
+        separator.innerHTML = "·";
+        var commentDateContainer = document.createElement("span");
+        commentDateContainer.className = "ml-2 points";
+        commentDateContainer.innerHTML = commentDate;
+        var commentContentContainer = document.createElement("div");
+        commentContentContainer.innerHTML = commentContent;
+        var navContainer = document.createElement("div");
+        navContainer.className = "mt-2";
+        var infoSpan = document.createElement("span");
+        infoSpan.className = "info";
+        var replyLink = document.createElement("a");
+        replyLink.setAttribute("href", "#");
+        replyLink.setAttribute("data-id", commentID);
+        replyLink.addEventListener("click", function () {
+          var id = $(this).attr("data-id")
+          console.log("Reply clicked, id=" + id);
+
+          var addCommentContainer = document.createElement("div")
+
+          var txtComment = document.createElement("textarea")
+          txtComment.setAttribute("oninput", "checkCommentBox();")
+          txtComment.className = "form-control mt-2"
+          txtComment.type = "text"
+          txtComment.placeholder = "Type a comment"
+
+          var btnSubmit = document.createElement("button")
+          btnSubmit.disabled = true
+          btnSubmit.setAttribute("onclick", "createNewComment()")
+          btnSubmit.className = "btn btn-primary mt-2"
+          btnSubmit.innerHTML = "Submit"
+
+          var txtCommentContainer = document.createElement("div")
+          txtCommentContainer.className = "container-fluid"
+
+          txtCommentContainer.append(txtComment)
+          txtCommentContainer.append(btnSubmit)
+
+          addCommentContainer.append(txtCommentContainer)
+
+          $(txtCommentContainer).appendTo(txtContainer).hide().slideDown(500)
+        }, {
+            once: true
+          })
+
+        var commentIcon = document.createElement("i");
+        commentIcon.className = "material-icons md-16 md-dark";
+        commentIcon.innerHTML = "comment";
+        var replyText = document.createElement("span");
+        replyText.innerHTML = "Reply";
+
+        var txtContainer = document.createElement("div")
+
+        voteContainer.append(upArrow);
+        voteContainer.append(downArrow);
+        userNameContainer.append(userName);
+        flexContainer.append(userNameContainer);
+        flexContainer.append(commentScoreContainer);
+        flexContainer.append(separator);
+        flexContainer.append(commentDateContainer);
+        if (username) {
+          replyLink.append(commentIcon);
+          replyLink.append(replyText);
+          infoSpan.append(replyLink);
+          navContainer.append(infoSpan);
+        }
+        commentBodyContainer.append(flexContainer);
+        commentBodyContainer.append(commentContentContainer);
+        commentBodyContainer.append(navContainer);
+        commentBodyContainer.append(txtContainer)
+        mainCommentContainer.append(voteContainer);
+        mainCommentContainer.append(commentBodyContainer);
+        wholeCommentContainer.append(mainCommentContainer);
+
+        $("#commentContainer").append(wholeCommentContainer);
       }
 
       function deletePost(postID) {

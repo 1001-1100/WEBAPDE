@@ -1,7 +1,10 @@
 const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
+const User = require("../models/user.js")
 const Post = require("../models/post.js")
+const prettyMs = require('pretty-ms');
+const timestamp = require('time-stamp');
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -21,6 +24,7 @@ router.post("/edit", (req,res) =>{
 router.get("/edit/:id", (req,res) =>{
 	Post.get(req.params.id).then((post)=>{
 		res.render("./pages/editpost", {
+			uname: req.session.username,
 			post
 		})
 	},(error)=>{
@@ -29,23 +33,28 @@ router.get("/edit/:id", (req,res) =>{
 })
 
 router.get("/create", (req,res) =>{
-	res.render("./pages/newpost")
+	res.render("./pages/newpost", {
+		uname: req.session.username
+	})
 })
 
 router.post("/create", (req,res) =>{
-	var dateNow = new Date()
 	var newPost = {
 		postTitle: req.body.postTitle,
 		postDescription: req.body.postDescription,
 		postAuthor: req.session.username,
-		postDate: (dateNow.getMonth()+1)+"/"+dateNow.getDate()+"/"+dateNow.getFullYear()+" "+dateNow.toLocaleTimeString(),
-		postDateRaw: dateNow,
+		postDateString: timestamp('YYYY/MM/DD'),
+		postDate: new Date(),
 		postScore: 0,
 		commentNumber: 0,
 		comment: []
 	}
 	Post.put(newPost).then((newPost)=>{
-		res.redirect("/post/"+newPost._id)
+		User.putPost(newPost).then((newPost)=>{
+			res.redirect("/post/"+newPost._id)
+		},(error)=>{
+			res.redirect("/post/create")
+		})
 	},(error)=>{
 		res.redirect("/post/create")
 	})
@@ -107,14 +116,6 @@ router.get("/search/:searchTerm", (req,res) => {
 	})
 })
 
-router.post("/user", (req,res) => {
-	Post.search(req.body.username).then((posts)=>{
-		res.send(posts)
-	},(error)=>{
-
-	})
-})
-
 router.post("/comments", (req,res) => {
 	Post.get(req.body.id).then((post)=>{
 		res.send(post.comment)
@@ -140,7 +141,7 @@ router.get("/:id", (req,res) => {
 			postDescription: post.postDescription,
 			postAuthor: post.postAuthor,
 			postScore: post.postScore,
-			postDate: post.postDate,
+			postDate: prettyMs(new Date() - post.postDate),
 			commentNumber: post.commentNumber
 		})
 	},(error)=>{

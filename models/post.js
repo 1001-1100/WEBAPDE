@@ -9,15 +9,16 @@ var postSchema = mongoose.Schema({
 	},
 	postDescription: String,
 	postAuthor: String,
-	postDate: String,
-	postDateRaw: Date,
+	postDateString: String,
+	postDate: Date,
 	postScore: Number,
 	commentNumber: Number,
 	comment: [{
 		_postID: mongoose.SchemaTypes.ObjectId,
 		commentContent: String,
 		commentAuthor: String,
-		commentDate: String,
+		commentDateString: String,
+		commentDate: Date,
 		commentScore: Number,
 		nestedComments: [{
 			commentID: String
@@ -81,7 +82,7 @@ exports.getSortedScoreMore = function (skipNum) {
 
 exports.getSortedDate = function () {
 	return new Promise(function (resolve, reject) {
-		Post.find().sort({postDateRaw : -1}).limit(5).then((posts) => {
+		Post.find().sort({postDate : -1}).limit(5).then((posts) => {
 			resolve(posts)
 		}, (err) => {
 			reject(err)
@@ -91,7 +92,7 @@ exports.getSortedDate = function () {
 
 exports.getSortedDateMore = function (skipNum) {
 	return new Promise(function (resolve, reject) {
-		Post.find().sort({postDateRaw : -1}).skip(skipNum).limit(5).then((posts) => {
+		Post.find().sort({postDate : -1}).skip(skipNum).limit(5).then((posts) => {
 			resolve(posts)
 		}, (err) => {
 			reject(err)
@@ -112,14 +113,13 @@ exports.put = function (post) {
 
 exports.putComment = function (comment) {
 	return new Promise(function (resolve, reject) {
-		Post.findOne({
+		Post.findOneAndUpdate({
 			_id: comment._postID
-		}).then((post) => {
-			post.comment.push(comment)
-			post.commentNumber += 1
-			post.save().then((msg) => {
-				resolve(comment)
-			})
+		}, {
+			$push: {comment: comment},
+			$inc: {commentNumber: 1}
+		}).then((msg) => {
+			resolve(comment)
 		}, (err) => {
 			reject(err)
 		})

@@ -4,7 +4,8 @@ var commentSchema = mongoose.Schema({
     _postID: mongoose.SchemaTypes.ObjectId,
 	commentContent: String,
 	commentAuthor: String,
-	commentDate: String,
+	commentDateString: String,
+	commentDate: Date,
 	commentScore: Number,
 	nestedComments: [{
 		_commentID: mongoose.SchemaTypes.ObjectId

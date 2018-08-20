@@ -54,10 +54,8 @@ router.post("/login", (req,res) => {
 router.post("/checkregister", (req,res) => {
 	User.validate(req.body.uname,req.body.email).then((resp)=>{
 		if (resp == 1){ // only username matched in db
-			console.log("in checkregisteraccount - if")
 			res.send("1")
 		} else if (resp == 2) { // only email matched in db
-			console.log("in checkregisteraccount - if")
 			res.send("2")
 		} else {
 			res.send("3")
@@ -70,7 +68,6 @@ router.post("/checkregister", (req,res) => {
 router.post("/register", upload.single('avatar'), (req,res) => {
 	bcrypt.hash(req.body.password, 12).then((hashed) => {
 		var hashedPassword = hashed
-		console.log(req.file)
 		var filename = "default"
 		if(req.file){
 			filename = req.file.filename
@@ -119,6 +116,7 @@ router.get("/avatar/:filename", (req,res) => {
 router.get("/:username", (req,res) => {
 	User.get(req.params.username).then((user)=>{
 		res.render("./pages/user-profile", {
+			uname: req.session.username,
 			avatar: user.avatar,
 			username: user.username,
 			shortBio: user.shortBio

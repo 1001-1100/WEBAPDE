@@ -3,6 +3,9 @@ const router = express.Router()
 const bodyparser = require("body-parser")
 const Comment = require("../models/comment.js")
 const Post = require("../models/post.js")
+const User = require("../models/user.js")
+const prettyMs = require('pretty-ms');
+const timestamp = require('time-stamp');
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -17,13 +20,16 @@ router.post("/create", (req,res) => {
 		_postID: req.body.postID,
 		commentContent: req.body.commentContent,
 		commentAuthor: req.session.username,
-		commentDate: (dateNow.getMonth() + 1) + "/" + dateNow.getDate() + "/" + dateNow.getFullYear() + " " + dateNow.toLocaleTimeString(),
+		commentDateString: timestamp('YYYY/MM/DD'),
+		commentDate: new Date(),
 		commentScore: 0,
 		nestedComments: []
 	}
 	Comment.put(newComment).then((newComment)=>{
 		Post.putComment(newComment).then((newComment)=>{
-			res.send(newComment)
+			User.putComment(newComment).then((newComment)=>{
+				res.send(newComment)
+			})
 		})
 	},(error)=>{
 

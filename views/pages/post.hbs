@@ -17,7 +17,7 @@
 
     var username = "{{uname}}";
     var newComments = 0;
-
+    
     function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
       var wholeCommentContainer = document.createElement("div");
       wholeCommentContainer.className = "comment-container";
@@ -276,7 +276,7 @@
               </span>
               <span class="p-2">
                 <i class="material-icons md-18 md-dark">person_outline</i> Posted by
-                <a href="/user/{{postAuthor}}">{{postAuthor}}</a> at {{postDate}}
+                <a href="/user/{{postAuthor}}">{{postAuthor}}</a> · {{postDate}} ago
               </span>
           </div>
         </div>
