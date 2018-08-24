@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-	{{> headerResources}}
+    {{> headerResources}}
     <title>The Forum</title>
 
     <script>
-        function onlick(){
-            $.post("editpost", {postID: "{{postID}}", postTitle: $("inputPostTitle").val(), postContent: $("inputPostContent").val()}, (editedPostLink) => {
+        function onlick() {
+            $.post("editpost", { postID: "{{postID}}", postTitle: $("inputPostTitle").val(), postContent: $("inputPostContent").val() }, (editedPostLink) => {
 
             })
         }
@@ -50,7 +50,7 @@
             </div>
         </div>
     </main>
-    {{> scriptResources}}
+    {{> footer}} {{> scriptResources}}
 
     <script>
         $(document).ready(function () {

@@ -8,37 +8,37 @@ const timestamp = require('time-stamp');
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
-	extended : true
+	extended: true
 })
 
 router.use(urlencoder)
 
-router.post("/edit", (req,res) =>{
-	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-		res.redirect("post/"+postID)
-	},(error)=>{
+router.post("/edit", (req, res) => {
+	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID) => {
+		res.redirect("post/" + postID)
+	}, (error) => {
 
 	})
 })
 
-router.get("/edit/:id", (req,res) =>{
-	Post.get(req.params.id).then((post)=>{
+router.get("/edit/:id", (req, res) => {
+	Post.get(req.params.id).then((post) => {
 		res.render("./pages/editpost", {
 			uname: req.session.username,
 			post
 		})
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/create", (req,res) =>{
+router.get("/create", (req, res) => {
 	res.render("./pages/newpost", {
 		uname: req.session.username
 	})
 })
 
-router.post("/create", (req,res) =>{
+router.post("/create", (req, res) => {
 	var newPost = {
 		postTitle: req.body.postTitle,
 		postDescription: req.body.postDescription,
@@ -49,91 +49,94 @@ router.post("/create", (req,res) =>{
 		commentNumber: 0,
 		comment: []
 	}
-	Post.put(newPost).then((newPost)=>{
-		User.putPost(newPost).then((newPost)=>{
-			res.redirect("/post/"+newPost._id)
-		},(error)=>{
+
+	console.log("NEW POST: " + newPost)
+
+	Post.put(newPost).then((newPost) => {
+		User.putPost(newPost).then((newPost) => {
+			res.redirect("/post/" + newPost._id)
+		}, (error) => {
 			res.redirect("/post/create")
 		})
-	},(error)=>{
+	}, (error) => {
 		res.redirect("/post/create")
 	})
 })
 
-router.get("/all", (req,res) =>{
-	Post.getAll().then((posts)=>{
+router.get("/all", (req, res) => {
+	Post.getAll().then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/date", (req,res) =>{
-	Post.getSortedDate().then((posts)=>{
+router.get("/all/date", (req, res) => {
+	Post.getSortedDate().then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/score", (req,res) =>{
-	Post.getSortedScore().then((posts)=>{
+router.get("/all/score", (req, res) => {
+	Post.getSortedScore().then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.post("/all/more", (req,res) =>{
-	Post.getAllMore(parseInt(req.body.skipNum)).then((posts)=>{
+router.post("/all/more", (req, res) => {
+	Post.getAllMore(parseInt(req.body.skipNum)).then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/date/more", (req,res) =>{
-	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts)=>{
+router.get("/all/date/more", (req, res) => {
+	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/score/more", (req,res) =>{
-	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts)=>{
+router.get("/all/score/more", (req, res) => {
+	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/search/:searchTerm", (req,res) => {
-	Post.search(req.params.searchTerm).then((posts)=>{
+router.get("/search/:searchTerm", (req, res) => {
+	Post.search(req.params.searchTerm).then((posts) => {
 		res.send(posts)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.post("/comments", (req,res) => {
-	Post.get(req.body.id).then((post)=>{
+router.post("/comments", (req, res) => {
+	Post.get(req.body.id).then((post) => {
 		res.send(post.comment)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/delete/:id", (req,res) => {
-	Post.delete(req.params.id).then((result)=>{
+router.get("/delete/:id", (req, res) => {
+	Post.delete(req.params.id).then((result) => {
 		res.send(result)
-	},(error)=>{
+	}, (error) => {
 		res.send(null)
 	})
 })
 
-router.get("/:id", (req,res) => {
-	Post.get(req.params.id).then((post)=>{
+router.get("/:id", (req, res) => {
+	Post.get(req.params.id).then((post) => {
 		res.render("./pages/post", {
 			uname: req.session.username,
 			postID: post._id,
@@ -144,7 +147,7 @@ router.get("/:id", (req,res) => {
 			postDate: prettyMs(new Date() - post.postDate),
 			commentNumber: post.commentNumber
 		})
-	},(error)=>{
+	}, (error) => {
 
 	})
 })

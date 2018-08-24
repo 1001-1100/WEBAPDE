@@ -19,12 +19,14 @@
         <div class="text-center mb-3 mt-5">
           <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}">
         </div>
-        <div class="font-weight-bold">{{username}}</div>
-        <div class="description">{{shortBio}}</div>
+        <div class="ml-4">
+          <div class="font-weight-bold">{{username}}</div>
+          <div class="description">{{shortBio}}</div>
+        </div>
       </div>
 
       <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="editCommentLabel">Edit comment</h5>
@@ -44,7 +46,7 @@
       </div>
 
       <div class="modal fade" id="deleteCommentConfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="deleteCommentLabel">Delete comment</h5>
@@ -64,7 +66,7 @@
       </div>
 
       <div class="modal fade" id="deletePostConfirmation" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title" id="deletePostLabel">Delete post</h5>
@@ -77,7 +79,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal" id="btnDeletePost">Delete</button>
             </div>
           </div>
         </div>
@@ -97,24 +99,197 @@
 
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="user-posts" role="tabpanel" aria-labelledby="user-posts-tab">
-            <ul id="postContainer" class="list-unstyled"></ul>
+            <ul id="postContainer" class="list-unstyled">
+              <div id="loading-posts">
+                <div class="d-flex flex-row mb-3 media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes1"></span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="d-flex flex-column ml-1">
+                    <div class="text">
+                      <div class="title"></div>
+                      <div class="text-line"></div>
+                      <div class="text-line"></div>
+                      <div>
+                        <span class="text-footer1"></span>
+                        <span class="text-footer2"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-            <div id="loadMorePosts" class="btn btn-outline-primary">See more posts</div>
+                <div class="d-flex flex-row mb-3 media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes1"></span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="d-flex flex-column ml-1">
+                    <div class="text">
+                      <div class="title"></div>
+                      <div class="text-line"></div>
+                      <div class="text-line"></div>
+                      <div>
+                        <span class="text-footer1"></span>
+                        <span class="text-footer2"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-row mb-3 media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes1"></span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="d-flex flex-column ml-1">
+                    <div class="text">
+                      <div class="title"></div>
+                      <div class="text-line"></div>
+                      <div class="text-line"></div>
+                      <div>
+                        <span class="text-footer1"></span>
+                        <span class="text-footer2"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-row mb-3 media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes1"></span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="d-flex flex-column ml-1">
+                    <div class="text">
+                      <div class="title"></div>
+                      <div class="text-line"></div>
+                      <div class="text-line"></div>
+                      <div>
+                        <span class="text-footer1"></span>
+                        <span class="text-footer2"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex flex-row mb-3 media post">
+                  <div class="mr-3 actions">
+                    <i class="material-icons md-18 md-dark">arrow_upward</i>
+                    <span class="votes1"></span>
+                    <i class="material-icons md-18 md-dark">arrow_downward</i>
+                  </div>
+                  <div class="d-flex flex-column ml-1">
+                    <div class="text">
+                      <div class="title"></div>
+                      <div class="text-line"></div>
+                      <div class="text-line"></div>
+                      <div>
+                        <span class="text-footer1"></span>
+                        <span class="text-footer2"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </ul>
+
+            <div id="loadMorePosts" class="btn btn-outline-primary" style="display: none;">See more posts</div>
           </div>
 
           <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
-            <ul id="commentContainer" class="list-unstyled"></ul>
-              <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
+            <ul id="commentContainer" class="list-unstyled">
+              <div id="loading-comments">
+                <div class="comment-container">
+                  <div class="ml-3 media comment">
+                    <div class="mr-3 commentactions">
+                      <i class="material-icons md-18 md-dark">arrow_upward</i>
+                      <i class="material-icons md-18 md-dark">arrow_downward</i>
+                    </div>
+                    <div class="d-flex media-body">
+                      <div class="text">
+                        <div>
+                          <span class="text-footer3"></span>
+                          <span class="text-footer1"></span>
+                        </div>
+                        <div class="text-line"></div>
+                        <div class="text-line"></div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comment-container">
+                  <div class="ml-3 media comment">
+                    <div class="mr-3 commentactions">
+                      <i class="material-icons md-18 md-dark">arrow_upward</i>
+                      <i class="material-icons md-18 md-dark">arrow_downward</i>
+                    </div>
+                    <div class="d-flex media-body">
+                      <div class="text">
+                        <div>
+                          <span class="text-footer3"></span>
+                          <span class="text-footer1"></span>
+                        </div>
+                        <div class="text-line"></div>
+                        <div class="text-line"></div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="comment-container">
+                  <div class="ml-3 media comment">
+                    <div class="mr-3 commentactions">
+                      <i class="material-icons md-18 md-dark">arrow_upward</i>
+                      <i class="material-icons md-18 md-dark">arrow_downward</i>
+                    </div>
+                    <div class="d-flex media-body">
+                      <div class="text">
+                        <div>
+                          <span class="text-footer3"></span>
+                          <span class="text-footer1"></span>
+                        </div>
+                        <div class="text-line"></div>
+                        <div class="text-line"></div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+
             </ul>
-            </div>
-            </div>
-            </div>
-            </div>
+            <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
-  {{> scriptResources}}
+  {{> footer}} {{> scriptResources}}
 
   <script>
     $(document).ready(function () {
+
+      $(document).ajaxStart(function () {
+        $("#loading-posts").css("display", "block");
+        $("#loading-comments").css("display", "block");
+      });
+
+      $(document).ajaxComplete(function () {
+        $("#loading-posts").css("display", "none");
+        $("#loading-comments").css("display", "none");
+      });
 
       var username = "{{username}}";
 
@@ -128,6 +303,7 @@
           for (let i = 0; i < foundPosts.length; i++) {
             addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
           }
+          $("#loadMorePosts").show()
         } else {
           addNoPosts()
         }
@@ -141,7 +317,7 @@
             addComment(foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].commentDate, foundComments[i].commentScore);
           }
         } else {
-
+          addNoComments()
         }
       })
 
@@ -150,7 +326,7 @@
 
       function addNoPosts() {
         var noPosts = document.createElement("div");
-        noPosts.className = "comment-container";
+        noPosts.className = "postcomment";
         var icon = document.createElement("i");
         icon.className = "material-icons md-orange md-92 flex-fill";
         icon.innerHTML = "sentiment_very_dissatisfied";
@@ -168,6 +344,30 @@
         noPosts.append(content);
         noPosts.id = "noPost";
         $("#postContainer").append(noPosts);
+      }
+
+      function addNoComments() {
+        var noComments = document.createElement("div");
+        noPosts.className = "postcomment";
+        var icon = document.createElement("i");
+        icon.className = "material-icons md-orange md-92 flex-fill";
+        icon.innerHTML = "sentiment_very_dissatisfied";
+        var content = document.createElement("div");
+        content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
+        var text = document.createElement("h2");
+        text.className = "flex-fill text-center";
+        text.innerHTML = "No comments yet...";
+        var subtext = document.createElement("h6");
+        subtext.className = "mt-1 flex-fill text-center subheading";
+        subtext.innerHTML = "Looks like this user hasn't commented on anything.";
+        content.append(icon);
+        content.append(text);
+        content.append(subtext);
+        noPosts.append(content);
+        noPosts.id = "noPost";
+        $("#commentContainer").append(noComments);
+
+        $("#loadMoreComments").hide()
       }
 
       function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
@@ -215,38 +415,6 @@
         userName.innerHTML = postAuthor;
         userName.setAttribute("href", "/user/" + postAuthor);
 
-
-        var icondelete = document.createElement("i");
-        icondelete.innerHTML = "delete";
-        icondelete.className = "material-icons md-16 md-dark icons material-actions";
-
-        var iconedit = document.createElement("i");
-        iconedit.innerHTML = "edit";
-        iconedit.className = "material-icons md-16 md-dark icons material-actions";
-
-        var deletespan = document.createElement("span");
-        deletespan.className = "deleteSpan";
-        deletespan.setAttribute("data-id", postIDs);
-        deletespan.setAttribute("data-toggle", "modal");
-        deletespan.setAttribute("data-target", "#deletePostConfirmation");
-        deletespan.addEventListener("click", function () {
-          //  var id = $(this).attr("data-id")
-          //   console.log("ID of post is " + id);
-          deletePost(postIDs);
-        })
-
-        var editspan = document.createElement("span");
-        editspan.addEventListener("click", function () {
-            window.location.href = "/post/editpost/"+postIDs;
-        })
-
-        //TODO
-        //editspan.setAttribute("data-toggle", "modal");
-        //editspan.setAttribute("data-target", "#editPostModal");
-        //  var edita = document.createElement("a");
-        editspan.append(iconedit);
-        deletespan.append(icondelete);
-
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);
         voteBox.append(arrowDownward);
@@ -266,8 +434,39 @@
         flexColumn.append(postInfo);
         flexRow.append(flexColumn);
         mediaPost.append(flexRow);
-        flexRow.append(editspan);
-        flexRow.append(deletespan);
+
+        var curUser = "{{username}}"
+        var loggedIn = "{{uname}}"
+        if (loggedIn)
+          if (curUser === loggedIn) {
+            var icondelete = document.createElement("i");
+            icondelete.innerHTML = "delete";
+            icondelete.className = "material-icons md-22 md-dark icons material-actions";
+
+            var iconedit = document.createElement("i");
+            iconedit.innerHTML = "edit";
+            iconedit.className = "material-icons md-22 md-dark icons material-actions";
+
+            var deletespan = document.createElement("span");
+            deletespan.className = "deleteSpan";
+            deletespan.setAttribute("data-id", postIDs);
+            deletespan.setAttribute("data-toggle", "modal");
+            deletespan.setAttribute("data-target", "#deletePostConfirmation");
+
+            var editspan = document.createElement("span");
+            editspan.addEventListener("click", function () {
+              window.location.href = "/post/editpost/" + postIDs;
+            })
+
+            //TODO
+            //editspan.setAttribute("data-toggle", "modal");
+            //editspan.setAttribute("data-target", "#editPostModal");
+            //  var edita = document.createElement("a");
+            editspan.append(iconedit);
+            deletespan.append(icondelete);
+            flexRow.append(editspan);
+            flexRow.append(deletespan);
+          }
 
         $("#postContainer").append(mediaPost);
       }
@@ -403,6 +602,17 @@
         })
 
       }
+
+      $("#deletePostConfirmation").on('show.bs.modal', function (e) {
+        console.log("show delete post modal")
+        var postID = $(e.relatedTarget).data('id');
+        $("#btnDeletePost").attr("id", postID);
+      })
+
+      $("#btnDeletePost").on("click", function () {
+        var postID = $(this).attr("id")
+        deletePost(postID);
+      })
     });
   </script>
 

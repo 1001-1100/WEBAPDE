@@ -24,7 +24,7 @@
 </head>
 
 <body>
-  {{#if uname}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
+  {{#if uname}} {{> signedHomeNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
     <div class="starter-template">
 
@@ -33,7 +33,8 @@
         <a href="post/create" class="mr-auto btn btn-outline-success">
           <i class="material-icons md-18">add</i> Create post</a>
 
-        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort posts by</button>
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sort
+          posts by</button>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="javascript:void(0)" id="sortByDate">Date Created</a>
           <a class="dropdown-item" href="javascript:void(0)" id="sortByPopularity">Popularity</a>
@@ -51,112 +52,109 @@
       {{/if}}
 
       <ul id="postContainer" class="list-unstyled">
+
+
+        <div id="loading-posts">
+          <div class="d-flex flex-row mb-3 media post">
+            <div class="mr-3 actions">
+              <i class="material-icons md-18 md-dark">arrow_upward</i>
+              <span class="votes1"></span>
+              <i class="material-icons md-18 md-dark">arrow_downward</i>
+            </div>
+            <div class="d-flex flex-column ml-1">
+              <div class="text">
+                <div class="title"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div>
+                  <span class="text-footer1"></span>
+                  <span class="text-footer2"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-row mb-3 media post">
+            <div class="mr-3 actions">
+              <i class="material-icons md-18 md-dark">arrow_upward</i>
+              <span class="votes1"></span>
+              <i class="material-icons md-18 md-dark">arrow_downward</i>
+            </div>
+            <div class="d-flex flex-column ml-1">
+              <div class="text">
+                <div class="title"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div>
+                  <span class="text-footer1"></span>
+                  <span class="text-footer2"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-row mb-3 media post">
+            <div class="mr-3 actions">
+              <i class="material-icons md-18 md-dark">arrow_upward</i>
+              <span class="votes1"></span>
+              <i class="material-icons md-18 md-dark">arrow_downward</i>
+            </div>
+            <div class="d-flex flex-column ml-1">
+              <div class="text">
+                <div class="title"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div>
+                  <span class="text-footer1"></span>
+                  <span class="text-footer2"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-row mb-3 media post">
+            <div class="mr-3 actions">
+              <i class="material-icons md-18 md-dark">arrow_upward</i>
+              <span class="votes1"></span>
+              <i class="material-icons md-18 md-dark">arrow_downward</i>
+            </div>
+            <div class="d-flex flex-column ml-1">
+              <div class="text">
+                <div class="title"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div>
+                  <span class="text-footer1"></span>
+                  <span class="text-footer2"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-row mb-3 media post">
+            <div class="mr-3 actions">
+              <i class="material-icons md-18 md-dark">arrow_upward</i>
+              <span class="votes1"></span>
+              <i class="material-icons md-18 md-dark">arrow_downward</i>
+            </div>
+            <div class="d-flex flex-column ml-1">
+              <div class="text">
+                <div class="title"></div>
+                <div class="text-line"></div>
+                <div class="text-line"></div>
+                <div>
+                  <span class="text-footer1"></span>
+                  <span class="text-footer2"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </ul>
-
-      <div id="loading-posts">
-        <div class="d-flex flex-row mb-3 media post">
-          <div class="mr-3 actions">
-            <i class="material-icons md-18 md-dark">arrow_upward</i>
-            <span class="votes1"></span>
-            <i class="material-icons md-18 md-dark">arrow_downward</i>
-          </div>
-          <div class="d-flex flex-column ml-1">
-            <div class="text">
-              <div class="title"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div>
-                <span class="text-footer1"></span>
-                <span class="text-footer2"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row mb-3 media post">
-          <div class="mr-3 actions">
-            <i class="material-icons md-18 md-dark">arrow_upward</i>
-            <span class="votes1"></span>
-            <i class="material-icons md-18 md-dark">arrow_downward</i>
-          </div>
-          <div class="d-flex flex-column ml-1">
-            <div class="text">
-              <div class="title"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div>
-                <span class="text-footer1"></span>
-                <span class="text-footer2"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row mb-3 media post">
-          <div class="mr-3 actions">
-            <i class="material-icons md-18 md-dark">arrow_upward</i>
-            <span class="votes1"></span>
-            <i class="material-icons md-18 md-dark">arrow_downward</i>
-          </div>
-          <div class="d-flex flex-column ml-1">
-            <div class="text">
-              <div class="title"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div>
-                <span class="text-footer1"></span>
-                <span class="text-footer2"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row mb-3 media post">
-          <div class="mr-3 actions">
-            <i class="material-icons md-18 md-dark">arrow_upward</i>
-            <span class="votes1"></span>
-            <i class="material-icons md-18 md-dark">arrow_downward</i>
-          </div>
-          <div class="d-flex flex-column ml-1">
-            <div class="text">
-              <div class="title"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div>
-                <span class="text-footer1"></span>
-                <span class="text-footer2"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row mb-3 media post">
-          <div class="mr-3 actions">
-            <i class="material-icons md-18 md-dark">arrow_upward</i>
-            <span class="votes1"></span>
-            <i class="material-icons md-18 md-dark">arrow_downward</i>
-          </div>
-          <div class="d-flex flex-column ml-1">
-            <div class="text">
-              <div class="title"></div>
-              <div class="text-line"></div>
-              <div class="text-line"></div>
-              <div>
-                <span class="text-footer1"></span>
-                <span class="text-footer2"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div id="loadMorePosts" class="btn btn-primary">Load more posts</div>
     </div>
   </main>
-
-  {{> scriptResources}}
-
-  {{> globalScripts}}
+  {{> footer}} {{> scriptResources}} {{> globalScripts}}
 
   <script>
     $(document).ready(function () {
@@ -320,75 +318,78 @@
 
         $("#postContainer").append(mediaPost);
       }
-
-      {{!-- function upvotePost(postID) {
-        var username = "{{uname}}";
-
-        if (!username) {
-          //add modal
-        } else {
-          $.post("upPost", {
-            id: postID,
-            username: username
-          }, (foundUser) => {
-            if (foundUser) {
-              //set to orange
-            }
-          })
-        }
-      }
-
-      function downvotePost(postID) {
-        var username = "{{uname}}";
-
-        if (!username) {
-          //add modal
-        } else {
-          $.post("downPost", {
-            id: postID,
-            username: username
-          }, (foundUser) => {
-            if (foundUser) {
-              //set to blue
-            }
-          })
-        }
-      }
-
-      function upvoteComment(commentID) {
-        var username = "{{uname}}";
-
-        if (!username) {
-          //add modal
-        } else {
-          $.post("upComment", {
-            id: commentID,
-            username: username
-          }, (foundUser) => {
-            if (foundUser) {
-              //set to orange
-            }
-          })
-        }
-      }
-
-      function downvoteComment(commentID) {
-        var username = "{{uname}}";
-
-        if (!username) {
-          //add modal
-        } else {
-          $.post("downComment", {
-            id: commentID,
-            username: username
-          }, (foundUser) => {
-            if (foundUser) {
-              //set to blue
-            }
-          })
-        }
-      } --}}
-    });
+      /*
+            function upvotePost(postID) {
+                  var username = "{{uname}}";
+      
+                  if (!username) {
+                    //add modal
+                  } else {
+                    $.post("upPost", {
+                      id: postID,
+                      username: username
+                    }, (foundUser) => {
+                      if (foundUser) {
+                        //set to orange
+                      }
+                    })
+                  }
+                }
+      
+                function downvotePost(postID) {
+                  var username = "{{uname}}";
+      
+                  if (!username) {
+                    //add modal
+                  } else {
+                    $.post("downPost", {
+                      id: postID,
+                      username: username
+                    }, (foundUser) => {
+                      if (foundUser) {
+                        //set to blue
+                      }
+                    })
+                  }
+                }
+      
+                function upvoteComment(commentID) {
+                  var username = "{{uname}}";
+      
+                  if (!username) {
+                    //add modal
+                  } else {
+                    $.post("upComment", {
+                      id: commentID,
+                      username: username
+                    }, (foundUser) => {
+                      if (foundUser) {
+                        //set to orange
+                      }
+                    })
+                  }
+                }
+      
+                function downvoteComment(commentID) {
+                  var username = "{{uname}}";
+      
+                  if (!username) {
+                    //add modal
+                  } else {
+                    $.post("downComment", {
+                      id: commentID,
+                      username: username
+                    }, (foundUser) => {
+                      if (foundUser) {
+                        //set to blue
+                      }
+                    })
+                  }
+                }
+      
+                */
+    }
+    );
   </script>
 
 </body>

@@ -32,7 +32,7 @@ var userSchema = mongoose.Schema({
 		}]
 	}],
 	comment: [{
-		_commentID: mongoose.SchemaTypes.ObjectId,
+		_postID: mongoose.SchemaTypes.ObjectId,
 		commentContent: String,
 		commentAuthor: String,
 		commentDateString: String,
@@ -58,10 +58,10 @@ exports.get = function (username) {
 exports.put = function (user) {
 	return new Promise(function (resolve, reject) {
 		var u = new User(user)
-		u.save().then((newUser)=>{
-		  resolve(newUser)
-		}, (err)=>{
-		  reject(err)
+		u.save().then((newUser) => {
+			resolve(newUser)
+		}, (err) => {
+			reject(err)
 		})
 	})
 }
@@ -71,7 +71,9 @@ exports.putPost = function (post) {
 		User.findOneAndUpdate({
 			username: post.postAuthor
 		}, {
-			$push: {post: post}
+			$push: {
+				post: post
+			}
 		}).then((msg) => {
 			resolve(post)
 		}, (err) => {
@@ -85,7 +87,9 @@ exports.putComment = function (comment) {
 		User.findOneAndUpdate({
 			username: comment.commentAuthor
 		}, {
-			$push: {comment: comment}
+			$push: {
+				comment: comment
+			}
 		}).then((msg) => {
 			resolve(comment)
 		}, (err) => {
@@ -111,7 +115,7 @@ exports.validate = function (username, emailAddress) {
 		User.findOne({
 			username
 		}).then((user) => {
-			if(user){
+			if (user) {
 				resolve(1)
 			}
 		}, (err) => {
@@ -120,7 +124,7 @@ exports.validate = function (username, emailAddress) {
 		User.findOne({
 			emailAddress
 		}).then((user) => {
-			if(user){
+			if (user) {
 				resolve(2)
 			}
 		}, (err) => {
