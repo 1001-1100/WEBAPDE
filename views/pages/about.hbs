@@ -7,62 +7,37 @@
 </head>
 
 <body>
-   {{#if username}}
-	{{> signedNavBar}}	
-  {{else}}
-	{{> unsignedNavBar}}
-  {{/if}}
+  {{#if username}} {{> signedNavBar}} {{else}} {{> unsignedNavBar}} {{/if}}
   <main role="main" class="container">
-    <div class="starter-template ">
+    <div class="starter-template">
       <h2>About The Developers</h2>
 
-     
-      <div>
-          <span>
-                <img src = "./nicohos.png"width="300" height="350" >
-          </span>
-        
-          <span>
-              <img src = "./josh1.jpg" width="300" height="350">
-          </span>
-         
-            <span>
-              <img src = "./kayehos.png"width="300" height="350">
-            </span>
-          <div>
-            Nico is the best president :D
-
-          </div>  
-        
+      <div class="row justify-content-around">
+        <div class="col-sm">
+          <div class="text-center"><img src="./nicohos.png" width="250" height="150" class="avatar"></div>
+          <span class="font-weight-bold">@nico</span><br>Integer efficitur vel velit vel varius. Etiam nunc eros, commodo
+          in nisl eu, sagittis mattis sapien.
+        </div>
+        <div class="col-sm">
+          <div class="text-center"><img src="./josh1.jpg" width="250" height="150" class="avatar"></div>
+          <span class="font-weight-bold">@josh</span><br> Nulla id sem a arcu aliquam facilisis non at libero. Sed et metus
+          vel justo pellentesque gravida. Aliquam a magna placerat, mollis nunc nec, rutrum nisl.
+        </div>
+        <div class="col-sm">
+          <div class="text-center"><img src="./kayehos.png" width="250" height="150" class="avatar"></div>
+          <span class="font-weight-bold">@kaye</span><br>Aliquam non ultrices sapien, eu rutrum enim. Donec lacinia cursus
+          posuere.
+        </div>
       </div>
-      <br>
-      <h2>About the Site </h2>
-      <div>
-        <p>This website is one of the minumum requirements for WEBAPDE. The Forum allows you to interact and discuss with other people on absolutely anything similar to Reddit</p>
 
-
-
+      <div class="mt-5">
+        <h2>About the Site</h2>
+        <p>This website is one of the minumum requirements for WEBAPDE. The Forum allows you to interact and discuss anything
+          under the sun with others (similar to Reddit)</p>
       </div>
-      {{!-- <ul class="list-group list-group-flush">
-
-        <li class="list-group-item">
-          <a href="/">Home</li>
-        <li class="list-group-item">
-          <a href="/user-profile">User Profile</li>
-        <li class="list-group-item">
-          <a href="/signin">Login</li>
-        <li class="list-group-item">
-          <a href="/register">Register</li>
-        <li class="list-group-item">
-          <a href="/newpost">Create Post</li>
-        <li class="list-group-item">
-          <a href="/editpost">Edit Post</li>
-        <li class="list-group-item">
-          <a href="/post">View Post</li>
-      </ul> --}}
     </div>
   </main>
-
+  {{> footer}}
 
 </body>
 

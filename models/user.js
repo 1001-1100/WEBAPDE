@@ -158,10 +158,10 @@ exports.updateComment = function(username, postID, commentID, commentContent){
 exports.put = function (user) {
 	return new Promise(function (resolve, reject) {
 		var u = new User(user)
-		u.save().then((newUser)=>{
-		  resolve(newUser)
-		}, (err)=>{
-		  reject(err)
+		u.save().then((newUser) => {
+			resolve(newUser)
+		}, (err) => {
+			reject(err)
 		})
 	})
 }
@@ -171,7 +171,9 @@ exports.putPost = function (post) {
 		User.findOneAndUpdate({
 			username: post.postAuthor
 		}, {
-			$push: {post: post}
+			$push: {
+				post: post
+			}
 		}).then((msg) => {
 			resolve(post)
 		}, (err) => {
@@ -184,19 +186,11 @@ exports.putComment = function (comment, postID) {
 	return new Promise(function (resolve, reject) {
 		User.findOne({
 			username: comment.commentAuthor
-		
-		}).then((foundUser) => {
-
-			foundUser.comment.push(comment) // push in comment array of user
-			
-			for(let i = 0 ; i< foundUser.post.length; i++){
-				if(foundUser.post[i]._id == postID){
-					foundUser.post[i].comment.push(comment);
-				}
+		}, {
+			$push: {
+				comment: comment
 			}
-
-			foundUser.save();
-			
+		}).then((msg) => {
 			resolve(comment)
 		}, (err) => {
 			reject(err)
@@ -245,7 +239,7 @@ exports.validate = function (username, emailAddress) {
 		User.findOne({
 			username
 		}).then((user) => {
-			if(user){
+			if (user) {
 				resolve(1)
 			}
 		}, (err) => {
@@ -254,7 +248,7 @@ exports.validate = function (username, emailAddress) {
 		User.findOne({
 			emailAddress
 		}).then((user) => {
-			if(user){
+			if (user) {
 				resolve(2)
 			}
 		}, (err) => {

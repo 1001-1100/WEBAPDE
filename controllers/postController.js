@@ -9,50 +9,45 @@ const timestamp = require('time-stamp');
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
-	extended : true
+	extended: true
 })
 
 router.use(urlencoder)
 
-router.post("/edit", (req,res) =>{
-	
-	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-	//	res.render("post/"+req.body.postID)
-	},(error)=>{
-		console.log(error);
-	})
+router.post("/edit", (req, res) => {
+	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID) => {
+		res.redirect("/post/" + postID)
+	}, (error) => {
 
 	User.edit(req.session.username ,req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-		res.send("post/"+req.session.username)
+		res.send("/post/"+req.session.username)
 		//window.location.href("post/"+req.session.username)
 	},(error)=>{
 		console.log(error);
 	})
 })
 
-router.get("/edit/:id", urlencoder, (req,res) =>{
-
-	
-	Post.get(req.params.id).then((post)=>{
-		res.render("./pages/editpost", {	
+router.get("/edit/:id", (req, res) => {
+	Post.get(req.params.id).then((post) => {
+		res.render("./pages/editpost", {
 			uname: req.session.username,
 			postID: post._id,
 			postTitle: post.postTitle,
 			postContent: post.postDescription
 		})
-	},(error)=>{
-		console.log(error);
+    
+	}, (error) => {
 
 	})
 })
 
-router.get("/create", (req,res) =>{
+router.get("/create", (req, res) => {
 	res.render("./pages/newpost", {
 		uname: req.session.username
 	})
 })
 
-router.post("/create", (req,res) =>{
+router.post("/create", (req, res) => {
 	var newPost = {
 		postTitle: req.body.postTitle,
 		postDescription: req.body.postDescription,
@@ -63,13 +58,16 @@ router.post("/create", (req,res) =>{
 		commentNumber: 0,
 		comment: []
 	}
-	Post.put(newPost).then((newPost)=>{
-		User.putPost(newPost).then((newPost)=>{
-			res.redirect("/post/"+newPost._id)
-		},(error)=>{
+
+	console.log("NEW POST: " + newPost)
+
+	Post.put(newPost).then((newPost) => {
+		User.putPost(newPost).then((newPost) => {
+			res.redirect("/post/" + newPost._id)
+		}, (error) => {
 			res.redirect("/post/create")
 		})
-	},(error)=>{
+	}, (error) => {
 		res.redirect("/post/create")
 	})
 })
@@ -214,23 +212,22 @@ router.get("/search/:searchTerm", (req,res) => {
 	})
 })
 
-router.post("/comments", (req,res) => {
-	Post.get(req.body.id).then((post)=>{
+router.post("/comments", (req, res) => {
+	Post.get(req.body.id).then((post) => {
 		res.send(post.comment)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/delete/:id", (req,res) => {
-
-	Post.delete(req.params.id).then((result)=>{
+router.get("/delete/:id", (req, res) => {
+	Post.delete(req.params.id).then((result) => {
 		res.send(result)
-	},(error)=>{
+	}, (error) => {
 		res.send(null)
 	})
 })
-
+  
 router.post("/deletepost", (req, res) =>{
 
 	// Deletes post in the Post collection Db given the postID
@@ -311,7 +308,7 @@ router.get("/:id", (req,res) => {
 			postDate: prettyMs(new Date() - post.postDate, {compact: true, verbose: true}),
 			commentNumber: post.commentNumber
 		})
-	},(error)=>{
+	}, (error) => {
 
 	})
 })

@@ -17,53 +17,23 @@
     </form>
 
     <div class="nav navbar-nav ml-auto w-100 justify-content-end">
-      <a href="post/create" class="btn btn-success" onMouseOver="this.style.cursor='pointer'">
-        <i class="material-icons md-18">add</i> Create post</a>
       <div class="dropdown mr-2 ml-2">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
           {{!-- <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}"> --}} {{uname}}
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-          <a href="/user" style="color: #000;" class="dropdown-item">
-            {{!-- <button class="dropdown-item" type="button"> --}}View Profile {{!-- </button> --}}
+          <a href="/user" style="color: #000;">
+            <button class="dropdown-item" type="button">View Profile
+            </button>
           </a>
-          {{!-- <button class="dropdown-item" type="button"> --}}
+          <button class="dropdown-item" type="button">
             <form action="logout" class="form-inline my-2 my-lg-0" method="post">
-              <button type="submit" class="dropdown-item" onMouseOver="this.style.cursor='pointer'">Logout</button>
+              <button type="submit" class="dropdown-item">Logout</button>
             </form>
-            {{!-- </button> --}}
+          </button>
         </div>
       </div>
     </div>
   </div>
 </nav>
-
-<script>
-
-  $(document).ready(function(){
-
-      $("#searchbtn").on("click", function(evt){
-               evt.preventDefault();
-
-        var keyword = $('#inputSearch').val();
-          
-              $.post("post/search/" + keyword,{  
-                keyword : keyword
-              
-                },(foundPosts)=>{
-                  $("#postContainer").empty();
-                  if(foundPosts){
-                      
-                      for(let i = 0; i < foundPosts.length; i++) {
-                        addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                      }	
-
-                  }else{	
-                      $("#postContainer").append("No posts available");
-                  }
-              })
-        });
-  })
-
-</script>
