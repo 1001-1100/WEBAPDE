@@ -215,7 +215,18 @@ router.get("/search/:searchTerm", (req,res) => {
 
 router.post("/comments", (req, res) => {
 	Post.get(req.body.id).then((post) => {
-		res.send(post.comment)
+		var commentData = []
+		for(let i = 0 ; i < post.comment.length ; i++){
+			commentData.push({
+				_id: post.comment[i]._id,
+				_postID: post.comment[i]._postID,
+				commentContent: post.comment[i].commentContent,
+				commentAuthor: post.comment[i].commentAuthor,
+				commentScore: post.comment[i].commentScore,
+				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(commentData)
 	}, (error) => {
 
 	})

@@ -398,7 +398,7 @@
       $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
         if (comments.length > 0) {
           for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].commentDate, comments[i].commentScore);
+            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
           }
         } else {
           var noComments = document.createElement("div");
