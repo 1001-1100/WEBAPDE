@@ -26,6 +26,32 @@ exports.get = function (id) {
 	})
 }
 
+exports.deleteComment = function(commentID){
+	return new Promise(function (resolve, reject) {
+		Comment.remove({
+			_id: commentID
+		}).then((result) => {
+			resolve(result)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.updateComment = function(commentID, commentContent){
+	return new Promise(function (resolve, reject) {
+		Comment.findOneAndUpdate({
+			_id: commentID
+		},{
+			commentContent
+		}).then((newComment) => {
+		//	resolve(newComment)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
 exports.put = function (comment) {
 	return new Promise(function (resolve, reject) {
 		var c = new Comment(comment)

@@ -32,7 +32,7 @@ var userSchema = mongoose.Schema({
 		}]
 	}],
 	comment: [{
-		_commentID: mongoose.SchemaTypes.ObjectId,
+		_postID: mongoose.SchemaTypes.ObjectId,
 		commentContent: String,
 		commentAuthor: String,
 		commentDateString: String,
@@ -51,6 +51,106 @@ exports.get = function (username) {
 			resolve(user)
 		}, (err) => {
 			reject(err)
+		})
+	})
+}
+
+exports.deletePost = function(username, id){
+	return new Promise(function(resolve, reject){
+		User.findOne({
+			username
+		}).then((user)=>{
+
+			for(let i = 0; i < user.post.length; i++ ){
+				if(user.post[i]._id == id){
+					user.post.splice(i, 1)
+				}
+			}
+
+			user.save().then((newUser)=>{
+				resolve(newUser)
+			}, (err)=>{
+				reject(err)
+			})
+			
+		})
+	})
+}
+
+exports.deleteComment = function(username, postID, commentID){
+	console.log("deleteComment postID is " + postID)
+	console.log("deleteComment commentID is " + commentID)
+	console.log("deleteComment username is " + username)
+	return new Promise(function(resolve, reject){
+		User.findOne({
+			username
+		}).then((user)=>{
+
+			if(user){
+			// deletes in comment array in the post array of user
+			for(let i = 0; i < user.post.length; i++ ){
+				if(user.post[i]._id == postID){
+					if(user.post[i].comment.length >0){
+						for(let j = 0; j<user.post[i].comment.length; j++){
+							if(user.post[i].comment[j]._id == commentID){
+								user.post[i].comment.splice(j, 1)
+							}
+						}
+					}
+				}
+			}
+
+			// deletes in comment array of user
+			for(let i = 0; i < user.comment.length; i++){
+				if(user.comment[i]._id == commentID){
+					user.comment.splice(i, 1);
+				}
+			}
+
+			user.save().then((newUser)=>{
+				resolve(newUser)
+			}, (err)=>{
+				reject(err)
+			})
+		}else{console.log("user is NULL")}
+		})
+	})
+}
+
+exports.updateComment = function(username, postID, commentID, commentContent){
+
+	return new Promise(function(resolve, reject){
+		User.findOne({
+			username
+		}).then((user)=>{
+
+			if(user){
+			// deletes in comment array in the post array of user
+			for(let i = 0; i < user.post.length; i++ ){
+				if(user.post[i]._id == postID){
+					if(user.post[i].comment.length >0){
+						for(let j = 0; j<user.post[i].comment.length; j++){
+							if(user.post[i].comment[j]._id == commentID){
+								user.post[i].comment[j].commentContent = commentContent
+							}
+						}
+					}
+				}
+			}
+
+			// deletes in comment array of user
+			for(let i = 0; i < user.comment.length; i++){
+				if(user.comment[i]._id == commentID){
+					user.comment[i].commentContent = commentContent
+				}
+			}
+
+			user.save().then((newUser)=>{
+				resolve(newUser)
+			}, (err)=>{
+				reject(err)
+			})
+		}else{console.log("user is NULL")}
 		})
 	})
 }
@@ -80,13 +180,23 @@ exports.putPost = function (post) {
 	})
 }
 
-exports.putComment = function (comment) {
+exports.putComment = function (comment, postID) {
 	return new Promise(function (resolve, reject) {
-		User.findOneAndUpdate({
+		User.findOne({
 			username: comment.commentAuthor
-		}, {
-			$push: {comment: comment}
-		}).then((msg) => {
+		
+		}).then((foundUser) => {
+
+			foundUser.comment.push(comment) // push in comment array of user
+			
+			for(let i = 0 ; i< foundUser.post.length; i++){
+				if(foundUser.post[i]._id == postID){
+					foundUser.post[i].comment.push(comment);
+				}
+			}
+
+			foundUser.save();
+			
 			resolve(comment)
 		}, (err) => {
 			reject(err)
@@ -102,6 +212,30 @@ exports.authenticate = function (username) {
 			resolve(user)
 		}, (err) => {
 			reject(err)
+		})
+	})
+}
+
+exports.edit = function (username, id, postTitle, postDescription) {
+	console.log(username);
+	return new Promise(function (resolve, reject) {
+		User.findOne({
+			username: username
+		}).then((foundUser) => {
+			if(foundUser){
+				for(let i = 0; i < foundUser.post.length; i++ ){
+					if(foundUser.post[i]._id == id){
+						foundUser.post[i].postTitle = postTitle
+						foundUser.post[i].postDescription = postDescription
+					}
+				}
+			
+				foundUser.save().then((newUser)=>{
+					resolve(newUser)
+				}, (err)=>{
+					reject(err)
+				})
+			}else{console.log("foundUser is empty")}
 		})
 	})
 }

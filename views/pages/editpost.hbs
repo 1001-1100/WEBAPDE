@@ -6,11 +6,11 @@
     <title>The Forum</title>
 
     <script>
-        function onlick(){
-            $.post("editpost", {postID: "{{postID}}", postTitle: $("inputPostTitle").val(), postContent: $("inputPostContent").val()}, (editedPostLink) => {
+  //      function editPost(){
+  //          $.post("post/edit", {postID: "{{postID}}", postTitle: $("inputPostTitle").val(), postContent: $("inputPostContent").val()}, (editedPostLink) => {
 
-            })
-        }
+   //        })
+     //   }
     </script>
 </head>
 
@@ -42,10 +42,10 @@
                 <form>
                     <div class="ml-3 h2 mb-3">Edit post</div>
                     <div class="container-fluid">
-                        <input type="text" class="form-control" id="inputPostTitle" value="{{postTitle}}" required>
-                        <textarea class="form-control mt-3" type="text" id="inputPostContent" rows="9">{{postContent}}</textarea>
+                        <input type="text" class="form-control" id="inputPostTitle" name = "postTitle" value="{{postTitle}}" required>
+                        <textarea class="form-control mt-3" type="text" id="inputPostContent" name = "postContent" rows="9">{{postContent}}</textarea>
                     </div>
-                    <a class="btn btn-primary mt-2 ml-3" onclick="editPost();">Save</a>
+                    <a class="btn btn-primary mt-2 ml-3" id = "savebtn">Save</a>
                 </form>
             </div>
         </div>
@@ -55,6 +55,18 @@
     <script>
         $(document).ready(function () {
 
+            $("#savebtn").on("click", function(evt){
+                var name = "{{uname}}"
+                $.post("post/edit",{
+                    uname: "{{uname}}",
+                    postID: "{{postID}}",
+                    postTitle: $("#inputPostTitle").val(),
+                    postContent: $("#inputPostContent").val()
+                },
+                (editedPostLink) => {
+                    window.location.href = "user/"+name;
+                });
+            }); 
         });
     </script>
 

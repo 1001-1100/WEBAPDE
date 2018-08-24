@@ -101,9 +101,11 @@ router.post("/posts", (req,res) => {
 	})
 })
 
+
+
 router.post("/comments", (req,res) => {
 	User.get(req.body.username).then((user)=>{
-		res.send(user.comment)
+		res.send(user)
 	},(error)=>{
 
 	})
@@ -114,6 +116,9 @@ router.get("/avatar/:filename", (req,res) => {
 })
 
 router.get("/:username", (req,res) => {
+
+	console.log("imhere")
+
 	User.get(req.params.username).then((user)=>{
 		res.render("./pages/user-profile", {
 			uname: req.session.username,
@@ -125,6 +130,8 @@ router.get("/:username", (req,res) => {
 
 	})
 })
+
+
 
 module.exports = router
 

@@ -3,6 +3,7 @@ const router = express.Router()
 const bodyparser = require("body-parser")
 const User = require("../models/user.js")
 const Post = require("../models/post.js")
+const Comment = require("../models/comment.js")
 const prettyMs = require('pretty-ms');
 const timestamp = require('time-stamp');
 const app = express()
@@ -14,20 +15,33 @@ const urlencoder = bodyparser.urlencoded({
 router.use(urlencoder)
 
 router.post("/edit", (req,res) =>{
+	
 	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-		res.redirect("post/"+postID)
+	//	res.render("post/"+req.body.postID)
 	},(error)=>{
+		console.log(error);
+	})
 
+	User.edit(req.session.username ,req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
+		res.send("post/"+req.session.username)
+		//window.location.href("post/"+req.session.username)
+	},(error)=>{
+		console.log(error);
 	})
 })
 
-router.get("/edit/:id", (req,res) =>{
+router.get("/edit/:id", urlencoder, (req,res) =>{
+
+	
 	Post.get(req.params.id).then((post)=>{
-		res.render("./pages/editpost", {
+		res.render("./pages/editpost", {	
 			uname: req.session.username,
-			post
+			postID: post._id,
+			postTitle: post.postTitle,
+			postContent: post.postDescription
 		})
 	},(error)=>{
+		console.log(error);
 
 	})
 })
@@ -209,11 +223,80 @@ router.post("/comments", (req,res) => {
 })
 
 router.get("/delete/:id", (req,res) => {
+
 	Post.delete(req.params.id).then((result)=>{
 		res.send(result)
 	},(error)=>{
 		res.send(null)
 	})
+})
+
+router.post("/deletepost", (req, res) =>{
+
+	// Deletes post in the Post collection Db given the postID
+	Post.deletePost(req.body.id).then((result)=>{ 
+	//	res.send(result)
+	},(error)=>{
+		res.send(null)
+	})
+
+	// Deletes post in the User collection db by searchin for the user then deleting the post in his post array
+	User.deletePost(req.body.username, req.body.id).then((result)=>{ 
+		res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+	},(error)=>{
+		res.send(null)
+	})
+
+})
+
+router.post("/deletecomment", (req, res) =>{
+
+	// Deletes comment in the Post collection Db given the postID
+	Post.deleteComment(req.body.postID, req.body.commentID).then((result)=>{ 
+	//	res.send(result)
+	},(error)=>{
+		res.send(null)
+	})
+	
+	 Comment.deleteComment(req.body.commentID).then((result)=>{ 
+		//	res.send(result) 
+	 },(error)=>{
+		res.send(null)
+	 })
+
+	// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
+	 User.deleteComment(req.body.username, req.body.postID, req.body.commentID).then((result)=>{ 
+	 	res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+	 },(error)=>{
+		res.send(null)
+	 })
+})
+
+router.post("/updateComment", (req, res) =>{
+
+	
+	// Deletes comment in the Post collection Db given the postID
+	Post.updateComment(req.body.postID, req.body.commentID, req.body.commentContent).then((result)=>{ 
+	//	res.send(result)
+	},(error)=>{
+		res.send(null)
+	})
+	
+	 Comment.updateComment(req.body.commentID, req.body.commentContent).then((result)=>{ 
+		//	res.send(result) 
+	 },(error)=>{
+		res.send(null)
+	 })
+
+	// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
+	 User.updateComment(req.body.username, req.body.postID, req.body.commentID, req.body.commentContent).then((result)=>{ 
+	 	res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+	 },(error)=>{
+		res.send(null)
+	 })
+
+
+
 })
 
 router.get("/:id", (req,res) => {
