@@ -62,7 +62,19 @@ router.post("/create", (req,res) =>{
 
 router.get("/all", (req,res) =>{
 	Post.getAll().then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -70,7 +82,19 @@ router.get("/all", (req,res) =>{
 
 router.get("/all/date", (req,res) =>{
 	Post.getSortedDate().then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -78,7 +102,19 @@ router.get("/all/date", (req,res) =>{
 
 router.get("/all/score", (req,res) =>{
 	Post.getSortedScore().then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -86,7 +122,19 @@ router.get("/all/score", (req,res) =>{
 
 router.post("/all/more", (req,res) =>{
 	Post.getAllMore(parseInt(req.body.skipNum)).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -94,7 +142,19 @@ router.post("/all/more", (req,res) =>{
 
 router.get("/all/date/more", (req,res) =>{
 	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -102,7 +162,19 @@ router.get("/all/date/more", (req,res) =>{
 
 router.get("/all/score/more", (req,res) =>{
 	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -110,7 +182,19 @@ router.get("/all/score/more", (req,res) =>{
 
 router.get("/search/:searchTerm", (req,res) => {
 	Post.search(req.params.searchTerm).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -141,7 +225,7 @@ router.get("/:id", (req,res) => {
 			postDescription: post.postDescription,
 			postAuthor: post.postAuthor,
 			postScore: post.postScore,
-			postDate: prettyMs(new Date() - post.postDate),
+			postDate: prettyMs(new Date() - post.postDate, {compact: true, verbose: true}),
 			commentNumber: post.commentNumber
 		})
 	},(error)=>{
