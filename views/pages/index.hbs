@@ -200,7 +200,7 @@
         $("#postContainer").empty();
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
             skipNum += 1;
           }
         } else {
@@ -212,7 +212,7 @@
         $.post("/post/all/more", { skipNum }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
               skipNum += 1;
             }
           }
@@ -225,7 +225,7 @@
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
               skipNum += 1;
             }
           } else {
@@ -240,7 +240,7 @@
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
               skipNum += 1;
             }
           } else {
@@ -309,7 +309,7 @@
         spanUsername.append(personIcon);
         spanUsername.append("Posted by ");
         spanUsername.append(userName);
-        spanUsername.append(" at " + postDate);
+        spanUsername.append(" · " + postDate + " ago");
         spanInfo.append(spanUsername);
         postInfo.append(spanInfo);
         flexColumn.append(postInfo);

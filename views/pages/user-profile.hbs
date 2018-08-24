@@ -35,11 +35,11 @@
               </button>
             </div>
             <div class="modal-body">
-              <textarea class="form-control mt-3" type="text" id="inputPostContent" rows="3"> </textarea>
+              <textarea class="form-control mt-3" type="text" id="inputCommentContent" rows="3"> </textarea>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+              <button type="button" id= "savechanges" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-              <button type="button" class="btn btn-danger" data-dismiss="modal">Delete</button>
+              <button type="button" id = "deleteCommentModal" class="btn btn-danger" data-dismiss="modal">Delete</button>
             </div>
           </div>
         </div>
@@ -276,9 +276,12 @@
       </div>
     </div>
   </main>
+  
   {{> footer}} {{> scriptResources}}
 
   <script>
+
+
     $(document).ready(function () {
 
       $(document).ajaxStart(function () {
@@ -311,16 +314,17 @@
 
       $.post("/user/comments", {
         username: username
-      }, (foundComments) => {
-        if (foundComments.length > 0) {
-          for (let i = 0; i < foundComments.length; i++) {
-            addComment(foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].commentDate, foundComments[i].commentScore);
+      }, (foundUser) => {
+        if (foundUser.comment.length > 0) {
+          for (let i = 0; i < foundUser.comment.length; i++) {
+            addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].commentDate, foundUser.comment[i].commentScore);
           }
         } else {
           addNoComments()
         }
       })
 
+     
 
       /////////////////////////////////////////////////////////////////
 
@@ -344,6 +348,28 @@
         noPosts.append(content);
         noPosts.id = "noPost";
         $("#postContainer").append(noPosts);
+      }
+      
+      function addNoComments() {
+        var noPosts = document.createElement("div");
+        noPosts.className = "comment-container";
+        var icon = document.createElement("i");
+        icon.className = "material-icons md-orange md-92 flex-fill";
+        icon.innerHTML = "sentiment_very_dissatisfied";
+        var content = document.createElement("div");
+        content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
+        var text = document.createElement("h2");
+        text.className = "flex-fill text-center";
+        text.innerHTML = "No  comments yet...";
+        var subtext = document.createElement("h6");
+        subtext.className = "mt-1 flex-fill text-center subheading";
+        subtext.innerHTML = "Looks like this user has no comments yet.";
+        content.append(icon);
+        content.append(text);
+        content.append(subtext);
+        noPosts.append(content);
+        noPosts.id = "noPost";
+        $("#commentContainer").append(noPosts);
       }
 
       function addNoComments() {
@@ -394,12 +420,15 @@
         var personIcon = document.createElement("i");
         personIcon.className = "material-icons md-18 md-dark";
         personIcon.innerHTML = "person_outline";
+
         var postTitleContainer = document.createElement("a");
         postTitleContainer.setAttribute("href", "/post/" + postIDs);
         postTitleContainer.className = "mt-0 mb-1";
         postTitleContainer.innerHTML = postTitle;
+
         var postContent = document.createElement("div");
         postContent.innerHTML = postDescription;
+
         var postInfo = document.createElement("div");
         postInfo.className = "p-1 flex-fill";
         var spanInfo = document.createElement("span");
@@ -414,6 +443,38 @@
         var userName = document.createElement("a");
         userName.innerHTML = postAuthor;
         userName.setAttribute("href", "/user/" + postAuthor);
+        
+        var icondelete = document.createElement("i");
+        icondelete.innerHTML = "delete";
+        icondelete.className = "material-icons md-16 md-dark icons material-actions";
+
+        var iconedit = document.createElement("i");
+        iconedit.innerHTML = "edit";
+        iconedit.className = "material-icons md-16 md-dark icons material-actions";
+
+        var deletespan = document.createElement("span");
+        deletespan.className = "deleteSpan";
+        deletespan.setAttribute("data-id", postIDs);
+        deletespan.setAttribute("data-toggle", "modal");
+        deletespan.setAttribute("data-target", "#deletePostConfirmation");
+        deletespan.addEventListener("click", function () {
+          //  var id = $(this).attr("data-id")
+          //   console.log("ID of post is " + id);
+         // deletePost(postIDs);
+         document.getElementById("deletePostModal").setAttribute("data-id", postIDs)
+        })
+     
+        
+        var editspan = document.createElement("span");
+        editspan.addEventListener("click", function () {
+            window.location.href = "post/edit/" + postIDs;
+        })
+        //TODO
+        //editspan.setAttribute("data-toggle", "modal");
+        //editspan.setAttribute("data-target", "#editPostModal");
+        //  var edita = document.createElement("a");
+        editspan.append(iconedit);
+        deletespan.append(icondelete);
 
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);
@@ -471,7 +532,8 @@
         $("#postContainer").append(mediaPost);
       }
 
-      function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
+      function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
+        console.log("addComment commentID " + commentID)
         var wholeCommentContainer = document.createElement("div");
         wholeCommentContainer.className = "comment-container";
         var mainCommentContainer = document.createElement("div");
@@ -489,7 +551,7 @@
           commentBodyContainer.className = "media-body";
         else
           commentBodyContainer.className = "media-body mb-3";
-        commentBodyContainer.id = commentID;
+        commentBodyContainer.id = postID;
         var flexContainer = document.createElement("div");
         flexContainer.className = "d-flex";
         var userNameContainer = document.createElement("h6");
@@ -515,13 +577,13 @@
         infoSpan.className = "info";
         var replyLink = document.createElement("a");
         replyLink.setAttribute("href", "#");
-        replyLink.setAttribute("data-id", commentID);
+        replyLink.setAttribute("data-id", postID);
         replyLink.addEventListener("click", function () {
           var id = $(this).attr("data-id")
           console.log("Reply clicked, id=" + id);
 
           var addCommentContainer = document.createElement("div")
-
+          
           var txtComment = document.createElement("textarea")
           txtComment.setAttribute("oninput", "checkCommentBox();")
           txtComment.className = "form-control mt-2"
@@ -540,12 +602,60 @@
           txtCommentContainer.append(txtComment)
           txtCommentContainer.append(btnSubmit)
 
+       
           addCommentContainer.append(txtCommentContainer)
 
           $(txtCommentContainer).appendTo(txtContainer).hide().slideDown(500)
         }, {
             once: true
           })
+
+          ///
+         var icondelete = document.createElement("i");
+        icondelete.innerHTML = "delete";
+        icondelete.className = "material-icons md-16 md-dark icons material-actions";
+
+        var iconedit = document.createElement("i");
+        iconedit.innerHTML = "edit";
+        iconedit.className = "material-icons md-16 md-dark icons material-actions";
+
+        var deletespan = document.createElement("span");
+        deletespan.className = "deleteSpan";
+        deletespan.setAttribute("data-postID", postID);
+        deletespan.setAttribute("data-toggle", "modal");
+        deletespan.setAttribute("data-target", "#deleteCommentConfirmation");
+        deletespan.addEventListener("click", function () {
+          //  var id = $(this).attr("data-id")
+          //   console.log("ID of post is " + id);
+         // deletePost(postIDs);
+         document.getElementById("deleteCommentModal").setAttribute("data-postID", postID)
+         document.getElementById("deleteCommentModal").setAttribute("data-commentID", commentID)
+       
+        })
+
+        var editspan = document.createElement("span");
+        editspan.addEventListener("click", function () {
+          $("#inputCommentContent").val(commentContent)
+        })
+
+       // editspan.addEventListener("click", function () {
+       //     window.location.href = "/post/editpost/"+postID;
+       // })
+
+        //TODO
+        editspan.setAttribute("data-toggle", "modal");
+        editspan.setAttribute("data-target", "#editCommentModal");
+        editspan.addEventListener("click", function(){
+
+          document.getElementById("editCommentModal").setAttribute("data-commentID", commentID)
+          document.getElementById("editCommentModal").setAttribute("data-postID", postID)
+        })
+
+
+        editspan.append(iconedit);
+        deletespan.append(icondelete);
+
+///
 
         var commentIcon = document.createElement("i");
         commentIcon.className = "material-icons md-16 md-dark";
@@ -562,6 +672,8 @@
         flexContainer.append(commentScoreContainer);
         flexContainer.append(separator);
         flexContainer.append(commentDateContainer);
+        flexContainer.append(editspan);
+        flexContainer.append(deletespan);  
         if (username) {
           replyLink.append(commentIcon);
           replyLink.append(replyText);
@@ -579,28 +691,92 @@
         $("#commentContainer").append(wholeCommentContainer);
       }
 
-      function deletePost(postID) {
-        var username = "{{uname}}";
-        $("#postContainer").empty();
-        $.post("deletepost", {
-          id: postID,
-          username: username
-        }, (deletedPost) => {
+      $("#savechanges").on("click", function(evt){
+        var postID = $("#editCommentModal").attr("data-postID")
+        var commentID = $("#editCommentModal").attr("data-commentID")
+        var commentContent = $("#inputCommentContent").val();
 
-          if (deletedPost) {
+          updateComment(postID, commentID, commentContent)
+      })
 
-            for (let i = 0; i < deletedPost.post.length; i++) {
-              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber);
-            }
+      $('#deletePostModal').on('click',function(evt){
+          var id = $(this).attr("data-id")
+          deletePost(id)
+        }
+      );
 
+      $('#deleteCommentModal').on('click',function(evt){
+          var postid = $(this).attr("data-postID")
+          var commentid = $(this).attr("data-commentID")
+          
+        console.log("user-profile postID is" + postid)
+        console.log("user-profile commentID is" + commentid)
+          deleteComment(postid, commentid)
+        }
+      );
 
-          } else {
-            addNoPosts()
-          }
+      function updateComment(postID, commentID, commentContent){
+        var username = "{{username}}";
+        $("#commentContainer").empty();
 
+        $.post("post/updateComment",{
+            postID: postID,
+            commentID: commentID,
+            commentContent: commentContent,
+            username: username
+        },(foundUser)=>{
+          console.log(foundUser)
+           if (foundUser) {
+                for (let i = 0; i < foundUser.comment.length; i++) {
+                  addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].commentDate, foundUser.comment[i].commentScore);
+                }
+           } else {
+                addNoComments()
+              }
 
         })
 
+      }
+
+       function deleteComment(postID, commentID) {
+
+          var username = "{{username}}";
+          $("#commentContainer").empty();
+
+          $.post("post/deletecomment", {
+            postID: postID,
+            commentID: commentID,
+            username: username
+          }, (foundUser) => { // returns the users list of post after deleting the said post already
+              console.log(foundUser)
+              if (foundUser) {
+                for (let i = 0; i < foundUser.comment.length; i++) {
+                  addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].commentDate, foundUser.comment[i].commentScore);
+                }
+              } else {
+                addNoComments()
+              }
+          })
+      }
+  
+      function deletePost(postID) {
+          var username = "{{username}}";
+          $("#postContainer").empty();
+
+          $.post("post/deletepost", {
+            id: postID,
+            username: username
+          }, (deletedPost) => { // returns the users list of post after deleting the said post already
+
+            if (deletedPost) {
+              for (let i = 0; i < deletedPost.post.length; i++) {
+                addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber);
+              }
+            } else {
+              addNoPosts()
+            }
+
+          })
       }
 
       $("#deletePostConfirmation").on('show.bs.modal', function (e) {
