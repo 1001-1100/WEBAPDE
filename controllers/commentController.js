@@ -27,7 +27,7 @@ router.post("/create", (req,res) => {
 	}
 	Comment.put(newComment).then((newComment)=>{
 		Post.putComment(newComment).then((newComment)=>{
-			User.putComment(newComment).then((newComment)=>{
+			User.putComment(newComment, req.body.postID).then((newComment)=>{
 				res.send(newComment)
 			})
 		})
