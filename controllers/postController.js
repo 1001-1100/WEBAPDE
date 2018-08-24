@@ -19,6 +19,7 @@ router.post("/edit", (req, res) => {
 		res.redirect("/post/" + postID)
 	}, (error) => {
 
+	})
 	User.edit(req.session.username ,req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
 		res.send("/post/"+req.session.username)
 		//window.location.href("post/"+req.session.username)

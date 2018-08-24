@@ -208,7 +208,7 @@
         }
       })
 
-      $("#loadMorePosts").click(function () {
+      $("#loadMorePosts").click(() => {
         $.post("/post/all/more", { skipNum }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
