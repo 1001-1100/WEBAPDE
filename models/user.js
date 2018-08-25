@@ -37,7 +37,10 @@ var userSchema = mongoose.Schema({
 		commentAuthor: String,
 		commentDateString: String,
 		commentDate: Date,
-		commentScore: Number
+		commentScore: Number,
+		nestedComments: [{
+			_commentID: mongoose.SchemaTypes.ObjectId
+		}]
 	}],
 })
 
@@ -62,8 +65,15 @@ exports.deletePost = function(username, id){
 		}).then((user)=>{
 
 			for(let i = 0; i < user.post.length; i++ ){
-				if(user.post[i]._id == id){
+				if(user.post[i]._id.equals(id)){
 					user.post.splice(i, 1)
+				}
+			}
+
+			for(let i = 0; i < user.comment.length; i++ ){
+				if(user.comment[i]._postID.equals(id)){
+					console.log("fdound")
+					user.comment.splice(i, 1)
 				}
 			}
 
@@ -182,16 +192,52 @@ exports.putPost = function (post) {
 	})
 }
 
-exports.putComment = function (comment, postID) {
+exports.putComment = function (comment, post) {
 	return new Promise(function (resolve, reject) {
-		User.findOne({
+		User.findOneAndUpdate({
 			username: comment.commentAuthor
 		}, {
-			$push: {
-				comment: comment
-			}
+			$push: {comment: comment}
 		}).then((msg) => {
-			resolve(comment)
+			User.findOne({
+				username: post.postAuthor
+			}).then((user) => {
+				for(let i = 0 ; i < user.post.length ; i++){
+					if(user.post[i]._id.equals(post._id)){
+						user.post[i].commentNumber = post.commentNumber
+					}
+				}
+				user.save().then((msg)=>{})
+				resolve(comment)
+			})
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.putNestedComment = function (comment, post, commentID) {
+	return new Promise(function (resolve, reject) {
+		User.findOneAndUpdate({
+			username: comment.commentAuthor
+		}, {
+			$push: {comment: comment}
+		}).then((msg) => {
+			User.findOne({
+				username: post.postAuthor
+			}).then((user) => {
+				for(let i = 0 ; i < user.post.length ; i++){
+					if(user.post[i]._id.equals(post._id)){
+						for(let j = 0 ; j < user.post[i].comment.length ; j++){
+							if(user.post[i].comment[j]._id.equals(commentID)){
+								user.post[i].comment[j].nestedComments.push(comment._id)
+							}
+						}
+					}
+				}
+				user.save().then((msg)=>{})
+				resolve(comment)
+			})
 		}, (err) => {
 			reject(err)
 		})
