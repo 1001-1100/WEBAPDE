@@ -50,8 +50,22 @@
       </div>
       {{/if}}
 
-      <ul id="postContainer" class="list-unstyled">
-      </ul>
+ <ul id="postContainer" class="list-unstyled">
+             
+     {{#if PostsWithKeywords}}
+      {{else}}
+      {{/if}}
+
+
+
+      {{#each PostsWithKeywords}}
+          
+                    
+        <div>Post Title: {{postTitle}}  </div>
+
+      {{/each}}
+  </ul>
+    
 
       <div id="loading-posts">
         <div class="d-flex flex-row mb-3 media post">
@@ -160,7 +174,19 @@
 
   <script>
     $(document).ready(function () {
+    //    document.onload = function(){
+      //    $("#postContainer").empty();
+      //    if (foundPosts.length > 0) {
+      //        for (let i = 0; i < foundPosts.length; i++) {
+      //          addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
+       //         skipNum += 1;
+       //       }
+     //     } else {
+      //          addNoPosts();
+    //      }
+      //  }
 
+    
       var skipNum = 0;
 
       function addNoPosts() {
@@ -250,6 +276,7 @@
           }
         })
       })
+
 
       function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
         var mediaPost = document.createElement("div");

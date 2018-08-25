@@ -10,7 +10,7 @@
 
   <div class="navbar-collapse collapse w-100">
     <form action="/post/search" method="get" class="navbar-nav w-100 justify-content-center my-2 my-lg-0">
-      <input class="form-control mr-sm-2" id ="inputSearch" type="text" placeholder="Search..." aria-label="Search">
+      <input class="form-control mr-sm-2" id ="inputSearch" type="text" name="searchTerm" placeholder="Search..." aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" id="searchbtn" type="submit">
         <i class="material-icons md-18">search</i>
       </button>
@@ -38,32 +38,19 @@
     </div>
   </div>
 </nav>
-
+  {{> scriptResources}}
 <script>
 
   $(document).ready(function(){
 
-      $("#searchbtn").on("click", function(evt){
-               evt.preventDefault();
+    //  $("#searchbtn").on("click", function(evt){
+      //         evt.preventDefault();
 
-        var keyword = $('#inputSearch').val();
-          
-              $.post("post/search/" + keyword,{  
-                keyword : keyword
+      //  var keyword = $('#inputSearch').val();
+       //   console.log("searchbtn clicked")
+        //      window.location.href = "post/search/"+ keyword;
               
-                },(foundPosts)=>{
-                  $("#postContainer").empty();
-                  if(foundPosts){
-                      
-                      for(let i = 0; i < foundPosts.length; i++) {
-                        addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-                      }	
-
-                  }else{	
-                      $("#postContainer").append("No posts available");
-                  }
-              })
-        });
+    //    });
   })
 
 </script>
