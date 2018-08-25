@@ -13,6 +13,7 @@ const multer = require('multer')
 const prettyMs = require('pretty-ms')
 const timestamp = require('time-stamp')
 const marked = require('marked')
+const validator = require('validator')
 const mongoose = require("mongoose")
 const app = express()
 

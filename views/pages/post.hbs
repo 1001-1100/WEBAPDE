@@ -274,8 +274,8 @@
           <i class="material-icons md-18 md-dark down">arrow_downward</i>
         </div>
         <div class="media-body">
-          <h5 class="mt-0 mb-1">{{postTitle}}</h5>
-          {{postDescription}}
+          <h5 class="mt-0 mb-1">{{{postTitle}}}</h5>
+          <div>{{{postDescription}}}</div>
           <div class="mt-2 flex-fill">
             <span class="info">
               <span class="p-2">
@@ -388,6 +388,9 @@
 
   <script>
     $(document).ready(function () {
+
+      console.log("{{postDescription}}")
+
       $(document).ajaxStart(function () {
         $("#loading-comments").css("display", "block");
       });

@@ -7,6 +7,7 @@ const Comment = require("../models/comment.js")
 const prettyMs = require('pretty-ms')
 const timestamp = require('time-stamp')
 const marked = require('marked')
+const validator = require('validator')
 marked.setOptions({sanitize: true})
 const app = express()
 
@@ -68,9 +69,9 @@ router.get("/create", (req,res) =>{
 
 router.post("/create", (req, res) => {
 	var newPost = {
-		postTitle: marked(req.body.postTitle),
+		postTitle: validator.escape(req.body.postTitle),
 		postDescription: marked(req.body.postDescription),
-		postAuthor: marked(req.session.username),
+		postAuthor: req.session.username,
 		postDateString: timestamp('YYYY/MM/DD'),
 		postDate: new Date(),
 		postScore: 0,

@@ -300,12 +300,12 @@
         spanComment.className = "mr-3";
         var commentNumberContainer = document.createElement("a");
         commentNumberContainer.innerHTML = " ";
-        commentNumberContainer.setAttribute("href", "post/" + postID + "#comments");
+        commentNumberContainer.setAttribute("href", "/post/" + postID + "#comments");
         var spanUsername = document.createElement("span");
         spanUsername.className = "p-1";
         var userName = document.createElement("a");
         userName.innerHTML = postAuthor;
-        userName.setAttribute("href", "user/" + postAuthor);
+        userName.setAttribute("href", "/user/" + postAuthor);
 
         voteBox.append(arrowUpward);
         voteBox.append(voteValue);
