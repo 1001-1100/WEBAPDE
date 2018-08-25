@@ -23,7 +23,13 @@ var postSchema = mongoose.Schema({
 		nestedComments: [{
 			_commentID: mongoose.SchemaTypes.ObjectId
 		}]
-	}]
+	}],
+	upvote:[{
+		username: String
+	}],
+	downvote:[{
+		username: String
+	}],
 })
 
 var Post = mongoose.model("postList", postSchema)
@@ -205,22 +211,22 @@ exports.deleteComment = function (postID, commentID) {
 
 
 exports.search = function (searchTerm){
-
-	var findPost = Post.find({postDescription: {$regex:searchTerm ,$options:"$i"}})
-	var findPost2 = Post.find({postTitle: {$regex:searchTerm ,$options:"$i"}})
-	let check = 0;
-	console.log("im in /searchkeyword " + searchTerm);
-	findPost.then((foundPosts)=>{
-		findPost2.then((foundPosts2)=>{
-			if(foundPosts || foundPosts2){
-				console.log(foundPosts)
-				console.log("foundPosts not nullll");
-				res.send(foundPosts.concat(foundPosts2));
-				
-			}else{
-				console.log("foundPosts nullll");
-				res.send(null);
-			}
+	return new Promise(function (resolve, reject) {
+		var findPost = Post.find({postDescription: {$regex:searchTerm ,$options:"$i"}})
+		var findPost2 = Post.find({postTitle: {$regex:searchTerm ,$options:"$i"}})
+		let check = 0;
+		console.log("im in /searchkeyword " + searchTerm);
+		findPost.then((foundPosts)=>{
+			findPost2.then((foundPosts2)=>{
+				if(foundPosts || foundPosts2){
+					console.log("foundPosts not nullll");
+					resolve(foundPosts.concat(foundPosts2));
+					
+				}else{
+					console.log("foundPosts nullll");
+					resolve(null);
+				}
+			})
 		})
 	})
 }
