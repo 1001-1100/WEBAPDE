@@ -18,7 +18,7 @@ router.post("/create", (req,res) => {
 	var dateNow = new Date()
 	var newComment = {
 		_postID: req.body.postID,
-		commentContent: req.body.commentContent,
+		commentContent: marked(req.body.commentContent),
 		commentAuthor: req.session.username,
 		commentDateString: timestamp('YYYY/MM/DD'),
 		commentDate: new Date(),
@@ -52,7 +52,7 @@ router.post("/nested", (req,res) => {
 	var dateNow = new Date()
 	var newComment = {
 		_postID: req.body.postID,
-		commentContent: req.body.commentContent,
+		commentContent: marked(req.body.commentContent),
 		commentAuthor: req.session.username,
 		commentDateString: timestamp('YYYY/MM/DD'),
 		commentDate: new Date(),

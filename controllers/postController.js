@@ -4,8 +4,10 @@ const bodyparser = require("body-parser")
 const User = require("../models/user.js")
 const Post = require("../models/post.js")
 const Comment = require("../models/comment.js")
-const prettyMs = require('pretty-ms');
-const timestamp = require('time-stamp');
+const prettyMs = require('pretty-ms')
+const timestamp = require('time-stamp')
+const marked = require('marked')
+marked.setOptions({sanitize: true})
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -66,9 +68,9 @@ router.get("/create", (req,res) =>{
 
 router.post("/create", (req, res) => {
 	var newPost = {
-		postTitle: req.body.postTitle,
-		postDescription: req.body.postDescription,
-		postAuthor: req.session.username,
+		postTitle: marked(req.body.postTitle),
+		postDescription: marked(req.body.postDescription),
+		postAuthor: marked(req.session.username),
 		postDateString: timestamp('YYYY/MM/DD'),
 		postDate: new Date(),
 		postScore: 0,
