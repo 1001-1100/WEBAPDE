@@ -135,7 +135,7 @@ exports.updateComment = function(username, postID, commentID, commentContent){
 		}).then((user)=>{
 
 			if(user){
-			// deletes in comment array in the post array of user
+			// updates in comment array in the post array of user
 			for(let i = 0; i < user.post.length; i++ ){
 				if(user.post[i]._id == postID){
 					if(user.post[i].comment.length >0){
@@ -148,7 +148,7 @@ exports.updateComment = function(username, postID, commentID, commentContent){
 				}
 			}
 
-			// deletes in comment array of user
+			// updates in comment array of user
 			for(let i = 0; i < user.comment.length; i++){
 				if(user.comment[i]._id == commentID){
 					user.comment[i].commentContent = commentContent
