@@ -42,7 +42,6 @@ router.get("/edit/:id", (req, res) => {
 	})
 })
 
-<<<<<<< HEAD
 
 router.get("/search", (req, res) => {
 	console.log("/search")
@@ -60,9 +59,6 @@ router.get("/search", (req, res) => {
 })
 
 router.get("/create", (req,res) =>{
-=======
-router.get("/create", (req, res) => {
->>>>>>> 82a3676001eb98df38fdff71badcda12b9edb269
 	res.render("./pages/newpost", {
 		uname: req.session.username
 	})
@@ -213,16 +209,6 @@ router.get("/all/score/more", (req,res) =>{
 	})
 })
 
-<<<<<<< HEAD
-// router.get("/search/:searchTerm", (req,res) => {
-// 	Post.search(req.params.searchTerm).then((posts)=>{
-// 		res.send(posts)
-// 	},(error)=>{
-
-// 	})
-// })
-
-=======
 router.get("/search/:searchTerm", (req,res) => {
 	Post.search(req.params.searchTerm).then((posts)=>{
 		var postData = []
@@ -242,7 +228,6 @@ router.get("/search/:searchTerm", (req,res) => {
 
 	})
 })
->>>>>>> 82a3676001eb98df38fdff71badcda12b9edb269
 
 router.post("/comments", (req, res) => {
 	Post.get(req.body.id).then((post) => {
