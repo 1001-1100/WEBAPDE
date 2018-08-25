@@ -275,7 +275,13 @@ router.post("/deletepost", (req, res) =>{
 
 	// Deletes post in the Post collection Db given the postID
 	Post.deletePost(req.body.id).then((result)=>{ 
-	//	res.send(result)
+		//
+	},(error)=>{
+		res.send(null)
+	})
+
+	Comment.deleteCommentFromPost(req.body.id).then((result)=>{
+		//
 	},(error)=>{
 		res.send(null)
 	})
@@ -305,10 +311,22 @@ router.post("/deletecomment", (req, res) =>{
 	 })
 
 	// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
-	 User.deleteComment(req.body.username, req.body.postID, req.body.commentID).then((result)=>{ 
-	 	res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+	 User.deleteComment(req.body.username, req.body.postID, req.body.commentID).then((user)=>{ 
+		 var commentData = []
+		 for(let i = 0 ; i < user.comment.length ; i++){
+			commentData.push({
+				_postID: user.comment[i]._postID,
+				commentContent: user.comment[i].commentContent,
+				commentAuthor: user.comment[i].commentAuthor,
+				commentDateString: user.comment[i].commentDateString,
+				commentDate: user.comment[i].commentDate,
+				commentScore: user.comment[i].commentScore,
+				nestedComments: user.comment[i].nestedComments,
+				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true})
+			})
+		 }
 	 },(error)=>{
-		res.send(null)
+		res.send(commentData)
 	 })
 })
 

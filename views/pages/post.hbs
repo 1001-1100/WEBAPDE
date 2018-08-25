@@ -18,7 +18,7 @@
     var username = "{{uname}}";
     var newComments = 0;
 
-    function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
+    function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
       var wholeCommentContainer = document.createElement("div");
       wholeCommentContainer.className = "comment-container";
       var mainCommentContainer = document.createElement("div");
@@ -61,25 +61,29 @@
       var infoSpan = document.createElement("span");
       infoSpan.className = "info";
       var replyLink = document.createElement("a");
-      replyLink.setAttribute("href", "#");
-      replyLink.setAttribute("data-id", commentID);
+      replyLink.setAttribute("href", "javascript:void(0)");
       replyLink.addEventListener("click", function () {
-        var id = $(this).attr("data-id")
-        console.log("Reply clicked, id=" + id);
 
         var addCommentContainer = document.createElement("div")
 
         var txtComment = document.createElement("textarea")
-        txtComment.setAttribute("oninput", "checkCommentBox();")
+        //txtComment.setAttribute("oninput", "checkCommentBox();")
         txtComment.className = "form-control mt-2"
+        txtComment.id = commentID
         txtComment.type = "text"
         txtComment.placeholder = "Type a comment"
 
         var btnSubmit = document.createElement("button")
-        btnSubmit.disabled = true
-        btnSubmit.setAttribute("onclick", "createNewComment()")
+        //btnSubmit.disabled = true
+        //btnSubmit.setAttribute("onclick", "createNewNestedComment()")
         btnSubmit.className = "btn btn-primary mt-2"
         btnSubmit.innerHTML = "Submit"
+        btnSubmit.addEventListener("click", function () {
+          $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
+            var commentContainer = "div#"+commentID
+            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+          })
+        })
 
         var txtCommentContainer = document.createElement("div")
         txtCommentContainer.className = "container-fluid"
@@ -126,7 +130,7 @@
       $("#allComments").append(wholeCommentContainer);
     }
 
-    function addNestedComment(commentContainer, commentID, commentContent, commentAuthor, commentDate, commentScore) {
+    function addNestedComment(commentContainer, commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
       var mainCommentContainer = document.createElement("div");
       mainCommentContainer.className = "media comment";
       mainCommentContainer.setAttribute("style", "margin-top: 20px");
@@ -238,7 +242,7 @@
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-      addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+      addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
     })
     $("#submitButton").attr("disabled", "disabled");
 		}
@@ -375,7 +379,8 @@
 
     </div>
   </main>
-  {{> footer}} {{> scriptResources}}
+  {{> scriptResources}}
+  {{> footer}} 
 
   <script>
     $(document).ready(function () {
@@ -398,7 +403,7 @@
       $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
         if (comments.length > 0) {
           for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
+            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
           }
         } else {
           var noComments = document.createElement("div");
