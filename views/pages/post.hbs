@@ -17,7 +17,7 @@
 
     var username = "{{uname}}";
     var newComments = 0;
-    
+
     function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
       var wholeCommentContainer = document.createElement("div");
       wholeCommentContainer.className = "comment-container";
@@ -238,9 +238,9 @@
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-        addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
-      })
-      $("#submitButton").attr("disabled", "disabled");
+      addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+    })
+    $("#submitButton").attr("disabled", "disabled");
 		}
 
     function checkCommentBox() {
@@ -282,141 +282,100 @@
         </div>
       </div>
 
-      {{#if uname}}
+
       <div class="postcomment">
+        {{#if uname}}
         <h5 class="mt-0 mb-1">Replying as
           <a href="/user/{{uname}}">{{uname}}</a>
         </h5>
-        <div class="container-fluid">
+        <div class="container-fluid mb-2 mt-3">
           <textarea oninput="checkCommentBox();" id="commentContent" class="form-control mt-3" type="text" placeholder="Type a comment"></textarea>
+          <button disabled id="submitButton" onclick="createNewComment();" class="btn btn-primary mt-2">Submit</button>
         </div>
-        <button disabled id="submitButton" onclick="createNewComment();" class="btn btn-primary mt-2 ml-3">Submit</button>
-      </div>
-      {{else}}
-      <div class="postcomment">
+        {{else}}
         <h5 class="mt-0 mb-3">Reply to post</h5>
-        <div class="container-fluid">
+        <div class="container-fluid mb-2 mt-3">
           <form>
             <fieldset disabled>
               <input type="text" class="form-control mb-3" placeholder="What are your thoughts? Login or Register">
             </fieldset>
           </form>
-
         </div>
-      </div>
-      {{/if}}
+        {{/if}}
+        <a name="comments"></a>
 
-      <a name="comments"></a>
+        <div id="allComments"></div>
 
-      <div id="allComments"></div>
+        <div id="loading-comments">
+          <div class="comment-container">
+            <div class="ml-3 media comment">
+              <div class="mr-3 commentactions">
+                <i class="material-icons md-18 md-dark">arrow_upward</i>
+                <i class="material-icons md-18 md-dark">arrow_downward</i>
+              </div>
+              <div class="d-flex media-body">
+                <div class="text">
+                  <div>
+                    <span class="text-footer3"></span>
+                    <span class="text-footer1"></span>
+                  </div>
+                  <div class="text-line"></div>
+                  <div class="text-line"></div>
 
-      <div id="loading-comments">
-        <div class="comment-container">
-          <div class="ml-3 media comment">
-            <div class="mr-3 commentactions">
-              <i class="material-icons md-18 md-dark">arrow_upward</i>
-              <i class="material-icons md-18 md-dark">arrow_downward</i>
-            </div>
-            <div class="d-flex media-body">
-              <div class="text">
-                <div>
-                  <span class="text-footer3"></span>
-                  <span class="text-footer1"></span>
                 </div>
-                <div class="text-line"></div>
-                <div class="text-line"></div>
-
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="comment-container">
-          <div class="ml-3 media comment">
-            <div class="mr-3 commentactions">
-              <i class="material-icons md-18 md-dark">arrow_upward</i>
-              <i class="material-icons md-18 md-dark">arrow_downward</i>
-            </div>
-            <div class="d-flex media-body">
-              <div class="text">
-                <div>
-                  <span class="text-footer3"></span>
-                  <span class="text-footer1"></span>
+          <div class="comment-container">
+            <div class="ml-3 media comment">
+              <div class="mr-3 commentactions">
+                <i class="material-icons md-18 md-dark">arrow_upward</i>
+                <i class="material-icons md-18 md-dark">arrow_downward</i>
+              </div>
+              <div class="d-flex media-body">
+                <div class="text">
+                  <div>
+                    <span class="text-footer3"></span>
+                    <span class="text-footer1"></span>
+                  </div>
+                  <div class="text-line"></div>
+                  <div class="text-line"></div>
+
                 </div>
-                <div class="text-line"></div>
-                <div class="text-line"></div>
-
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="comment-container">
-          <div class="ml-3 media comment">
-            <div class="mr-3 commentactions">
-              <i class="material-icons md-18 md-dark">arrow_upward</i>
-              <i class="material-icons md-18 md-dark">arrow_downward</i>
-            </div>
-            <div class="d-flex media-body">
-              <div class="text">
-                <div>
-                  <span class="text-footer3"></span>
-                  <span class="text-footer1"></span>
+          <div class="comment-container">
+            <div class="ml-3 media comment">
+              <div class="mr-3 commentactions">
+                <i class="material-icons md-18 md-dark">arrow_upward</i>
+                <i class="material-icons md-18 md-dark">arrow_downward</i>
+              </div>
+              <div class="d-flex media-body">
+                <div class="text">
+                  <div>
+                    <span class="text-footer3"></span>
+                    <span class="text-footer1"></span>
+                  </div>
+                  <div class="text-line"></div>
+                  <div class="text-line"></div>
+
                 </div>
-                <div class="text-line"></div>
-                <div class="text-line"></div>
-
               </div>
             </div>
           </div>
+
+
         </div>
-
-        <div class="comment-container">
-          <div class="ml-3 media comment">
-            <div class="mr-3 commentactions">
-              <i class="material-icons md-18 md-dark">arrow_upward</i>
-              <i class="material-icons md-18 md-dark">arrow_downward</i>
-            </div>
-            <div class="d-flex media-body">
-              <div class="text">
-                <div>
-                  <span class="text-footer3"></span>
-                  <span class="text-footer1"></span>
-                </div>
-                <div class="text-line"></div>
-                <div class="text-line"></div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="comment-container">
-          <div class="ml-3 media comment">
-            <div class="mr-3 commentactions">
-              <i class="material-icons md-18 md-dark">arrow_upward</i>
-              <i class="material-icons md-18 md-dark">arrow_downward</i>
-            </div>
-            <div class="d-flex media-body">
-              <div class="text">
-                <div>
-                  <span class="text-footer3"></span>
-                  <span class="text-footer1"></span>
-                </div>
-                <div class="text-line"></div>
-                <div class="text-line"></div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-
 
       </div>
+
+
     </div>
   </main>
-
-  {{> scriptResources}}
+  {{> footer}} {{> scriptResources}}
 
   <script>
     $(document).ready(function () {
@@ -436,10 +395,10 @@
               }
             });
       */
-      $.post("/post/comments", {id: "{{postID}}"}, (comments) => {
+      $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
         if (comments.length > 0) {
           for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].commentDate, comments[i].commentScore);
+            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
           }
         } else {
           var noComments = document.createElement("div");
@@ -468,14 +427,12 @@
           $("#allComments").append(noComments);
         }
       })
-      
+
     });
 
 
-  </script>
+  </script> {{> globalScripts}}
 
-  {{> globalScripts}}
-  
 </body>
 
 </html>

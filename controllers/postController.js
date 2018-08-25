@@ -9,43 +9,40 @@ const timestamp = require('time-stamp');
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
-	extended : true
+	extended: true
 })
 
 router.use(urlencoder)
 
-router.post("/edit", (req,res) =>{
-	
-	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-	//	res.render("post/"+req.body.postID)
-	},(error)=>{
-		console.log(error);
-	})
+router.post("/edit", (req, res) => {
+	Post.edit(req.body.postID, req.body.postTitle, req.body.postContent).then((postID) => {
+		res.redirect("/post/" + postID)
+	}, (error) => {
 
+	})
 	User.edit(req.session.username ,req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-		res.send("post/"+req.session.username)
+		res.send("/post/"+req.session.username)
 		//window.location.href("post/"+req.session.username)
 	},(error)=>{
 		console.log(error);
 	})
 })
 
-router.get("/edit/:id", urlencoder, (req,res) =>{
-
-	
-	Post.get(req.params.id).then((post)=>{
-		res.render("./pages/editpost", {	
+router.get("/edit/:id", (req, res) => {
+	Post.get(req.params.id).then((post) => {
+		res.render("./pages/editpost", {
 			uname: req.session.username,
 			postID: post._id,
 			postTitle: post.postTitle,
 			postContent: post.postDescription
 		})
-	},(error)=>{
-		console.log(error);
+    
+	}, (error) => {
 
 	})
 })
 
+<<<<<<< HEAD
 
 router.get("/search", (req, res) => {
 	console.log("/search")
@@ -63,12 +60,15 @@ router.get("/search", (req, res) => {
 })
 
 router.get("/create", (req,res) =>{
+=======
+router.get("/create", (req, res) => {
+>>>>>>> 82a3676001eb98df38fdff71badcda12b9edb269
 	res.render("./pages/newpost", {
 		uname: req.session.username
 	})
 })
 
-router.post("/create", (req,res) =>{
+router.post("/create", (req, res) => {
 	var newPost = {
 		postTitle: req.body.postTitle,
 		postDescription: req.body.postDescription,
@@ -79,20 +79,35 @@ router.post("/create", (req,res) =>{
 		commentNumber: 0,
 		comment: []
 	}
-	Post.put(newPost).then((newPost)=>{
-		User.putPost(newPost).then((newPost)=>{
-			res.redirect("/post/"+newPost._id)
-		},(error)=>{
+
+	console.log("NEW POST: " + newPost)
+
+	Post.put(newPost).then((newPost) => {
+		User.putPost(newPost).then((newPost) => {
+			res.redirect("/post/" + newPost._id)
+		}, (error) => {
 			res.redirect("/post/create")
 		})
-	},(error)=>{
+	}, (error) => {
 		res.redirect("/post/create")
 	})
 })
 
 router.get("/all", (req,res) =>{
 	Post.getAll().then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -100,7 +115,19 @@ router.get("/all", (req,res) =>{
 
 router.get("/all/date", (req,res) =>{
 	Post.getSortedDate().then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -108,7 +135,19 @@ router.get("/all/date", (req,res) =>{
 
 router.get("/all/score", (req,res) =>{
 	Post.getSortedScore().then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -116,7 +155,19 @@ router.get("/all/score", (req,res) =>{
 
 router.post("/all/more", (req,res) =>{
 	Post.getAllMore(parseInt(req.body.skipNum)).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -124,7 +175,19 @@ router.post("/all/more", (req,res) =>{
 
 router.get("/all/date/more", (req,res) =>{
 	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -132,12 +195,25 @@ router.get("/all/date/more", (req,res) =>{
 
 router.get("/all/score/more", (req,res) =>{
 	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts)=>{
-		res.send(posts)
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
 })
 
+<<<<<<< HEAD
 // router.get("/search/:searchTerm", (req,res) => {
 // 	Post.search(req.params.searchTerm).then((posts)=>{
 // 		res.send(posts)
@@ -146,24 +222,55 @@ router.get("/all/score/more", (req,res) =>{
 // 	})
 // })
 
-
-router.post("/comments", (req,res) => {
-	Post.get(req.body.id).then((post)=>{
-		res.send(post.comment)
+=======
+router.get("/search/:searchTerm", (req,res) => {
+	Post.search(req.params.searchTerm).then((posts)=>{
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
 })
+>>>>>>> 82a3676001eb98df38fdff71badcda12b9edb269
 
-router.get("/delete/:id", (req,res) => {
+router.post("/comments", (req, res) => {
+	Post.get(req.body.id).then((post) => {
+		var commentData = []
+		for(let i = 0 ; i < post.comment.length ; i++){
+			commentData.push({
+				_id: post.comment[i]._id,
+				_postID: post.comment[i]._postID,
+				commentContent: post.comment[i].commentContent,
+				commentAuthor: post.comment[i].commentAuthor,
+				commentScore: post.comment[i].commentScore,
+				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(commentData)
+	}, (error) => {
 
-	Post.delete(req.params.id).then((result)=>{
+	})
+})
+
+router.get("/delete/:id", (req, res) => {
+	Post.delete(req.params.id).then((result) => {
 		res.send(result)
-	},(error)=>{
+	}, (error) => {
 		res.send(null)
 	})
 })
-
+  
 router.post("/deletepost", (req, res) =>{
 
 	// Deletes post in the Post collection Db given the postID
@@ -241,10 +348,10 @@ router.get("/:id", (req,res) => {
 			postDescription: post.postDescription,
 			postAuthor: post.postAuthor,
 			postScore: post.postScore,
-			postDate: prettyMs(new Date() - post.postDate),
+			postDate: prettyMs(new Date() - post.postDate, {compact: true, verbose: true}),
 			commentNumber: post.commentNumber
 		})
-	},(error)=>{
+	}, (error) => {
 
 	})
 })

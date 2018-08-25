@@ -2,6 +2,8 @@ const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
 const User = require("../models/user.js")
+const prettyMs = require('pretty-ms');
+const timestamp = require('time-stamp');
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -95,7 +97,19 @@ router.post("/register", upload.single('avatar'), (req,res) => {
 
 router.post("/posts", (req,res) => {
 	User.get(req.body.username).then((user)=>{
-		res.send(user.post)
+		var postData = []
+		for(let i = 0 ; i < user.post.length ; i++){
+			postData.push({
+				_id: user.post[i]._id,
+				postTitle: user.post[i].postTitle,
+				postDescription: user.post[i].postDescription,
+				postAuthor: user.post[i].postAuthor,
+				postScore: user.post[i].postScore,
+				commentNumber: user.post[i].commentNumber,
+				relativeTime: prettyMs(new Date() - user.post[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	},(error)=>{
 
 	})
@@ -105,7 +119,18 @@ router.post("/posts", (req,res) => {
 
 router.post("/comments", (req,res) => {
 	User.get(req.body.username).then((user)=>{
-		res.send(user)
+		var commentData = []
+		for(let i = 0 ; i < user.comment.length ; i++){
+			commentData.push({
+				_id: user.comment[i]._id,
+				_postID: user.comment[i]._postID,
+				commentContent: user.comment[i].commentContent,
+				commentAuthor: user.comment[i].commentAuthor,
+				commentScore: user.comment[i].commentScore,
+				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(commentData)
 	},(error)=>{
 
 	})

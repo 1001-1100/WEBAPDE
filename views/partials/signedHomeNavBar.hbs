@@ -10,52 +10,30 @@
 
   <div class="navbar-collapse collapse w-100">
     <form action="/post/search" method="get" class="navbar-nav w-100 justify-content-center my-2 my-lg-0">
-<<<<<<< HEAD
-      <input class="form-control mr-sm-2" id ="inputSearch" type="text" name="searchTerm" placeholder="Search..." aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" id="searchbtn" type="submit">
-=======
       <input class="form-control mr-sm-2" id="inputSearch" type="text" placeholder="Search posts..." aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" id="searchbtn" type="submit" onMouseOver="this.style.cursor='pointer'">
->>>>>>> 82a3676001eb98df38fdff71badcda12b9edb269
         <i class="material-icons md-18">search</i>
       </button>
     </form>
 
     <div class="nav navbar-nav ml-auto w-100 justify-content-end">
-      <a href="post/create" class="btn btn-success" onMouseOver="this.style.cursor='pointer'">
-        <i class="material-icons md-18">add</i> Create post</a>
       <div class="dropdown mr-2 ml-2">
         <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
           {{!-- <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}"> --}} {{uname}}
         </button>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu2">
-          <a href="/user" style="color: #000;" class="dropdown-item">
-            {{!-- <button class="dropdown-item" type="button"> --}}View Profile {{!-- </button> --}}
+          <a href="/user" style="color: #000;">
+            <button class="dropdown-item" type="button">View Profile
+            </button>
           </a>
-          {{!-- <button class="dropdown-item" type="button"> --}}
+          <button class="dropdown-item" type="button">
             <form action="logout" class="form-inline my-2 my-lg-0" method="post">
-              <button type="submit" class="dropdown-item" onMouseOver="this.style.cursor='pointer'">Logout</button>
+              <button type="submit" class="dropdown-item">Logout</button>
             </form>
-            {{!-- </button> --}}
+          </button>
         </div>
       </div>
     </div>
   </div>
 </nav>
-  {{> scriptResources}}
-<script>
-
-  $(document).ready(function(){
-
-    //  $("#searchbtn").on("click", function(evt){
-      //         evt.preventDefault();
-
-      //  var keyword = $('#inputSearch').val();
-       //   console.log("searchbtn clicked")
-        //      window.location.href = "post/search/"+ keyword;
-              
-    //    });
-  })
-
-</script>
