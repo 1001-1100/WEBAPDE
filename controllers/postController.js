@@ -223,6 +223,7 @@ router.post("/comments", (req, res) => {
 				commentContent: post.comment[i].commentContent,
 				commentAuthor: post.comment[i].commentAuthor,
 				commentScore: post.comment[i].commentScore,
+				nestedComments: post.comment[i].nestedComments,
 				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true})
 			})
 		}

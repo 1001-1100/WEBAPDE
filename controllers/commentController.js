@@ -84,7 +84,16 @@ router.post("/nested", (req,res) => {
 
 router.get("/:id", (req,res) => {
 	Comment.get(req.params.id).then((comment)=>{
-		res.send(comment)
+		commentData = {
+			_id: comment._id,
+			_postID: comment._postID,
+			commentContent: comment.commentContent,
+			commentAuthor: comment.commentAuthor,
+			commentScore: comment.commentScore,
+			nestedComments: comment.nestedComments,
+			relativeTime: prettyMs(new Date() - comment.commentDate, {compact: true, verbose: true})
+		}
+		res.send(commentData)
 	},(error)=>{
 		res.send(null)
 	})	

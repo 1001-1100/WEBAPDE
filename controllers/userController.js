@@ -137,7 +137,9 @@ router.post("/comments", (req,res) => {
 })
 
 router.get("/avatar/:filename", (req,res) => {
-	fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
+	try{
+		fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
+	}catch(e){}
 })
 
 router.get("/:username", (req,res) => {
