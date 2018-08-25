@@ -49,12 +49,13 @@ router.get("/edit/:id", (req, res) => {
 router.get("/search", (req, res) => {
 	console.log("/search")
 
-	Post.search(req.query.searchTerm).then((PostsWithKeywords) => {
+	Post.search(req.query.searchTerm).then((posts) => {
 		
 	//	res.send(PostsWithKeywords)
-		console.log("Found posts with keywords are: " + PostsWithKeywords)
-		res.render("./pages/index", {
-			PostsWithKeywords
+		console.log("Found posts with keywords are: " + posts)
+		res.render("./pages/searched", {
+			posts, 
+			searchTerm: req.query.searchTerm
 		})
 	}, (error)=>{
 		console.log(error)
