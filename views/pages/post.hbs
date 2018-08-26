@@ -32,10 +32,7 @@
       downArrow.className = "material-icons md-18 md-dark down";
       downArrow.innerHTML = "arrow_downward";
       var commentBodyContainer = document.createElement("div");
-      if (username)
-        commentBodyContainer.className = "media-body";
-      else
-        commentBodyContainer.className = "media-body mb-3";
+      commentBodyContainer.className = "media-body";
       commentBodyContainer.id = commentID;
       var flexContainer = document.createElement("div");
       flexContainer.className = "d-flex";
@@ -79,7 +76,7 @@
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
-            var commentContainer = "div#"+commentID
+            var commentContainer = "div#" + commentID
             addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
           })
         })
@@ -142,10 +139,7 @@
       downArrow.className = "material-icons md-18 md-dark down";
       downArrow.innerHTML = "arrow_downward";
       var commentBodyContainer = document.createElement("div");
-      if (username)
-        commentBodyContainer.className = "media-body";
-      else
-        commentBodyContainer.className = "media-body mb-3";
+      commentBodyContainer.className = "media-body";
       commentBodyContainer.id = commentID;
       var flexContainer = document.createElement("div");
       flexContainer.className = "d-flex";
@@ -191,7 +185,7 @@
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
-            var commentContainer = "div#"+commentID
+            var commentContainer = "div#" + commentID
             addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
           })
         })
@@ -246,9 +240,9 @@
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-        addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
-      })
-      $("#submitButton").attr("disabled", "disabled");
+      addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+    })
+    $("#submitButton").attr("disabled", "disabled");
 		}
 
     function checkCommentBox() {
@@ -293,7 +287,7 @@
 
       <div class="postcomment">
         {{#if uname}}
-        <h5 class="mt-0 mb-1">Replying as
+        <h5 class="mt-0 mb-1 ml-2">Replying as
           <a href="/user/{{uname}}">{{uname}}</a>
         </h5>
         <div class="container-fluid mb-2 mt-3">
@@ -301,8 +295,8 @@
           <button disabled id="submitButton" onclick="createNewComment();" class="btn btn-primary mt-2">Submit</button>
         </div>
         {{else}}
-        <h5 class="mt-0 mb-3">Reply to post</h5>
-        <div class="container-fluid mb-2 mt-3">
+        <h5 class="mt-0 mb-1 ml-2">Reply to post</h5>
+        <div class="container-fluid mb-2 mt-2">
           <form>
             <fieldset disabled>
               <input type="text" class="form-control mb-3" placeholder="What are your thoughts? Login or Register">
@@ -383,8 +377,7 @@
 
     </div>
   </main>
-  {{> scriptResources}}
-  {{> footer}} 
+  {{> scriptResources}} {{> footer}}
 
   <script>
     $(document).ready(function () {
@@ -405,11 +398,11 @@
               }
             });
       */
-      function traverseNestedComments(comment){
-        if(comment.nestedComments){
-          for(let i = 0 ; i < comment.nestedComments.length ; i++){
-            $.get("/comment/"+comment.nestedComments[i], {}, (newComment) => {
-              var commentContainer = "div#"+comment._id
+      function traverseNestedComments(comment) {
+        if (comment.nestedComments) {
+          for (let i = 0; i < comment.nestedComments.length; i++) {
+            $.get("/comment/" + comment.nestedComments[i], {}, (newComment) => {
+              var commentContainer = "div#" + comment._id
               addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
               traverseNestedComments(newComment)
             })
