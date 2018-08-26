@@ -322,9 +322,7 @@
         } else {
           addNoComments()
         }
-      })
-
-     
+      })  
 
       /////////////////////////////////////////////////////////////////
 
@@ -348,28 +346,6 @@
         noPosts.append(content);
         noPosts.id = "noPost";
         $("#postContainer").append(noPosts);
-      }
-      
-      function addNoComments() {
-        var noPosts = document.createElement("div");
-        noPosts.className = "comment-container";
-        var icon = document.createElement("i");
-        icon.className = "material-icons md-orange md-92 flex-fill";
-        icon.innerHTML = "sentiment_very_dissatisfied";
-        var content = document.createElement("div");
-        content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
-        var text = document.createElement("h2");
-        text.className = "flex-fill text-center";
-        text.innerHTML = "No  comments yet...";
-        var subtext = document.createElement("h6");
-        subtext.className = "mt-1 flex-fill text-center subheading";
-        subtext.innerHTML = "Looks like this user has no comments yet.";
-        content.append(icon);
-        content.append(text);
-        content.append(subtext);
-        noPosts.append(content);
-        noPosts.id = "noPost";
-        $("#commentContainer").append(noPosts);
       }
 
       function addNoComments() {
@@ -444,31 +420,6 @@
         userName.innerHTML = postAuthor;
         userName.setAttribute("href", "/user/" + postAuthor);
         
-        var icondelete = document.createElement("i");
-        icondelete.innerHTML = "delete";
-        icondelete.className = "material-icons md-16 md-dark icons material-actions";
-
-        var iconedit = document.createElement("i");
-        iconedit.innerHTML = "edit";
-        iconedit.className = "material-icons md-16 md-dark icons material-actions";
-
-        var deletespan = document.createElement("span");
-        deletespan.className = "deleteSpan";
-        deletespan.setAttribute("data-id", postIDs);
-        deletespan.setAttribute("data-toggle", "modal");
-        deletespan.setAttribute("data-target", "#deletePostConfirmation");
-        deletespan.addEventListener("click", function () {
-          //  var id = $(this).attr("data-id")
-          //   console.log("ID of post is " + id);
-         // deletePost(postIDs);
-         document.getElementById("deletePostModal").setAttribute("data-id", postIDs)
-        })
-     
-        
-        var editspan = document.createElement("span");
-        editspan.addEventListener("click", function () {
-            window.location.href = "post/edit/" + postIDs;
-        })
         //TODO
         //editspan.setAttribute("data-toggle", "modal");
         //editspan.setAttribute("data-target", "#editPostModal");
@@ -513,16 +464,15 @@
             deletespan.setAttribute("data-id", postIDs);
             deletespan.setAttribute("data-toggle", "modal");
             deletespan.setAttribute("data-target", "#deletePostConfirmation");
+              deletespan.addEventListener("click", function () {
+                document.getElementById("deletePostModal").setAttribute("data-id", postIDs)
+              })
 
             var editspan = document.createElement("span");
-            editspan.addEventListener("click", function () {
-              window.location.href = "/post/editpost/" + postIDs;
-            })
+              editspan.addEventListener("click", function () {
+                window.location.href = "/post/edit/" + postIDs;
+              })
 
-            //TODO
-            //editspan.setAttribute("data-toggle", "modal");
-            //editspan.setAttribute("data-target", "#editPostModal");
-            //  var edita = document.createElement("a");
             editspan.append(iconedit);
             deletespan.append(icondelete);
             flexRow.append(editspan);
@@ -624,38 +574,30 @@
         deletespan.setAttribute("data-postID", postID);
         deletespan.setAttribute("data-toggle", "modal");
         deletespan.setAttribute("data-target", "#deleteCommentConfirmation");
-        deletespan.addEventListener("click", function () {
-          //  var id = $(this).attr("data-id")
-          //   console.log("ID of post is " + id);
-         // deletePost(postIDs);
-         document.getElementById("deleteCommentModal").setAttribute("data-postID", postID)
-         document.getElementById("deleteCommentModal").setAttribute("data-commentID", commentID)
-       
-        })
+          deletespan.addEventListener("click", function () {
+  
+          document.getElementById("deleteCommentModal").setAttribute("data-postID", postID)
+          document.getElementById("deleteCommentModal").setAttribute("data-commentID", commentID)
+        
+          })
 
         var editspan = document.createElement("span");
-        editspan.addEventListener("click", function () {
-          $("#inputCommentContent").val(commentContent)
-        })
-
-       // editspan.addEventListener("click", function () {
-       //     window.location.href = "/post/editpost/"+postID;
-       // })
+          editspan.addEventListener("click", function () {
+            $("#inputCommentContent").val(commentContent)
+          })
 
         //TODO
         editspan.setAttribute("data-toggle", "modal");
         editspan.setAttribute("data-target", "#editCommentModal");
-        editspan.addEventListener("click", function(){
+          editspan.addEventListener("click", function(){
 
-          document.getElementById("editCommentModal").setAttribute("data-commentID", commentID)
-          document.getElementById("editCommentModal").setAttribute("data-postID", postID)
-        })
+            document.getElementById("editCommentModal").setAttribute("data-commentID", commentID)
+            document.getElementById("editCommentModal").setAttribute("data-postID", postID)
+          })
 
 
         editspan.append(iconedit);
         deletespan.append(icondelete);
-
-///
 
         var commentIcon = document.createElement("i");
         commentIcon.className = "material-icons md-16 md-dark";
