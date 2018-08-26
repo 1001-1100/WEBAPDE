@@ -207,13 +207,31 @@ exports.deleteComment = function (postID, commentID) {
 	})
 }
 
-
 exports.search = function (searchTerm){
 	return new Promise(function (resolve, reject) {
 		var findPost = Post.find({postDescription: {$regex:searchTerm ,$options:"$i"}})
 		var findPost2 = Post.find({postTitle: {$regex:searchTerm ,$options:"$i"}})
 		let check = 0;
-		console.log("im in /searchkeyword " + searchTerm);
+		findPost.then((foundPosts)=>{
+			findPost2.then((foundPosts2)=>{
+				if(foundPosts || foundPosts2){
+					console.log("foundPosts not nullll");
+					resolve(foundPosts.concat(foundPosts2));
+					
+				}else{
+					console.log("foundPosts nullll");
+					resolve(null);
+				}
+			})
+		})
+	})
+}
+
+exports.searchMore = function (searchTerm, skipNum){
+	return new Promise(function (resolve, reject) {
+		var findPost = Post.find({postDescription: {$regex:searchTerm ,$options:"$i"}}).skip(skipNum).limit(5)
+		var findPost2 = Post.find({postTitle: {$regex:searchTerm ,$options:"$i"}}).skip(skipNum).limit(5)
+		let check = 0;
 		findPost.then((foundPosts)=>{
 			findPost2.then((foundPosts2)=>{
 				if(foundPosts || foundPosts2){

@@ -125,12 +125,7 @@
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
-<<<<<<< HEAD
             loadComments();
-=======
-            var commentContainer = "div#" + commentID
-            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
->>>>>>> ebf0f801fadf1cc31cb639f415eccdfdce506744
           })
         })
 
@@ -238,12 +233,7 @@
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
-<<<<<<< HEAD
             loadComments();
-=======
-            var commentContainer = "div#" + commentID
-            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
->>>>>>> ebf0f801fadf1cc31cb639f415eccdfdce506744
           })
         })
 
@@ -299,14 +289,8 @@
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-<<<<<<< HEAD
         $("#submitButton").attr("disabled", "disabled");
       })
-=======
-      addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
-    })
-    $("#submitButton").attr("disabled", "disabled");
->>>>>>> ebf0f801fadf1cc31cb639f415eccdfdce506744
 		}
 
     function checkCommentBox() {
@@ -462,40 +446,6 @@
               }
             });
       */
-<<<<<<< HEAD
-=======
-      function traverseNestedComments(comment) {
-        if (comment.nestedComments) {
-          for (let i = 0; i < comment.nestedComments.length; i++) {
-            $.get("/comment/" + comment.nestedComments[i], {}, (newComment) => {
-              var commentContainer = "div#" + comment._id
-              addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
-              traverseNestedComments(newComment)
-            })
-          }
-        }
-      }
-
-      $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
-        if (comments.length > 0) {
-          for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
-            traverseNestedComments(comments[i])
-          }
-        } else {
-          var noComments = document.createElement("div");
-          noComments.className = "comment-container";
-          var icon = document.createElement("i");
-          icon.className = "material-icons md-orange md-92 flex-fill";
-          icon.innerHTML = "sentiment_very_dissatisfied";
-          var content = document.createElement("div");
-          content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
-          var text = document.createElement("h2");
-          text.className = "flex-fill text-center";
-          text.innerHTML = "No comments yet...";
-          var subtext = document.createElement("h6");
-          subtext.className = "mt-1 flex-fill text-center subheading";
->>>>>>> ebf0f801fadf1cc31cb639f415eccdfdce506744
 
       loadComments();
 
