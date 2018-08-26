@@ -341,18 +341,16 @@
         var username = "{{uname}}";
         for(let i =0; i <upvote.length; i++){
           if(upvote[i] == username){ // make arrowup orange
-            //arrowUpward.css = {color: "#F36E21"}
-            arrowUpward.className = "material-icons md-18 md-dark up upvoted"
-            console.log("username matched")
-            changeArrowUpColor();
+           
+            changeArrowUpColor(postID);
           }
         }
 
         $("#postContainer").append(mediaPost);
       }
-             function changeArrowUpColor(){
-         //       $('#arrow_upward').css({  color: "#F36E21" });
-            //     $('#upwardSpan').css({  color: "#F36E21" });
+             function changeArrowUpColor(postID){
+                $('#arrow_upward'+postID).css({  color: "#F36E21" });
+           
             }
 
        function upvotePost(postID) {
@@ -368,7 +366,7 @@
                 }, (foundUser) => {
                   if (foundUser) {
                       
-                     $('#arrow_downward' +postID).css({   color: "#3B7B3A8" });
+                     $('#arrow_downward' +postID).css({   color: "lightgray" });
                       $('#arrow_upward'+postID).css({  color: "#F36E21" });
                       document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
                   }
@@ -392,8 +390,8 @@
                       username: username
                     }, (foundUser) => {
                       if (foundUser) {
-                      $('#arrow_upward').css({   color: "#3B7B3A8" });
-                        $('#arrow_downward').css({   color: "#3C8AFF" });
+                      $('#arrow_upward'+ postID).css({   color: "lightgray" });
+                        $('#arrow_downward' + postID).css({   color: "#3C8AFF" });
                         document.getElementById("votes"+postID).innerHTML= foundUser.postScore;
                         //set to blue
                       }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
