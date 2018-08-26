@@ -18,7 +18,9 @@ router.get("/", (req, res) => {
 })
 
 router.get("/about", (req, res) => {
-    res.render("./pages/about.hbs")
+    res.render("./pages/about.hbs", {
+        uname: req.session.username,
+    })
 })
 
 router.get("/signin", (req, res) => {
