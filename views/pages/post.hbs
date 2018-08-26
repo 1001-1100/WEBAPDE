@@ -18,6 +18,55 @@
     var username = "{{uname}}";
     var newComments = 0;
 
+    function traverseNestedComments(comment){
+      if(comment.nestedComments){
+        for(let i = 0 ; i < comment.nestedComments.length ; i++){
+          $.get("/comment/"+comment.nestedComments[i], {}, (newComment) => {
+            var commentContainer = "div#"+comment._id
+            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+            traverseNestedComments(newComment);
+          })
+        }
+      }
+    }
+
+    function loadComments(){
+      $("#allComments").empty();
+      $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
+        if (comments.length > 0) {
+          for (let i = 0; i < comments.length; i++) {
+            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
+            traverseNestedComments(comments[i])
+          }
+        } else {
+          var noComments = document.createElement("div");
+          noComments.className = "comment-container";
+          var icon = document.createElement("i");
+          icon.className = "material-icons md-orange md-92 flex-fill";
+          icon.innerHTML = "sentiment_very_dissatisfied";
+          var content = document.createElement("div");
+          content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
+          var text = document.createElement("h2");
+          text.className = "flex-fill text-center";
+          text.innerHTML = "No comments yet...";
+          var subtext = document.createElement("h6");
+          subtext.className = "mt-1 flex-fill text-center subheading";
+
+          var username = "{{uname}}";
+          if (username)
+            subtext.innerHTML = "This place feels empty, why not start a discussion?";
+          else
+            subtext.innerHTML = "Login or register to start a discussion now.";
+          content.append(icon);
+          content.append(text);
+          content.append(subtext);
+          noComments.append(content);
+          noComments.id = "noComment";
+          $("#allComments").append(noComments);
+        }
+      })
+    }
+
     function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
       var wholeCommentContainer = document.createElement("div");
       wholeCommentContainer.className = "comment-container";
@@ -32,17 +81,14 @@
       downArrow.className = "material-icons md-18 md-dark down";
       downArrow.innerHTML = "arrow_downward";
       var commentBodyContainer = document.createElement("div");
-      if (username)
-        commentBodyContainer.className = "media-body";
-      else
-        commentBodyContainer.className = "media-body mb-3";
+      commentBodyContainer.className = "media-body";
       commentBodyContainer.id = commentID;
       var flexContainer = document.createElement("div");
       flexContainer.className = "d-flex";
       var userNameContainer = document.createElement("h6");
       userNameContainer.className = "mt-0";
       var userName = document.createElement("a");
-      userName.setAttribute("href", "user-profile?u=" + commentAuthor);
+      userName.setAttribute("href", "/user/" + commentAuthor);
       userName.setAttribute("style", "color : #000000;");
       userName.innerHTML = commentAuthor;
       var commentScoreContainer = document.createElement("span");
@@ -79,8 +125,7 @@
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
-            var commentContainer = "div#"+commentID
-            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+            loadComments();
           })
         })
 
@@ -93,9 +138,10 @@
         addCommentContainer.append(txtCommentContainer)
 
         $(txtCommentContainer).appendTo(txtContainer).hide().slideDown(500)
+
       }, {
-          once: true
-        })
+        once: true
+      })
 
       var commentIcon = document.createElement("i");
       commentIcon.className = "material-icons md-16 md-dark";
@@ -142,10 +188,7 @@
       downArrow.className = "material-icons md-18 md-dark down";
       downArrow.innerHTML = "arrow_downward";
       var commentBodyContainer = document.createElement("div");
-      if (username)
-        commentBodyContainer.className = "media-body";
-      else
-        commentBodyContainer.className = "media-body mb-3";
+      commentBodyContainer.className = "media-body";
       commentBodyContainer.id = commentID;
       var flexContainer = document.createElement("div");
       flexContainer.className = "d-flex";
@@ -174,7 +217,6 @@
       replyLink.setAttribute("href", "javascript:void(0)");
       replyLink.addEventListener("click", function (e) {
         var id = $(this).attr("data-id")
-        console.log("Reply clicked, id=" + id);
 
         var addCommentContainer = document.createElement("div")
 
@@ -191,8 +233,7 @@
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
-            var commentContainer = "div#"+commentID
-            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+            loadComments();
           })
         })
 
@@ -242,13 +283,14 @@
 
     function createNewComment() {
       $("#noComment").remove()
-      $.post("/comment/create", { postID: "{{postID}}", commentContent: $("#commentContent").val() }, (newComment) => {
+      $.post("/comment/create", {postID: "{{postID}}", commentContent: $("#commentContent").val()}, (newComment) => {
+        //addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+        loadComments();
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-        addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+        $("#submitButton").attr("disabled", "disabled");
       })
-      $("#submitButton").attr("disabled", "disabled");
 		}
 
     function checkCommentBox() {
@@ -293,7 +335,7 @@
 
       <div class="postcomment">
         {{#if uname}}
-        <h5 class="mt-0 mb-1">Replying as
+        <h5 class="mt-0 mb-1 ml-2">Replying as
           <a href="/user/{{uname}}">{{uname}}</a>
         </h5>
         <div class="container-fluid mb-2 mt-3">
@@ -301,8 +343,8 @@
           <button disabled id="submitButton" onclick="createNewComment();" class="btn btn-primary mt-2">Submit</button>
         </div>
         {{else}}
-        <h5 class="mt-0 mb-3">Reply to post</h5>
-        <div class="container-fluid mb-2 mt-3">
+        <h5 class="mt-0 mb-1 ml-2">Reply to post</h5>
+        <div class="container-fluid mb-2 mt-2">
           <form>
             <fieldset disabled>
               <input type="text" class="form-control mb-3" placeholder="What are your thoughts? Login or Register">
@@ -383,8 +425,7 @@
 
     </div>
   </main>
-  {{> scriptResources}}
-  {{> footer}} 
+  {{> scriptResources}} {{> footer}}
 
   <script>
     $(document).ready(function () {
@@ -405,51 +446,8 @@
               }
             });
       */
-      function traverseNestedComments(comment){
-        if(comment.nestedComments){
-          for(let i = 0 ; i < comment.nestedComments.length ; i++){
-            $.get("/comment/"+comment.nestedComments[i], {}, (newComment) => {
-              var commentContainer = "div#"+comment._id
-              addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
-              traverseNestedComments(newComment)
-            })
-          }
-        }
-      }
 
-      $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
-        if (comments.length > 0) {
-          for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
-            traverseNestedComments(comments[i])
-          }
-        } else {
-          var noComments = document.createElement("div");
-          noComments.className = "comment-container";
-          var icon = document.createElement("i");
-          icon.className = "material-icons md-orange md-92 flex-fill";
-          icon.innerHTML = "sentiment_very_dissatisfied";
-          var content = document.createElement("div");
-          content.className = "mt-3 mb-3 d-flex flex-column align-contents-center justify-contents-center";
-          var text = document.createElement("h2");
-          text.className = "flex-fill text-center";
-          text.innerHTML = "No comments yet...";
-          var subtext = document.createElement("h6");
-          subtext.className = "mt-1 flex-fill text-center subheading";
-
-          var username = "{{uname}}";
-          if (username)
-            subtext.innerHTML = "This place feels empty, why not start a discussion?";
-          else
-            subtext.innerHTML = "Login or register to start a discussion now.";
-          content.append(icon);
-          content.append(text);
-          content.append(subtext);
-          noComments.append(content);
-          noComments.id = "noComment";
-          $("#allComments").append(noComments);
-        }
-      })
+      loadComments();
 
     });
 

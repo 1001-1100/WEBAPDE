@@ -45,18 +45,87 @@ router.get("/edit/:id", (req, res) => {
 	})
 })
 
-
 router.get("/search", (req, res) => {
-	console.log("/search")
+	res.render("./pages/searched", {
+		searchTerm: req.query.searchTerm
+	})
+})
 
-	Post.search(req.query.searchTerm).then((posts) => {
-		
-	//	res.send(PostsWithKeywords)
-		console.log("Found posts with keywords are: " + posts)
-		res.render("./pages/searched", {
-			posts, 
-			searchTerm: req.query.searchTerm
-		})
+router.post("/search", urlencoder, (req, res) => {
+	Post.search(req.body.searchTerm).then((posts) => {
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
+	}, (error)=>{
+		console.log(error)
+	})
+})
+
+router.post("/search/more", urlencoder, (req, res) => {
+	Post.searchMore(req.body.searchTerm, req.body.skipNum).then((posts) => {
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
+	}, (error)=>{
+		console.log(error)
+	})
+})
+
+router.post("/search/date", urlencoder, (req, res) => {
+	Post.search(req.body.searchTerm).then((posts) => {
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
+	}, (error)=>{
+		console.log(error)
+	})
+})
+
+router.post("/search/score", urlencoder, (req, res) => {
+	Post.search(req.body.searchTerm).then((posts) => {
+		var postData = []
+		for(let i = 0 ; i < posts.length ; i++){
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+			})
+		}
+		res.send(postData)
 	}, (error)=>{
 		console.log(error)
 	})
@@ -212,26 +281,6 @@ router.get("/all/score/more", (req,res) =>{
 				upvote: posts[i].upvote
 			})
 		}	
-		res.send(postData)
-	},(error)=>{
-
-	})
-})
-
-router.get("/search/:searchTerm", (req,res) => {
-	Post.search(req.params.searchTerm).then((posts)=>{
-		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
-			postData.push({
-				_id: posts[i]._id,
-				postTitle: posts[i].postTitle,
-				postDescription: posts[i].postDescription,
-				postAuthor: posts[i].postAuthor,
-				postScore: posts[i].postScore,
-				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
-			})
-		}
 		res.send(postData)
 	},(error)=>{
 

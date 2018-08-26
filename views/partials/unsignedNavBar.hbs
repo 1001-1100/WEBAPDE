@@ -9,9 +9,9 @@
   </span>
 
   <div class="navbar-collapse collapse w-100">
-    <form class="navbar-nav w-100 justify-content-center my-2 my-lg-0">
-      <input class="form-control mr-sm-2" id="inputSearch" type="text" placeholder="Search posts...  {{face}}" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" id="searchbtn" type="submit">
+    <form action="/post/search" method="get" class="navbar-nav w-100 justify-content-center my-2 my-lg-0">
+      <input class="form-control mr-sm-2" id="inputSearch" name="searchTerm" type="text" placeholder="Search posts..." aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" id="searchbtn" type="submit" onMouseOver="this.style.cursor='pointer'">
         <i class="material-icons md-18">search</i>
       </button>
     </form>
