@@ -350,7 +350,7 @@
 
       function addNoComments() {
         var noComments = document.createElement("div");
-        noPosts.className = "postcomment";
+        noComments.className = "postcomment";
         var icon = document.createElement("i");
         icon.className = "material-icons md-orange md-92 flex-fill";
         icon.innerHTML = "sentiment_very_dissatisfied";
@@ -365,8 +365,8 @@
         content.append(icon);
         content.append(text);
         content.append(subtext);
-        noPosts.append(content);
-        noPosts.id = "noPost";
+        noComments.append(content);
+        noComments.id = "noComments";
         $("#commentContainer").append(noComments);
 
         $("#loadMoreComments").hide()
@@ -463,7 +463,7 @@
             deletespan.setAttribute("data-toggle", "modal");
             deletespan.setAttribute("data-target", "#deletePostConfirmation");
             deletespan.addEventListener("click", function () {
-              document.getElementById("deletePostModal").setAttribute("data-id", postIDs)
+              document.getElementById("deletePostConfirmation").setAttribute("data-id", postIDs)
             })
 
             var editspan = document.createElement("span");
@@ -706,10 +706,11 @@
           postID: postID,
           commentID: commentID,
           username: username
-        }, (foundComments) => { // returns the users list of comments after deleting the said post already
-          if (foundComments.length > 0) {
+        }, (foundUser) => { // returns the users list of comments after deleting the said post already
+          console.log(foundUser)
+          if (foundUser.comment.length > 0) {
             for (let i = 0; i < foundUser.comment.length; i++) {
-              addComment(foundComments._id, foundComments._postID, foundComments.commentContent, foundComments.commentAuthor, foundComments.relativeTime, foundComments.commentScore);
+              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].relativeTime, foundUser.comment[i].commentScore);
             }
           } else {
             addNoComments()

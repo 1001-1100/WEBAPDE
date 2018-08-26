@@ -157,18 +157,6 @@
 
   <script>
     $(document).ready(function () {
-      //    document.onload = function(){
-      //    $("#postContainer").empty();
-      //    if (foundPosts.length > 0) {
-      //        for (let i = 0; i < foundPosts.length; i++) {
-      //          addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].postDate, foundPosts[i].postScore, foundPosts[i].commentNumber);
-      //         skipNum += 1;
-      //       }
-      //     } else {
-      //          addNoPosts();
-      //      }
-      //  }
-
 
       var skipNum = 0;
 
@@ -211,7 +199,7 @@
         $("#postContainer").empty();
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
             skipNum += 1;
           }
         } else {
@@ -223,7 +211,7 @@
         $.post("/post/all/more", { skipNum }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
               skipNum += 1;
             }
           }
@@ -236,7 +224,7 @@
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
               skipNum += 1;
             }
           } else {
@@ -251,7 +239,7 @@
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
               skipNum += 1;
             }
           } else {
@@ -261,7 +249,7 @@
       })
 
 
-      function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
+      function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber, upvote) {
         var mediaPost = document.createElement("div");
         mediaPost.className = "media post";
         var flexRow = document.createElement("div");
@@ -273,12 +261,34 @@
         var arrowUpward = document.createElement("i");
         arrowUpward.className = "material-icons md-18 md-dark up";
         arrowUpward.innerHTML = "arrow_upward";
+        arrowUpward.id = "arrow_upward" + postID;
+
+        var upwardSpan = document.createElement("span")
+          upwardSpan.addEventListener("click", function () {
+              console.log("upwardSpan clicked")
+
+              upvotePost(postID)
+
+          })
+        upwardSpan.append(arrowUpward);
+
         var voteValue = document.createElement("span");
         voteValue.className = "votes";
+        voteValue.id = "votes" + postID
         voteValue.innerHTML = postScore;
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
         arrowDownward.innerHTML = "arrow_downward";
+        arrowDownward.id = "arrow_downward" + postID
+        var downwardSpan = document.createElement("span")
+          downwardSpan.addEventListener("click", function () {
+              console.log("downwardSpan clicked")
+
+              downvotePost(postID)
+          })
+        downwardSpan.append(arrowDownward);
+
+
         var commentIcon = document.createElement("i");
         commentIcon.className = "material-icons md-16 md-dark";
         commentIcon.innerHTML = "comment";
@@ -307,9 +317,9 @@
         userName.innerHTML = postAuthor;
         userName.setAttribute("href", "/user/" + postAuthor);
 
-        voteBox.append(arrowUpward);
+        voteBox.append(upwardSpan);
         voteBox.append(voteValue);
-        voteBox.append(arrowDownward);
+        voteBox.append(downwardSpan);
         flexRow.append(voteBox);
         postTitleContainer.append(postTitleLink);
         flexColumn.append(postTitleContainer);
@@ -328,43 +338,70 @@
         flexRow.append(flexColumn);
         mediaPost.append(flexRow);
 
+        var username = "{{uname}}";
+        for(let i =0; i <upvote.length; i++){
+          if(upvote[i] == username){ // make arrowup orange
+           
+            changeArrowUpColor(postID);
+          }
+        }
+
         $("#postContainer").append(mediaPost);
       }
-      /*
-            function upvotePost(postID) {
-                  var username = "{{uname}}";
-      
-                  if (!username) {
-                    //add modal
-                  } else {
-                    $.post("upPost", {
-                      id: postID,
-                      username: username
-                    }, (foundUser) => {
-                      if (foundUser) {
-                        //set to orange
-                      }
-                    })
+             function changeArrowUpColor(postID){
+                $('#arrow_upward'+postID).css({  color: "#F36E21" });
+           
+            }
+
+       function upvotePost(postID) {
+              var username = "{{uname}}";
+    
+              if (!username) {
+                //add modal
+                alert("Must login before voting.")
+              } else {
+                $.post("post/upPost", {
+                  id: postID,
+                  username: username
+                }, (foundUser) => {
+                  if (foundUser) {
+                      
+                     $('#arrow_downward' +postID).css({   color: "lightgray" });
+                      $('#arrow_upward'+postID).css({  color: "#F36E21" });
+                      document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
                   }
-                }
+                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                  
+                       alert("You can only upvote once")
+                  }
+                })
+              }
+            }
       
                 function downvotePost(postID) {
                   var username = "{{uname}}";
-      
+                 
                   if (!username) {
                     //add modal
+                     alert("Must login before voting.")
                   } else {
-                    $.post("downPost", {
+                    $.post("post/downPost", {
                       id: postID,
                       username: username
                     }, (foundUser) => {
                       if (foundUser) {
+                      $('#arrow_upward'+ postID).css({   color: "lightgray" });
+                        $('#arrow_downward' + postID).css({   color: "#3C8AFF" });
+                        document.getElementById("votes"+postID).innerHTML= foundUser.postScore;
                         //set to blue
-                      }
+                      }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                  
+                       alert("You can only downvote once")
+                  }
                     })
                   }
                 }
-      
+      /*
                 function upvoteComment(commentID) {
                   var username = "{{uname}}";
       

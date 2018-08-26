@@ -173,7 +173,8 @@ router.get("/all", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote
 			})
 		}
 		res.send(postData)
@@ -213,7 +214,8 @@ router.get("/all/score", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote
 			})
 		}
 		res.send(postData)
@@ -233,7 +235,8 @@ router.post("/all/more", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote
 			})
 		}
 		res.send(postData)
@@ -253,7 +256,8 @@ router.get("/all/date/more", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote
 			})
 		}
 		res.send(postData)
@@ -273,13 +277,34 @@ router.get("/all/score/more", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote
 			})
-		}
+		}	
 		res.send(postData)
 	},(error)=>{
 
 	})
+})
+
+router.post("/upPost",(req, res) =>{
+
+	Post.upVote(req.body.id, req.body.username).then((foundPost)=>{
+		res.send(foundPost)
+	},(error) =>{
+		console.log(error)
+	})
+
+})
+
+router.post("/downPost",(req, res) =>{
+
+	Post.downVote(req.body.id, req.body.username).then((foundPost)=>{
+		res.send(foundPost)
+	},(error) =>{
+		console.log(error)
+	})
+
 })
 
 router.post("/comments", (req, res) => {
@@ -364,8 +389,10 @@ router.post("/deletecomment", (req, res) =>{
 				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true})
 			})
 		 }
+
+		 res.send(user)
 	 },(error)=>{
-		res.send(commentData)
+		//res.send(commentData)
 	 })
 })
 
