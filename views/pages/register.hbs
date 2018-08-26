@@ -32,20 +32,27 @@
       <label for="inputBio">Short bio (optional)</label>
       <textarea name="shortBio" class="form-control" id="inputBio" rows="2"></textarea>
     </div>
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Avatar</span>
+
+    {{!--
+    <div class="form-group"> --}}
+      <div class="input-group mb-3">
+
+        <div class="input-group-prepend">
+          <span class="input-group-text">Avatar</span>
+        </div>
+
+        <img id="avatarPreview" width="100" height="100" class="rounded" src="./uploads/default.jpeg" />
       </div>
 
-      <div class="text-left custom-file">
-
-        <input name="avatar" type="file" accept=".png, .jpg, .jpeg"> {{!-- <input name="avatar" type="file" class="custom-file-input"
-          id="inputAvatar">
-        <label class="custom-file-label" for="inputAvatar">Choose file</label> --}}
-
+      <div class="input-group mb-2">
+        <div class="text-left custom-file">
+          <input name="avatar" type="file" class="custom-file-input" accept=".png, .jpg, .jpeg" id="inputAvatar">
+          <label class="custom-file-label" for="inputAvatar">Choose file</label>
+        </div>
       </div>
+      {{!--
+    </div> --}}
 
-    </div>
 
     <!-- <p style="text-align: left; margin-left: 5px"> Choose Avatar</p> -->
     <!-- <input type="file"> -->
@@ -88,7 +95,7 @@
 
         </div>
         <div class="modal-body">
-          <p class="text-left">You must upload an avatar image. Please try again.</p>
+          <p class="text-left">You must upload a valid avatar image. Please try again.</p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-info" data-dismiss="modal">Retry</button>
@@ -173,25 +180,21 @@
               $('label[for=inputEmail]').css({ color: 'red' });
 
             } else {
-            
-              {{!-- if (safe) --}}
+
+              if (safe)
                 $('#registerform').submit();
-              {{!-- else
+              else
                 $("#uploadErrorModal").modal("show");
-              //CHECK THIS --}}
 
             }
-
-
-          })
+          }
+          )
         }
       });
 
-
-      {{!-- $('#inputAvatar').on('change', function () {
+      $('#inputAvatar').on('change', function () {
         //get the file name
         var fileName = $('input[type=file]').val().split('\\').pop();
-
         safe = false
 
         //check extension
@@ -199,11 +202,13 @@
         var extFile = fileName.substr(idxDot, fileName.length).toLowerCase();
         if (extFile == "jpg" || extFile == "jpeg" || extFile == "png") {
           safe = true
+          document.getElementById('avatarPreview').src = window.URL.createObjectURL(this.files[0])
         }
 
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
-      }) --}}
+      });
+
     });
   </script>
 
