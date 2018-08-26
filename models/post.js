@@ -20,9 +20,7 @@ var postSchema = mongoose.Schema({
 		commentDateString: String,
 		commentDate: Date,
 		commentScore: Number,
-		nestedComments: [{
-			_commentID: mongoose.SchemaTypes.ObjectId
-		}]
+		nestedComments: [mongoose.SchemaTypes.ObjectId]
 	}],
 	upvote:[{
 		username: String

@@ -26,9 +26,7 @@ var userSchema = mongoose.Schema({
 			commentDateString: String,
 			commentDate: Date,
 			commentScore: Number,
-			nestedComments: [{
-				_commentID: mongoose.SchemaTypes.ObjectId
-			}]
+			nestedComments: [mongoose.SchemaTypes.ObjectId]
 		}]
 	}],
 	comment: [{
@@ -38,9 +36,7 @@ var userSchema = mongoose.Schema({
 		commentDateString: String,
 		commentDate: Date,
 		commentScore: Number,
-		nestedComments: [{
-			_commentID: mongoose.SchemaTypes.ObjectId
-		}]
+		nestedComments: [mongoose.SchemaTypes.ObjectId]
 	}],
 })
 

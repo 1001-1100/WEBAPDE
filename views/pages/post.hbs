@@ -246,9 +246,9 @@
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-      addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
-    })
-    $("#submitButton").attr("disabled", "disabled");
+        addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+      })
+      $("#submitButton").attr("disabled", "disabled");
 		}
 
     function checkCommentBox() {
@@ -408,7 +408,7 @@
       function traverseNestedComments(comment){
         if(comment.nestedComments){
           for(let i = 0 ; i < comment.nestedComments.length ; i++){
-            $.get("/comment/"+comment.nestedComments[i]._id, {}, (newComment) => {
+            $.get("/comment/"+comment.nestedComments[i], {}, (newComment) => {
               var commentContainer = "div#"+comment._id
               addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
               traverseNestedComments(newComment)
