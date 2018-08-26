@@ -207,17 +207,16 @@
         $("#loading-posts").css("display", "none");
       });
 
-      $.get("/post/all", {}, (foundPosts) => {
-        $("#postContainer").empty();
-        if (foundPosts.length > 0) {
-          for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
-            skipNum += 1;
-          }
-        } else {
-          addNoPosts();
+      var foundPosts = {{{posts}}}
+      $("#postContainer").empty();
+      if (foundPosts.length > 0) {
+        for (let i = 0; i < foundPosts.length; i++) {
+          addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+          skipNum += 1;
         }
-      })
+      } else {
+        addNoPosts();
+      }
 
       $("#loadMorePosts").click(() => {
         $.post("/post/all/more", { skipNum }, (foundPosts) => {

@@ -20,6 +20,7 @@ router.get("/", (req, res) => {
 router.get("/about", (req, res) => {
     res.render("./pages/about.hbs", {
         uname: req.session.username,
+        coolfaces: cool.faces
     })
 })
 
@@ -38,6 +39,14 @@ router.post("/logout", (req, res) => {
 
 router.get("/cool", (req,res) => {
     res.send(cool())
+})
+
+router.get("/coolfaces", (req,res) => {
+    res.send(cool.faces)
+})
+
+router.get("/coolfacestream", (req,res) => {
+    res.send(cool.faceStream)
 })
 
 router.use("*", (req, res) => {

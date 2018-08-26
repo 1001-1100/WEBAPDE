@@ -4,8 +4,11 @@ const bodyparser = require("body-parser")
 const User = require("../models/user.js")
 const Post = require("../models/post.js")
 const Comment = require("../models/comment.js")
-const prettyMs = require('pretty-ms');
-const timestamp = require('time-stamp');
+const prettyMs = require('pretty-ms')
+const timestamp = require('time-stamp')
+const marked = require('marked')
+const validator = require('validator')
+marked.setOptions({sanitize: true})
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -46,12 +49,13 @@ router.get("/edit/:id", (req, res) => {
 router.get("/search", (req, res) => {
 	console.log("/search")
 
-	Post.search(req.query.searchTerm).then((PostsWithKeywords) => {
+	Post.search(req.query.searchTerm).then((posts) => {
 		
 	//	res.send(PostsWithKeywords)
-		console.log("Found posts with keywords are: " + PostsWithKeywords)
-		res.render("./pages/index", {
-			PostsWithKeywords
+		console.log("Found posts with keywords are: " + posts)
+		res.render("./pages/searched", {
+			posts, 
+			searchTerm: req.query.searchTerm
 		})
 	}, (error)=>{
 		console.log(error)
@@ -66,8 +70,8 @@ router.get("/create", (req,res) =>{
 
 router.post("/create", (req, res) => {
 	var newPost = {
-		postTitle: req.body.postTitle,
-		postDescription: req.body.postDescription,
+		postTitle: validator.escape(req.body.postTitle),
+		postDescription: marked(req.body.postDescription),
 		postAuthor: req.session.username,
 		postDateString: timestamp('YYYY/MM/DD'),
 		postDate: new Date(),
@@ -239,6 +243,7 @@ router.post("/comments", (req, res) => {
 				commentContent: post.comment[i].commentContent,
 				commentAuthor: post.comment[i].commentAuthor,
 				commentScore: post.comment[i].commentScore,
+				nestedComments: post.comment[i].nestedComments,
 				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true})
 			})
 		}
@@ -260,7 +265,13 @@ router.post("/deletepost", (req, res) =>{
 
 	// Deletes post in the Post collection Db given the postID
 	Post.deletePost(req.body.id).then((result)=>{ 
-	//	res.send(result)
+		//
+	},(error)=>{
+		res.send(null)
+	})
+
+	Comment.deleteCommentFromPost(req.body.id).then((result)=>{
+		//
 	},(error)=>{
 		res.send(null)
 	})
@@ -290,10 +301,22 @@ router.post("/deletecomment", (req, res) =>{
 	 })
 
 	// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
-	 User.deleteComment(req.body.username, req.body.postID, req.body.commentID).then((result)=>{ 
-	 	res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+	 User.deleteComment(req.body.username, req.body.postID, req.body.commentID).then((user)=>{ 
+		 var commentData = []
+		 for(let i = 0 ; i < user.comment.length ; i++){
+			commentData.push({
+				_postID: user.comment[i]._postID,
+				commentContent: user.comment[i].commentContent,
+				commentAuthor: user.comment[i].commentAuthor,
+				commentDateString: user.comment[i].commentDateString,
+				commentDate: user.comment[i].commentDate,
+				commentScore: user.comment[i].commentScore,
+				nestedComments: user.comment[i].nestedComments,
+				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true})
+			})
+		 }
 	 },(error)=>{
-		res.send(null)
+		res.send(commentData)
 	 })
 })
 

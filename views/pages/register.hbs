@@ -173,12 +173,12 @@
               $('label[for=inputEmail]').css({ color: 'red' });
 
             } else {
-            if (safe)
+            
+              {{!-- if (safe) --}}
                 $('#registerform').submit();
-              else
+              {{!-- else
                 $("#uploadErrorModal").modal("show");
-              //CHECK THIS
-
+              //CHECK THIS --}}
 
             }
 
@@ -188,7 +188,7 @@
       });
 
 
-      $('#inputAvatar').on('change', function () {
+      {{!-- $('#inputAvatar').on('change', function () {
         //get the file name
         var fileName = $('input[type=file]').val().split('\\').pop();
 
@@ -203,7 +203,7 @@
 
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
-      })
+      }) --}}
     });
   </script>
 

@@ -18,7 +18,7 @@
     var username = "{{uname}}";
     var newComments = 0;
 
-    function addComment(commentID, commentContent, commentAuthor, commentDate, commentScore) {
+    function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
       var wholeCommentContainer = document.createElement("div");
       wholeCommentContainer.className = "comment-container";
       var mainCommentContainer = document.createElement("div");
@@ -61,25 +61,28 @@
       var infoSpan = document.createElement("span");
       infoSpan.className = "info";
       var replyLink = document.createElement("a");
-      replyLink.setAttribute("href", "#");
-      replyLink.setAttribute("data-id", commentID);
+      replyLink.setAttribute("href", "javascript:void(0)");
       replyLink.addEventListener("click", function () {
-        var id = $(this).attr("data-id")
-        console.log("Reply clicked, id=" + id);
 
         var addCommentContainer = document.createElement("div")
 
         var txtComment = document.createElement("textarea")
-        txtComment.setAttribute("oninput", "checkCommentBox();")
+        //txtComment.setAttribute("oninput", "checkCommentBox();")
         txtComment.className = "form-control mt-2"
         txtComment.type = "text"
         txtComment.placeholder = "Type a comment"
 
         var btnSubmit = document.createElement("button")
-        btnSubmit.disabled = true
-        btnSubmit.setAttribute("onclick", "createNewComment()")
+        //btnSubmit.disabled = true
+        //btnSubmit.setAttribute("onclick", "createNewNestedComment()")
         btnSubmit.className = "btn btn-primary mt-2"
         btnSubmit.innerHTML = "Submit"
+        btnSubmit.addEventListener("click", function () {
+          $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
+            var commentContainer = "div#"+commentID
+            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+          })
+        })
 
         var txtCommentContainer = document.createElement("div")
         txtCommentContainer.className = "container-fluid"
@@ -126,7 +129,7 @@
       $("#allComments").append(wholeCommentContainer);
     }
 
-    function addNestedComment(commentContainer, commentID, commentContent, commentAuthor, commentDate, commentScore) {
+    function addNestedComment(commentContainer, commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
       var mainCommentContainer = document.createElement("div");
       mainCommentContainer.className = "media comment";
       mainCommentContainer.setAttribute("style", "margin-top: 20px");
@@ -168,8 +171,7 @@
       var infoSpan = document.createElement("span");
       infoSpan.className = "info";
       var replyLink = document.createElement("a");
-      replyLink.setAttribute("href", "#");
-      replyLink.setAttribute("data-id", commentID);
+      replyLink.setAttribute("href", "javascript:void(0)");
       replyLink.addEventListener("click", function (e) {
         var id = $(this).attr("data-id")
         console.log("Reply clicked, id=" + id);
@@ -177,16 +179,22 @@
         var addCommentContainer = document.createElement("div")
 
         var txtComment = document.createElement("textarea")
-        txtComment.setAttribute("oninput", "checkCommentBox();")
+        //txtComment.setAttribute("oninput", "checkCommentBox();")
         txtComment.className = "form-control mt-2"
         txtComment.type = "text"
         txtComment.placeholder = "Type a comment"
 
         var btnSubmit = document.createElement("button")
-        btnSubmit.disabled = true
-        btnSubmit.setAttribute("onclick", "createNewComment()")
+        //btnSubmit.disabled = true
+        //btnSubmit.setAttribute("onclick", "createNewComment()")
         btnSubmit.className = "btn btn-primary mt-2"
         btnSubmit.innerHTML = "Submit"
+        btnSubmit.addEventListener("click", function () {
+          $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
+            var commentContainer = "div#"+commentID
+            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+          })
+        })
 
         var txtCommentContainer = document.createElement("div")
         txtCommentContainer.className = "container-fluid"
@@ -238,7 +246,7 @@
         $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-      addComment(newComment._id, newComment.commentContent, newComment.commentAuthor, newComment.commentDate, newComment.commentScore);
+      addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
     })
     $("#submitButton").attr("disabled", "disabled");
 		}
@@ -266,8 +274,8 @@
           <i class="material-icons md-18 md-dark down">arrow_downward</i>
         </div>
         <div class="media-body">
-          <h5 class="mt-0 mb-1">{{postTitle}}</h5>
-          {{postDescription}}
+          <h5 class="mt-0 mb-1">{{{postTitle}}}</h5>
+          <div>{{{postDescription}}}</div>
           <div class="mt-2 flex-fill">
             <span class="info">
               <span class="p-2">
@@ -375,10 +383,12 @@
 
     </div>
   </main>
-  {{> footer}} {{> scriptResources}}
+  {{> scriptResources}}
+  {{> footer}} 
 
   <script>
     $(document).ready(function () {
+
       $(document).ajaxStart(function () {
         $("#loading-comments").css("display", "block");
       });
@@ -395,10 +405,23 @@
               }
             });
       */
+      function traverseNestedComments(comment){
+        if(comment.nestedComments){
+          for(let i = 0 ; i < comment.nestedComments.length ; i++){
+            $.get("/comment/"+comment.nestedComments[i]._id, {}, (newComment) => {
+              var commentContainer = "div#"+comment._id
+              addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+              traverseNestedComments(newComment)
+            })
+          }
+        }
+      }
+
       $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
         if (comments.length > 0) {
           for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
+            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
+            traverseNestedComments(comments[i])
           }
         } else {
           var noComments = document.createElement("div");

@@ -21,7 +21,7 @@ var postSchema = mongoose.Schema({
 		commentDate: Date,
 		commentScore: Number,
 		nestedComments: [{
-			commentID: String
+			_commentID: mongoose.SchemaTypes.ObjectId
 		}]
 	}],
 	upvote:[{
@@ -125,7 +125,27 @@ exports.putComment = function (comment) {
 		}, {
 			$push: {comment: comment},
 			$inc: {commentNumber: 1}
-		}).then((msg) => {
+		}, {
+			new: true
+		}).then((post) => {
+			resolve(comment)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.putNestedComment = function (comment, commentID) {
+	return new Promise(function (resolve, reject) {
+		Post.findOne({
+			_id: comment._postID
+		}).then((post) => {
+			for(let i = 0 ; i < post.comment.length ; i++){
+				if(post.comment[i]._id.equals(commentID)){
+					post.comment[i].nestedComments.push(comment._id)
+				}
+			}
+			post.save().then((msg)=>{})
 			resolve(comment)
 		}, (err) => {
 			reject(err)

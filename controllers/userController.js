@@ -2,8 +2,10 @@ const express = require("express")
 const router = express.Router()
 const bodyparser = require("body-parser")
 const User = require("../models/user.js")
-const prettyMs = require('pretty-ms');
-const timestamp = require('time-stamp');
+const prettyMs = require('pretty-ms')
+const timestamp = require('time-stamp')
+const marked = require('marked')
+const validator = require('validator')
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -75,10 +77,10 @@ router.post("/register", upload.single('avatar'), (req,res) => {
 			filename = req.file.filename
 		}
 		var newUser = {
-			emailAddress: req.body.emailAddress,
-			username: req.body.username,
+			emailAddress: validator.escape(req.body.emailAddress),
+			username: validator.escape(req.body.username),
 			password: hashedPassword,
-			shortBio: req.body.shortBio,
+			shortBio: marked(req.body.shortBio),
 			avatar: filename
 		}
 		User.put(newUser).then((user)=>{
@@ -137,7 +139,9 @@ router.post("/comments", (req,res) => {
 })
 
 router.get("/avatar/:filename", (req,res) => {
-	fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
+	try{
+		fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
+	}catch(e){}
 })
 
 router.get("/:username", (req,res) => {
