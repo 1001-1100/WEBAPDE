@@ -96,6 +96,7 @@ exports.deleteComment = function(username, postID, commentID){
 			// deletes in comment array in the post array of user
 			for(let i = 0; i < user.post.length; i++ ){
 				if(user.post[i]._id == postID){
+					user.post[i].commentNumber = user.post[i].commentNumber - 1;
 					if(user.post[i].comment.length >0){
 						for(let j = 0; j<user.post[i].comment.length; j++){
 							if(user.post[i].comment[j]._id == commentID){
@@ -110,6 +111,7 @@ exports.deleteComment = function(username, postID, commentID){
 			for(let i = 0; i < user.comment.length; i++){
 				if(user.comment[i]._id == commentID){
 					user.comment.splice(i, 1);
+				
 				}
 			}
 
