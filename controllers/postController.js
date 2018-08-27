@@ -51,7 +51,7 @@ router.get("/search", (req, res) => {
 	})
 })
 
-router.post("/search", urlencoder, (req, res) => {
+router.post("/search", urlencoder, (req, res) => { 
 	Post.search(req.body.searchTerm).then((posts) => {
 		var postData = []
 		for(let i = 0 ; i < posts.length ; i++){
@@ -62,7 +62,9 @@ router.post("/search", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -72,6 +74,7 @@ router.post("/search", urlencoder, (req, res) => {
 })
 
 router.post("/search/more", urlencoder, (req, res) => {
+	console.log("search more ##")
 	Post.searchMore(req.body.searchTerm, req.body.skipNum).then((posts) => {
 		var postData = []
 		for(let i = 0 ; i < posts.length ; i++){
@@ -82,7 +85,9 @@ router.post("/search/more", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -102,7 +107,9 @@ router.post("/search/date", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -122,7 +129,9 @@ router.post("/search/score", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -195,7 +204,9 @@ router.get("/all/date", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
