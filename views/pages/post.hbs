@@ -20,11 +20,11 @@
     var username = "{{uname}}";
     var newComments = 0;
 
-    function traverseNestedComments(comment){
-      if(comment.nestedComments){
-        for(let i = 0 ; i < comment.nestedComments.length ; i++){
-          $.get("/comment/"+comment.nestedComments[i], {}, (newComment) => {
-            var commentContainer = "div#"+comment._id
+    function traverseNestedComments(comment) {
+      if (comment.nestedComments) {
+        for (let i = 0; i < comment.nestedComments.length; i++) {
+          $.get("/comment/" + comment.nestedComments[i], {}, (newComment) => {
+            var commentContainer = "div#" + comment._id
             addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore, newComment.upvote, newComment.downvote);
             traverseNestedComments(newComment);
           })
@@ -32,7 +32,7 @@
       }
     }
 
-    function loadComments(){
+    function loadComments() {
       $("#allComments").empty();
       $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
         if (comments.length > 0) {
@@ -81,29 +81,30 @@
       upArrow.innerHTML = "arrow_upward";
       upArrow.id = "arrow_upward" + commentID;
       var upwardSpan = document.createElement("span")
-        upwardSpan.addEventListener("click", function () {
-            console.log("upwardSpan clicked")
+      upwardSpan.addEventListener("click", function () {
+        console.log("upwardSpan clicked")
 
-            upvoteComment(commentID, postID);
+        upvoteComment(commentID, postID);
 
-        })
+      })
       upwardSpan.append(upArrow);
-
+      /*
       var voteValue = document.createElement("span");
       voteValue.className = "votes";
       voteValue.id = "votes" + commentID
       voteValue.innerHTML = commentScore;
+      */
       var downArrow = document.createElement("i");
       downArrow.className = "material-icons md-18 md-dark down";
       downArrow.innerHTML = "arrow_downward";
 
       downArrow.id = "arrow_downward" + commentID
       var downwardSpan = document.createElement("span")
-        downwardSpan.addEventListener("click", function () {
-          console.log("downwardSpan clicked")
+      downwardSpan.addEventListener("click", function () {
+        console.log("downwardSpan clicked")
 
-          downvoteComment(commentID, postID)
-        })
+        downvoteComment(commentID, postID)
+      })
       downwardSpan.append(downArrow);
 
       var commentBodyContainer = document.createElement("div");
@@ -120,6 +121,7 @@
       var commentScoreContainer = document.createElement("span");
       commentScoreContainer.className = "ml-2 points";
       commentScoreContainer.innerHTML = commentScore + " points";
+      commentScoreContainer.id = "votes" + commentID;
       var separator = document.createElement("span");
       separator.className = "ml-2";
       separator.innerHTML = "·";
@@ -167,8 +169,8 @@
         $(txtCommentContainer).appendTo(txtContainer).hide().slideDown(500)
 
       }, {
-        once: true
-      })
+          once: true
+        })
 
       var commentIcon = document.createElement("i");
       commentIcon.className = "material-icons md-16 md-dark";
@@ -179,7 +181,7 @@
       var txtContainer = document.createElement("div")
 
       voteContainer.append(upwardSpan);
-      voteContainer.append(voteValue);
+      //voteContainer.append(voteValue);
       voteContainer.append(downwardSpan);
       userNameContainer.append(userName);
       flexContainer.append(userNameContainer);
@@ -200,18 +202,18 @@
       mainCommentContainer.append(commentBodyContainer);
       wholeCommentContainer.append(mainCommentContainer);
 
-      
-        for(let i =0; i <upvote.length; i++){
-          if(upvote[i] == username){ // make arrowup orange
-            upArrow.setAttribute("style", "color:#F36E21");
-          }
-        }
 
-        for(let i =0; i <downvote.length; i++){
-          if(downvote[i] == username){ // make arrowdown blue
-            downArrow.setAttribute("style", "color:#3C8AFF");
-          }
+      for (let i = 0; i < upvote.length; i++) {
+        if (upvote[i] == username) { // make arrowup orange
+          upArrow.setAttribute("style", "color:#F36E21");
         }
+      }
+
+      for (let i = 0; i < downvote.length; i++) {
+        if (downvote[i] == username) { // make arrowdown blue
+          downArrow.setAttribute("style", "color:#3C8AFF");
+        }
+      }
 
       $("#allComments").append(wholeCommentContainer);
     }
@@ -319,95 +321,91 @@
       commentBodyContainer.append(txtContainer)
       mainCommentContainer.append(voteContainer);
       mainCommentContainer.append(commentBodyContainer);
-    
-      {{!-- for(let i =0; i <upvote.length; i++){
-        if(upvote[i] == username){ // make arrowup orange
+
+      for (let i = 0; i < upvote.length; i++) {
+        if (upvote[i] == username) { // make arrowup orange
           upArrow.setAttribute("style", "color:#F36E21");
         }
       }
 
-      for(let i =0; i <downvote.length; i++){
-        if(downvote[i] == username){ // make arrowdown blue
+      for (let i = 0; i < downvote.length; i++) {
+        if (downvote[i] == username) { // make arrowdown blue
           downArrow.setAttribute("style", "color:#3C8AFF");
         }
-      } --}}
+      }
 
       $(commentContainer).append(mainCommentContainer);
     }
 
- 
-
     function upvoteComment(commentID, postID) {
-          var username = "{{uname}}";
+      var username = "{{uname}}";
 
-          if (!username) {
-            //add modal
-            alert("Must login before voting.")
-          } else {
-            $.post("comment/upComment", {
-              commentID: commentID,
-              postID: postID,
-              username: username
-            }, (foundUser) => {
-              if (foundUser) {
-                  
-                $('#arrow_downward'+commentID).css({   color: "lightgray" });
-                $('#arrow_upward'+commentID).css({  color: "#F36E21" });
+      if (!username) {
+        $("#voteLoginError").modal("show");
+      } else {
+        $.post("comment/upComment", {
+          commentID: commentID,
+          postID: postID,
+          username: username
+        }, (foundUser) => {
+          if (foundUser) {
 
-                  for(let i = 0; i< foundUser.comment.length; i++){
-                    if(foundUser.comment[i]._id == commentID){
-                      document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore;
-                    }
-                  }
+            $('#arrow_downward' + commentID).css({ color: "lightgray" });
+            $('#arrow_upward' + commentID).css({ color: "#F36E21" });
+
+            for (let i = 0; i < foundUser.comment.length; i++) {
+              if (foundUser.comment[i]._id == commentID) {
+                document.getElementById("votes" + commentID).innerHTML = foundUser.comment[i].commentScore + " points";
               }
-              else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-                alert("You can only upvote once")
-              }
-            })
-          }
-        }
-
-  function downvoteComment(commentID, postID) {
-    var username = "{{uname}}";
-    
-    if (!username) {
-      //add modal
-        alert("Must login before voting.")
-    } else {
-      $.post("comment/downComment", {
-        commentID: commentID,
-        postID: postID,
-        username: username
-      }, (foundUser) => {
-        if (foundUser) {
-        $('#arrow_upward'+ commentID).css({   color: "lightgray" });
-          $('#arrow_downward' + commentID).css({   color: "#3C8AFF" });
-
-          for(let i = 0; i< foundUser.comment.length; i++){
-            if(foundUser.comment[i]._id == commentID){
-              document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore;
             }
           }
-          //set to blue
-        }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-    
-          alert("You can only downvote once")
+          else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+            $("#upvoteOnce").modal("show");
+          }
+        })
+      }
     }
-      })
+
+    function downvoteComment(commentID, postID) {
+      var username = "{{uname}}";
+
+      if (!username) {
+        $("#voteLoginError").modal("show");
+      } else {
+        $.post("comment/downComment", {
+          commentID: commentID,
+          postID: postID,
+          username: username
+        }, (foundUser) => {
+          if (foundUser) {
+            $('#arrow_upward' + commentID).css({ color: "lightgray" });
+            $('#arrow_downward' + commentID).css({ color: "#3C8AFF" });
+
+            for (let i = 0; i < foundUser.comment.length; i++) {
+              if (foundUser.comment[i]._id == commentID) {
+                document.getElementById("votes" + commentID).innerHTML = foundUser.comment[i].commentScore + " points";
+              }
+            }
+            //set to blue
+          } else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+
+            $("#downvoteOnce").modal("show");
+          }
+        })
+      }
     }
-  }
-      
+
     function createNewComment() {
       $("#noComment").remove();
       var commentContent = $("#commentContent").val();
       $("#commentContent").val("");
       $("#submitButton").attr("disabled", "disabled");
-      $.post("/comment/create", {postID: "{{postID}}", commentContent}, (newComment) => {
+      $.post("/comment/create", { postID: "{{postID}}", commentContent }, (newComment) => {
         //addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
         loadComments();
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-      })
+    })
 		}
 
     function checkCommentBox() {
@@ -542,10 +540,83 @@
 
     </div>
   </main>
+
+  <div class="modal fade" id="voteLoginError">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Vote error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <p class="text-left">You must be logged in to vote.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a href="/signin" class="btn btn-primary">Login</a>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <div class="modal fade" id="upvoteOnce">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Vote error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <p class="text-left">You can only upvote a comment once.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Got it</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <div class="modal fade" id="downvoteOnce">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Vote error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <p class="text-left">You can only downvote a comment once.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Got it</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
   {{> scriptResources}} {{> footer}}
 
   <script>
     $(document).ready(function () {
+      $(document).ajaxSend(function (e, jqxhr, options) {
+        // if the request same with the above source/path
+        if (options.url == "comment/upComment" || options.url == "comment/downComment") {
+          // set global to false
+          options.global = false;
+          $("#loading-comments").css("display", "none");
+        }
+      });
 
       $(document).ajaxStart(function () {
         $("#loading-comments").css("display", "block");
@@ -563,6 +634,7 @@
               }
             });
       */
+      
           $( "#upwardSpanpost" ).on( "click", function() {
             var postID = $("#upwardSpanpost").attr("data-id")
             upvotePost(postID)
