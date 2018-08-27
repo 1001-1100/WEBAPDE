@@ -267,7 +267,7 @@
           upwardSpan.addEventListener("click", function () {
               console.log("upwardSpan clicked")
 
-              upvotePost(postID)
+              upvotePost(postID, postAuthor)
 
           })
         upwardSpan.append(arrowUpward);
@@ -284,7 +284,7 @@
           downwardSpan.addEventListener("click", function () {
               console.log("downwardSpan clicked")
 
-              downvotePost(postID)
+              downvotePost(postID, postAuthor)
           })
         downwardSpan.append(arrowDownward);
 
@@ -357,7 +357,7 @@
 
 
   
-       function upvotePost(postID) {
+       function upvotePost(postID, postAuthor) {
               var username = "{{uname}}";
     
               if (!username) {
@@ -366,7 +366,8 @@
               } else {
                 $.post("post/upPost", {
                   id: postID,
-                  username: username
+                  username: username,
+                  postAuthor: postAuthor
                 }, (foundUser) => {
                   if (foundUser) {
                       
@@ -381,7 +382,7 @@
               }
             }
       
-                function downvotePost(postID) {
+                function downvotePost(postID, postAuthor) {
                   var username = "{{uname}}";
                  
                   if (!username) {
@@ -390,7 +391,9 @@
                   } else {
                     $.post("post/downPost", {
                       id: postID,
-                      username: username
+                      username: username,
+                      postAuthor: postAuthor
+                      
                     }, (foundUser) => {
                       if (foundUser) {
                       $('#arrow_upward'+ postID).css({   color: "lightgray" });

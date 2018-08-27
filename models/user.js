@@ -310,24 +310,23 @@ exports.updateComment = function(username, postID, commentID, commentContent){
 	})
 }
 
-exports.upVote = function (id, username) {
+exports.upVote = function (id, username, postAuthor) {
 	var upexist = 0;
 	var downvoteonce = 0;
 	var postindex=0;
 	return new Promise(function (resolve, reject) {
 		User.findOne({
-			username
+			username:postAuthor
 		
 		}).then((user) => {
-			console.log("upvote: " + user)
-			// checks downvote array if user is there and deletes 
+			
 			for(let j = 0; j < user.post.length; j++){
 
 				if(user.post[j]._id == id){
 					postindex = j;
 				}
 
-
+			// checks downvote array if user is there and deletes 
 				for(let i = 0; i< user.post[j].downvote.length; i++){
 					if(user.post[j].downvote[i] == username){
 						user.post[j].downvote.splice(i, 1);
@@ -374,13 +373,13 @@ exports.upVote = function (id, username) {
 	})
 }
 
-exports.downVote = function (id, username) {
+exports.downVote = function (id, username, postAuthor) {
 	var downexist = 0;
 	var upvoteonce = 0;
 	var postindex=0;
 	return new Promise(function (resolve, reject) {
 		User.findOne({
-			username
+			username:postAuthor
 		
 		}).then((user) => {
 		

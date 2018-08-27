@@ -294,7 +294,7 @@ router.get("/all/score/more", (req,res) =>{
 
 router.post("/upPost",(req, res) =>{
 
-	User.upVote(req.body.id, req.body.username).then((foundPost)=>{
+	User.upVote(req.body.id, req.body.username, req.body.postAuthor).then((foundPost)=>{
 	//	res.send(foundPost)
 	},(error) =>{
 		console.log(error)
@@ -311,7 +311,7 @@ router.post("/upPost",(req, res) =>{
 
 router.post("/downPost",(req, res) =>{
 
-	User.downVote(req.body.id, req.body.username).then((foundPost)=>{
+	User.downVote(req.body.id, req.body.username, req.body.postAuthor).then((foundPost)=>{
 		//	res.send(foundPost)
 		},(error) =>{
 			console.log(error)
