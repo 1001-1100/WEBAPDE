@@ -38,7 +38,9 @@ router.post("/create", (req,res) => {
 						commentDate: newComment.commentDate,
 						commentScore: newComment.commentScore,
 						nestedComments: newComment.nestedComments,
-						relativeTime: prettyMs(new Date() - newComment.commentDate, {compact: true, verbose: true})
+						relativeTime: prettyMs(new Date() - newComment.commentDate, {compact: true, verbose: true}),
+						upvote: newComment.upVoteComment,
+						downvote: newComment.downVoteComment
 					}
 					res.send(newComment)
 				})
@@ -81,6 +83,39 @@ router.post("/nested", (req,res) => {
 	},(error)=>{
 
 	})
+})
+
+router.post("/upComment",(req, res) =>{
+
+	User.upVoteComment(req.body.commentID, req.body.postID, req.body.username).then((foundPost)=>{
+	//	res.send(foundPost)
+	},(error) =>{
+		console.log(error)
+	})
+
+	Post.upVoteComment(req.body.commentID,  req.body.postID, req.body.username).then((foundPost)=>{
+		res.send(foundPost)
+	},(error) =>{
+		console.log(error)
+	})
+
+
+})
+
+router.post("/downComment",(req, res) =>{
+
+	User.downVoteComment(req.body.commentID, req.body.postID, req.body.username).then((foundPost)=>{
+		//	res.send(foundPost)
+		},(error) =>{
+			console.log(error)
+    })
+
+	Post.downVoteComment(req.body.commentID, req.body.postID, req.body.username).then((foundPost)=>{
+		res.send(foundPost)
+	},(error) =>{
+		console.log(error)
+	})
+
 })
 
 router.get("/:id", (req,res) => {

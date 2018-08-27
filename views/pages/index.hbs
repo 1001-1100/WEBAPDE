@@ -199,7 +199,7 @@
         $("#postContainer").empty();
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
             skipNum += 1;
           }
         } else {
@@ -211,7 +211,7 @@
         $.post("/post/all/more", { skipNum }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
               skipNum += 1;
             }
           }
@@ -224,7 +224,7 @@
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
               skipNum += 1;
             }
           } else {
@@ -239,7 +239,7 @@
           skipNum = 0;
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
               skipNum += 1;
             }
           } else {
@@ -249,7 +249,7 @@
       })
 
 
-      function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber, upvote) {
+      function addPost(postID, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber, upvote, downvote) {
         var mediaPost = document.createElement("div");
         mediaPost.className = "media post";
         var flexRow = document.createElement("div");
@@ -338,21 +338,25 @@
         flexRow.append(flexColumn);
         mediaPost.append(flexRow);
 
+       
         var username = "{{uname}}";
         for(let i =0; i <upvote.length; i++){
           if(upvote[i] == username){ // make arrowup orange
-           
-            changeArrowUpColor(postID);
+            arrowUpward.setAttribute("style", "color:#F36E21");
+          }
+        }
+
+        for(let i =0; i <downvote.length; i++){
+          if(downvote[i] == username){ // make arrowdown blue
+            arrowDownward.setAttribute("style", "color:#3C8AFF");
           }
         }
 
         $("#postContainer").append(mediaPost);
       }
-             function changeArrowUpColor(postID){
-                $('#arrow_upward'+postID).css({  color: "#F36E21" });
-           
-            }
 
+
+  
        function upvotePost(postID) {
               var username = "{{uname}}";
     
@@ -366,13 +370,12 @@
                 }, (foundUser) => {
                   if (foundUser) {
                       
-                     $('#arrow_downward' +postID).css({   color: "lightgray" });
-                      $('#arrow_upward'+postID).css({  color: "#F36E21" });
-                      document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
+                    $('#arrow_downward'+postID).css({   color: "lightgray" });
+                    $('#arrow_upward'+postID).css({  color: "#F36E21" });
+                    document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
                   }
                   else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-                  
-                       alert("You can only upvote once")
+                    alert("You can only upvote once")
                   }
                 })
               }

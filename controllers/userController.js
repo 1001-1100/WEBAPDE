@@ -108,7 +108,9 @@ router.post("/posts", (req,res) => {
 				postAuthor: user.post[i].postAuthor,
 				postScore: user.post[i].postScore,
 				commentNumber: user.post[i].commentNumber,
-				relativeTime: prettyMs(new Date() - user.post[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - user.post[i].postDate, {compact: true, verbose: true}),
+				upvote: user.post[i].upvote,
+				downvote: user.post[i].downvote
 			})
 		}
 		res.send(postData)
@@ -129,7 +131,10 @@ router.post("/comments", (req,res) => {
 				commentContent: user.comment[i].commentContent,
 				commentAuthor: user.comment[i].commentAuthor,
 				commentScore: user.comment[i].commentScore,
-				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true}),
+				upvote: user.comment[i].upvoteComment,
+				downvote: user.comment[i].downvoteComment,
+
 			})
 		}
 		res.send(commentData)
