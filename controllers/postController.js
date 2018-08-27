@@ -8,7 +8,9 @@ const prettyMs = require('pretty-ms')
 const timestamp = require('time-stamp')
 const marked = require('marked')
 const validator = require('validator')
-marked.setOptions({sanitize: true})
+marked.setOptions({
+	sanitize: true
+})
 const app = express()
 
 const urlencoder = bodyparser.urlencoded({
@@ -23,10 +25,10 @@ router.post("/edit", (req, res) => {
 	}, (error) => {
 
 	})
-	User.edit(req.session.username ,req.body.postID, req.body.postTitle, req.body.postContent).then((postID)=>{
-		res.send("/post/"+req.session.username)
+	User.edit(req.session.username, req.body.postID, req.body.postTitle, req.body.postContent).then((postID) => {
+		res.send("/post/" + req.session.username)
 		//window.location.href("post/"+req.session.username)
-	},(error)=>{
+	}, (error) => {
 		console.log(error);
 	})
 })
@@ -39,7 +41,7 @@ router.get("/edit/:id", (req, res) => {
 			postTitle: post.postTitle,
 			postContent: post.postDescription
 		})
-    
+
 	}, (error) => {
 
 	})
@@ -47,14 +49,15 @@ router.get("/edit/:id", (req, res) => {
 
 router.get("/search", (req, res) => {
 	res.render("./pages/searched", {
+		uname: req.session.username,
 		searchTerm: req.query.searchTerm
 	})
 })
 
-router.post("/search", urlencoder, (req, res) => { 
+router.post("/search", urlencoder, (req, res) => {
 	Post.search(req.body.searchTerm).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -62,13 +65,16 @@ router.post("/search", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	}, (error)=>{
+	}, (error) => {
 		console.log(error)
 	})
 })
@@ -77,7 +83,7 @@ router.post("/search/more", urlencoder, (req, res) => {
 	console.log("search more ##")
 	Post.searchMore(req.body.searchTerm, req.body.skipNum).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -85,13 +91,16 @@ router.post("/search/more", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	}, (error)=>{
+	}, (error) => {
 		console.log(error)
 	})
 })
@@ -99,7 +108,7 @@ router.post("/search/more", urlencoder, (req, res) => {
 router.post("/search/date", urlencoder, (req, res) => {
 	Post.search(req.body.searchTerm).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -107,13 +116,16 @@ router.post("/search/date", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	}, (error)=>{
+	}, (error) => {
 		console.log(error)
 	})
 })
@@ -121,7 +133,7 @@ router.post("/search/date", urlencoder, (req, res) => {
 router.post("/search/score", urlencoder, (req, res) => {
 	Post.search(req.body.searchTerm).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -129,18 +141,21 @@ router.post("/search/score", urlencoder, (req, res) => {
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	}, (error)=>{
+	}, (error) => {
 		console.log(error)
 	})
 })
 
-router.get("/create", (req,res) =>{
+router.get("/create", (req, res) => {
 	res.render("./pages/newpost", {
 		uname: req.session.username
 	})
@@ -158,7 +173,7 @@ router.post("/create", (req, res) => {
 		comment: []
 	}
 
-	console.log("NEW POST: " + newPost)
+	// console.log("NEW POST: " + newPost)
 
 	Post.put(newPost).then((newPost) => {
 		User.putPost(newPost).then((newPost) => {
@@ -171,10 +186,10 @@ router.post("/create", (req, res) => {
 	})
 })
 
-router.get("/all", (req,res) =>{
-	Post.getAll().then((posts)=>{
+router.get("/all", (req, res) => {
+	Post.getAll().then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -182,21 +197,24 @@ router.get("/all", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/date", (req,res) =>{
-	Post.getSortedDate().then((posts)=>{
+router.get("/all/date", (req, res) => {
+	Post.getSortedDate().then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -204,21 +222,24 @@ router.get("/all/date", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/score", (req,res) =>{
-	Post.getSortedScore().then((posts)=>{
+router.get("/all/score", (req, res) => {
+	Post.getSortedScore().then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -226,21 +247,24 @@ router.get("/all/score", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.post("/all/more", (req,res) =>{
-	Post.getAllMore(parseInt(req.body.skipNum)).then((posts)=>{
+router.post("/all/more", (req, res) => {
+	Post.getAllMore(parseInt(req.body.skipNum)).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -248,21 +272,24 @@ router.post("/all/more", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/date/more", (req,res) =>{
-	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts)=>{
+router.get("/all/date/more", (req, res) => {
+	Post.getSortedDateMore(parseInt(req.body.skipNum)).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -270,21 +297,24 @@ router.get("/all/date/more", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.get("/all/score/more", (req,res) =>{
-	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts)=>{
+router.get("/all/score/more", (req, res) => {
+	Post.getSortedScoreMore(parseInt(req.body.skipNum)).then((posts) => {
 		var postData = []
-		for(let i = 0 ; i < posts.length ; i++){
+		for (let i = 0; i < posts.length; i++) {
 			postData.push({
 				_id: posts[i]._id,
 				postTitle: posts[i].postTitle,
@@ -292,45 +322,48 @@ router.get("/all/score/more", (req,res) =>{
 				postAuthor: posts[i].postAuthor,
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
-				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: posts[i].upvote,
 				downvote: posts[i].downvote
 			})
-		}	
+		}
 		res.send(postData)
-	},(error)=>{
+	}, (error) => {
 
 	})
 })
 
-router.post("/upPost",(req, res) =>{
+router.post("/upPost", (req, res) => {
 
-	User.upVote(req.body.id, req.body.username).then((foundPost)=>{
-	//	res.send(foundPost)
-	},(error) =>{
-		console.log(error)
-	})
-
-	Post.upVote(req.body.id, req.body.username).then((foundPost)=>{
-		res.send(foundPost)
-	},(error) =>{
-		console.log(error)
-	})
-
-
-})
-
-router.post("/downPost",(req, res) =>{
-
-	User.downVote(req.body.id, req.body.username).then((foundPost)=>{
+	User.upVote(req.body.id, req.body.username).then((foundPost) => {
 		//	res.send(foundPost)
-		},(error) =>{
-			console.log(error)
-    })
+	}, (error) => {
+		console.log(error)
+	})
 
-	Post.downVote(req.body.id, req.body.username).then((foundPost)=>{
+	Post.upVote(req.body.id, req.body.username).then((foundPost) => {
 		res.send(foundPost)
-	},(error) =>{
+	}, (error) => {
+		console.log(error)
+	})
+
+
+})
+
+router.post("/downPost", (req, res) => {
+
+	User.downVote(req.body.id, req.body.username).then((foundPost) => {
+		//	res.send(foundPost)
+	}, (error) => {
+		console.log(error)
+	})
+
+	Post.downVote(req.body.id, req.body.username).then((foundPost) => {
+		res.send(foundPost)
+	}, (error) => {
 		console.log(error)
 	})
 
@@ -341,7 +374,7 @@ router.post("/downPost",(req, res) =>{
 router.post("/comments", (req, res) => {
 	Post.get(req.body.id).then((post) => {
 		var commentData = []
-		for(let i = 0 ; i < post.comment.length ; i++){
+		for (let i = 0; i < post.comment.length; i++) {
 			commentData.push({
 				_id: post.comment[i]._id,
 				_postID: post.comment[i]._postID,
@@ -349,7 +382,10 @@ router.post("/comments", (req, res) => {
 				commentAuthor: post.comment[i].commentAuthor,
 				commentScore: post.comment[i].commentScore,
 				nestedComments: post.comment[i].nestedComments,
-				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true}),
+				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {
+					compact: true,
+					verbose: true
+				}),
 				upvote: post.comment[i].upvoteComment,
 				downvote: post.comment[i].downvoteComment
 			})
@@ -367,87 +403,87 @@ router.get("/delete/:id", (req, res) => {
 		res.send(null)
 	})
 })
-  
-router.post("/deletepost", (req, res) =>{
+
+router.post("/deletepost", (req, res) => {
 
 	Post.get(req.body.id).then((post) => {
-		User.deleteCommentsFromPost(req.body.id).then((result)=>{
+		User.deleteCommentsFromPost(req.body.id).then((result) => {
 			// Deletes post in the Post collection Db given the postID
-			Post.deletePost(req.body.id).then((result)=>{
-				Comment.deleteCommentFromPost(req.body.id).then((deletedComments)=>{
+			Post.deletePost(req.body.id).then((result) => {
+				Comment.deleteCommentFromPost(req.body.id).then((deletedComments) => {
 					// Deletes post in the User collection db by searchin for the user then deleting the post in his post array
-					User.deletePost(req.body.username, req.body.id).then((result)=>{ 
+					User.deletePost(req.body.username, req.body.id).then((result) => {
 						res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
-					},(error)=>{
+					}, (error) => {
 						console.log(error)
 					})
-				},(error)=>{
+				}, (error) => {
 					console.log(error)
 				})
-			},(error)=>{
+			}, (error) => {
 				console.log(error)
 			})
-		},(error)=>{
+		}, (error) => {
 			console.log(error)
 		})
 	}, (error) => {
 		console.log(error)
-	})	
+	})
 
 })
 
-router.post("/deletecomment", (req, res) =>{
+router.post("/deletecomment", (req, res) => {
 
 	// Deletes comment in the Post collection Db given the postID
-	Post.deleteComment(req.body.postID, req.body.commentID).then((post)=>{ 
-		Comment.deleteComment(req.body.commentID).then((deletedComments)=>{ 
-			console.log("Outside user: "+deletedComments)
+	Post.deleteComment(req.body.postID, req.body.commentID).then((post) => {
+		Comment.deleteComment(req.body.commentID).then((deletedComments) => {
+			console.log("Outside user: " + deletedComments)
 			// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
-			User.deleteComments(post, deletedComments).then((user)=>{ 
+			User.deleteComments(post, deletedComments).then((user) => {
 				res.send(null)
-			},(error)=>{
+			}, (error) => {
 				res.send(null)
 			})
-		 },(error)=>{
+		}, (error) => {
 			res.send(null)
-		 })
-	},(error)=>{
+		})
+	}, (error) => {
 		res.send(null)
 	})
-	
+
 
 
 })
 
-router.post("/updateComment", (req, res) =>{
+router.post("/updateComment", (req, res) => {
 
-	
+
 	// Deletes comment in the Post collection Db given the postID
-	Post.updateComment(req.body.postID, req.body.commentID, req.body.commentContent).then((result)=>{ 
-	//	res.send(result)
-	},(error)=>{
+	Post.updateComment(req.body.postID, req.body.commentID, req.body.commentContent).then((result) => {
+		//	res.send(result)
+	}, (error) => {
 		res.send(null)
 	})
-	
-	 Comment.updateComment(req.body.commentID, req.body.commentContent).then((result)=>{ 
+
+	Comment.updateComment(req.body.commentID, req.body.commentContent).then((result) => {
 		//	res.send(result) 
-	 },(error)=>{
+	}, (error) => {
 		res.send(null)
-	 })
+	})
 
 	// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
-	 User.updateComment(req.body.username, req.body.postID, req.body.commentID, req.body.commentContent).then((result)=>{ 
-	 	res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
-	 },(error)=>{
+	User.updateComment(req.body.username, req.body.postID, req.body.commentID, req.body.commentContent).then((result) => {
+		res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+	}, (error) => {
 		res.send(null)
-	 })
+	})
 
 
 
 })
 
-router.get("/:id", (req,res) => {
-	Post.get(req.params.id).then((post)=>{
+router.get("/:id", (req, res) => {
+	Post.get(req.params.id).then((post) => {
 		res.render("./pages/post", {
 			uname: req.session.username,
 			postID: post._id,
@@ -455,7 +491,10 @@ router.get("/:id", (req,res) => {
 			postDescription: post.postDescription,
 			postAuthor: post.postAuthor,
 			postScore: post.postScore,
-			postDate: prettyMs(new Date() - post.postDate, {compact: true, verbose: true}),
+			postDate: prettyMs(new Date() - post.postDate, {
+				compact: true,
+				verbose: true
+			}),
 			commentNumber: post.commentNumber
 		})
 	}, (error) => {
