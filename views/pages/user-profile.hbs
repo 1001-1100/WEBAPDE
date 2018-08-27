@@ -304,7 +304,7 @@
       }, (foundPosts) => {
         if (foundPosts.length > 0) {
           for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
           }
           $("#loadMorePosts").show()
         } else {
@@ -372,7 +372,7 @@
         $("#loadMoreComments").hide()
       }
 
-      function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber) {
+      function addPost(postIDs, postTitle, postDescription, postAuthor, postDate, postScore, commentNumber, upvote, downvote) {
         var mediaPost = document.createElement("div");
         mediaPost.className = "media post";
         var flexRow = document.createElement("div");
@@ -384,12 +384,32 @@
         var arrowUpward = document.createElement("i");
         arrowUpward.className = "material-icons md-18 md-dark up";
         arrowUpward.innerHTML = "arrow_upward";
+        arrowUpward.id = "arrow_upward" + postIDs;
+        var upwardSpan = document.createElement("span")
+        upwardSpan.addEventListener("click", function () {
+            console.log("upwardSpan clicked")
+
+            upvotePost(postIDs)
+
+        })
+        upwardSpan.append(arrowUpward);
+
         var voteValue = document.createElement("span");
         voteValue.className = "votes";
+        voteValue.id = "votes" + postIDs
         voteValue.innerHTML = postScore;
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
         arrowDownward.innerHTML = "arrow_downward";
+        arrowDownward.id = "arrow_downward" + postIDs
+        var downwardSpan = document.createElement("span")
+          downwardSpan.addEventListener("click", function () {
+              console.log("downwardSpan clicked")
+
+              downvotePost(postIDs)
+          })
+        downwardSpan.append(arrowDownward);
+
         var commentIcon = document.createElement("i");
         commentIcon.className = "material-icons md-16 md-dark";
         commentIcon.innerHTML = "comment";
@@ -425,9 +445,9 @@
         //editspan.setAttribute("data-target", "#editPostModal");
         //  var edita = document.createElement("a");
 
-        voteBox.append(arrowUpward);
+        voteBox.append(upwardSpan);
         voteBox.append(voteValue);
-        voteBox.append(arrowDownward);
+        voteBox.append(downwardSpan);
         flexRow.append(voteBox);
         flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
@@ -445,6 +465,7 @@
         flexRow.append(flexColumn);
         mediaPost.append(flexRow);
 
+ 
         var curUser = "{{username}}"
         var loggedIn = "{{uname}}"
         if (loggedIn)
@@ -476,6 +497,19 @@
             flexRow.append(editspan);
             flexRow.append(deletespan);
           }
+
+        for(let i =0; i <upvote.length; i++){
+          if(upvote[i] == loggedIn){ // make arrowup orange
+            arrowUpward.setAttribute("style", "color:#F36E21");
+          }
+        }
+
+        for(let i =0; i <downvote.length; i++){
+          if(downvote[i] == loggedIn){ // make arrowdown blue
+            arrowDownward.setAttribute("style", "color:#3C8AFF");
+          }
+        }
+
 
         $("#postContainer").append(mediaPost);
       }
@@ -697,6 +731,54 @@
 
       }
 
+        function upvotePost(postID) {
+              var username = "{{uname}}";
+    
+              if (!username) {
+                //add modal
+                alert("Must login before voting.")
+              } else {
+                $.post("post/upPost", {
+                  id: postID,
+                  username: username
+                }, (foundUser) => {
+                  if (foundUser) {
+                      
+                    $('#arrow_downward'+postID).css({   color: "lightgray" });
+                    $('#arrow_upward'+postID).css({  color: "#F36E21" });
+                    document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
+                  }
+                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                    alert("You can only upvote once")
+                  }
+                })
+              }
+            }
+      
+                function downvotePost(postID) {
+                  var username = "{{uname}}";
+                 
+                  if (!username) {
+                    //add modal
+                     alert("Must login before voting.")
+                  } else {
+                    $.post("post/downPost", {
+                      id: postID,
+                      username: username
+                    }, (foundUser) => {
+                      if (foundUser) {
+                      $('#arrow_upward'+ postID).css({   color: "lightgray" });
+                        $('#arrow_downward' + postID).css({   color: "#3C8AFF" });
+                        document.getElementById("votes"+postID).innerHTML= foundUser.postScore;
+                        //set to blue
+                      }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                  
+                       alert("You can only downvote once")
+                  }
+                    })
+                  }
+                }
+
       function deleteComment(postID, commentID) {
 
         var username = "{{username}}";
@@ -729,7 +811,7 @@
 
           if (deletedPost) {
             for (let i = 0; i < deletedPost.post.length; i++) {
-              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber);
+              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
             }
           } else {
             addNoPosts()

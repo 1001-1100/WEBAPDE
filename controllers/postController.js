@@ -105,7 +105,8 @@ router.get("/all", (req,res) =>{
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
 				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
-				upvote: posts[i].upvote
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -146,7 +147,8 @@ router.get("/all/score", (req,res) =>{
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
 				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
-				upvote: posts[i].upvote
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -167,7 +169,8 @@ router.post("/all/more", (req,res) =>{
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
 				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
-				upvote: posts[i].upvote
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -188,7 +191,8 @@ router.get("/all/date/more", (req,res) =>{
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
 				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
-				upvote: posts[i].upvote
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}
 		res.send(postData)
@@ -209,7 +213,8 @@ router.get("/all/score/more", (req,res) =>{
 				postScore: posts[i].postScore,
 				commentNumber: posts[i].commentNumber,
 				relativeTime: prettyMs(new Date() - posts[i].postDate, {compact: true, verbose: true}),
-				upvote: posts[i].upvote
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
 			})
 		}	
 		res.send(postData)
@@ -240,11 +245,19 @@ router.get("/search/:searchTerm", (req,res) => {
 
 router.post("/upPost",(req, res) =>{
 
+	User.upVote(req.body.id, req.body.username).then((foundPost)=>{
+	//	res.send(foundPost)
+	console.log("User.upVote")
+	},(error) =>{
+		console.log(error)
+	})
+
 	Post.upVote(req.body.id, req.body.username).then((foundPost)=>{
 		res.send(foundPost)
 	},(error) =>{
 		console.log(error)
 	})
+
 
 })
 

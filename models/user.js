@@ -27,7 +27,9 @@ var userSchema = mongoose.Schema({
 			commentDate: Date,
 			commentScore: Number,
 			nestedComments: [mongoose.SchemaTypes.ObjectId]
-		}]
+		}],
+		upvote:[String],
+		downvote:[String]
 	}],
 	comment: [{
 		_postID: mongoose.SchemaTypes.ObjectId,
@@ -159,6 +161,128 @@ exports.updateComment = function(username, postID, commentID, commentContent){
 				reject(err)
 			})
 		}else{console.log("user is NULL")}
+		})
+	})
+}
+
+exports.upVote = function (id, username) {
+	var upexist = 0;
+	var downvoteonce = 0;
+	var postindex=0;
+	return new Promise(function (resolve, reject) {
+		User.findOne({
+			username
+		
+		}).then((user) => {
+			console.log("upvote: " + user)
+			// checks downvote array if user is there and deletes 
+			for(let j = 0; j < user.post.length; j++){
+
+				if(user.post[j]._id == id){
+					postindex = j;
+				}
+
+
+				for(let i = 0; i< user.post[j].downvote.length; i++){
+					if(user.post[j].downvote[i] == username){
+						user.post[j].downvote.splice(i, 1);
+						downvoteonce = 1;
+					}
+				}
+
+			// checks upvote array, if user already upvoted that post
+				for(let i = 0; i< user.post[j].upvote.length; i++){
+					if(user.post[j].upvote[i] == username){
+						upexist = 1;
+					}
+				}
+
+				if(upexist == 0 && downvoteonce == 0){ // wala pa yung username na yun, so can push to array
+					user.post[postindex].upvote.push(username)
+					user.post[postindex].postScore = user.post[postindex].postScore + 1;
+	
+				}else if(upexist == 0 && downvoteonce == 1){
+					user.post[postindex].upvote.push(username)
+					user.post[postindex].postScore = user.post[postindex].postScore + 2;
+	
+				}
+				else if (upexist == 1){// username already in the array, na upvote na yung post ng user na yun, sends back null
+					resolve(null)
+				}
+
+			}
+			user.save().then((newPost)=>{
+				resolve(newPost)
+			}, (err)=>{
+				reject(err)
+			})
+
+		
+
+			if(user){
+				
+			} else{console.log("post IS NULL")}
+
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.downVote = function (id, username) {
+	var downexist = 0;
+	var upvoteonce = 0;
+	return new Promise(function (resolve, reject) {
+		User.findOne({
+			username
+		
+		}).then((user) => {
+			console.log("downvote:" + user)
+			// checks upvote array if user is there and deletes 
+			for(let i = 0; i< user.post.upvote.length; i++){
+				if(user.post.upvote[i] == username){
+					user.post.upvote.splice(i, 1);
+					upvoteonce = 1;
+				}
+			}
+
+
+			// checks downvote array
+			for(let i = 0; i< user.post.downvote.length; i++){
+				if(user.post.downvote[i] == username){
+					downexist = 1;
+				}
+			}
+
+			if(downexist == 0 && upvoteonce == 0){ // wala pa yung username na yun, so can push to array
+				user.post.downvote.push(username)
+				user.post.postScore = user.post.postScore - 1;
+
+				user.save().then((newPost)=>{
+					resolve(newPost)
+				}, (err)=>{
+					reject(err)
+				})
+			}else if(downexist == 0 && upvoteonce == 1){
+				user.post.downvote.push(username)
+				user.post.postScore = user.post.postScore - 2;
+
+				user.save().then((newPost)=>{
+					resolve(newPost)
+				}, (err)=>{
+					reject(err)
+				})
+			}
+			else if (downexist == 1){// username already in the array, na downvote na yung post ng user na yun, sends back null
+				resolve(null)
+			}
+
+			if(user){
+				
+			} else{console.log("post IS NULL")}
+
+		}, (err) => {
+			reject(err)
 		})
 	})
 }

@@ -108,7 +108,9 @@ router.post("/posts", (req,res) => {
 				postAuthor: user.post[i].postAuthor,
 				postScore: user.post[i].postScore,
 				commentNumber: user.post[i].commentNumber,
-				relativeTime: prettyMs(new Date() - user.post[i].postDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - user.post[i].postDate, {compact: true, verbose: true}),
+				upvote: user.post[i].upvote,
+				downvote: user.post[i].downvote
 			})
 		}
 		res.send(postData)
