@@ -15,6 +15,8 @@
 
   <script>
 
+
+  
     var username = "{{uname}}";
     var newComments = 0;
 
@@ -334,6 +336,7 @@
 
       $(commentContainer).append(mainCommentContainer);
     }
+
     function upvoteComment(commentID, postID) {
       var username = "{{uname}}";
 
@@ -423,9 +426,9 @@
       <!-- START OF POST SECTION -->
       <div class="media post">
         <div class="mr-3 actions">
-          <i class="material-icons md-18 md-dark up">arrow_upward</i>
-          <span class="votes">{{postScore}}</span>
-          <i class="material-icons md-18 md-dark down">arrow_downward</i>
+          <i id="upwardSpanpost" data-id ="{{postID}}" class="material-icons md-18 md-dark up">arrow_upward</i>
+          <span id ="votes" class="votes">{{postScore}}</span>
+          <i id="downwardSpanpost" data-id = "{{postID}}" class="material-icons md-18 md-dark down">arrow_downward</i>
         </div>
         <div class="media-body">
           <h5 class="mt-0 mb-1">{{{postTitle}}}</h5>
@@ -631,7 +634,67 @@
               }
             });
       */
+      
+          $( "#upwardSpanpost" ).on( "click", function() {
+            var postID = $("#upwardSpanpost").attr("data-id")
+            upvotePost(postID)
+          });
 
+          $( "#downwardSpanpost" ).on( "click", function() {
+            var postID = $("#downwardSpanpost").attr("data-id")
+            downvotePost(postID)
+          });
+
+
+       
+       function upvotePost(postID) {
+              var username = "{{uname}}";
+    
+              if (!username) {
+                //add modal
+                alert("Must login before voting.")
+              } else {
+                $.post("post/upPost", {
+                  id: postID,
+                  username: username
+                }, (foundUser) => {
+                  if (foundUser) {
+                      
+                    $('#downwardSpanpost').css({   color: "lightgray" });
+                    $('#upwardSpanpost').css({  color: "#F36E21" });
+                    document.getElementById("votes").innerHTML=foundUser.postScore;
+                  }
+                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                    alert("You can only upvote once")
+                  }
+                })
+              }
+            }
+      
+                function downvotePost(postID) {
+                  var username = "{{uname}}";
+                 
+                  if (!username) {
+                    //add modal
+                     alert("Must login before voting.")
+                  } else {
+                    $.post("post/downPost", {
+                      id: postID,
+                      username: username
+                    }, (foundUser) => {
+                      if (foundUser) {
+                      $('#upwardSpanpost').css({   color: "lightgray" });
+                        $('#downwardSpanpost').css({   color: "#3C8AFF" });
+                        document.getElementById("votes").innerHTML= foundUser.postScore;
+                        //set to blue
+                      }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                  
+                       alert("You can only downvote once")
+                  }
+                    })
+                  }
+                }
+      
       loadComments();
 
     });

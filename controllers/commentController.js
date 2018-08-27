@@ -127,7 +127,9 @@ router.get("/:id", (req,res) => {
 			commentAuthor: comment.commentAuthor,
 			commentScore: comment.commentScore,
 			nestedComments: comment.nestedComments,
-			relativeTime: prettyMs(new Date() - comment.commentDate, {compact: true, verbose: true})
+			relativeTime: prettyMs(new Date() - comment.commentDate, {compact: true, verbose: true}),
+			upvote: comment.upvoteComment,
+			downvote: comment.downvoteComment
 		}
 		res.send(commentData)
 	},(error)=>{
