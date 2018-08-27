@@ -124,6 +124,7 @@
         btnSubmit.className = "btn btn-primary mt-2"
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
+          $("#allComments").empty();
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
             loadComments();
           })
@@ -232,6 +233,7 @@
         btnSubmit.className = "btn btn-primary mt-2"
         btnSubmit.innerHTML = "Submit"
         btnSubmit.addEventListener("click", function () {
+          $("#allComments").empty();
           $.post("/comment/nested", { postID: "{{postID}}", commentID, commentContent: txtComment.value }, (newComment) => {
             loadComments();
           })
@@ -282,14 +284,15 @@
     }
 
     function createNewComment() {
-      $("#noComment").remove()
-      $.post("/comment/create", {postID: "{{postID}}", commentContent: $("#commentContent").val()}, (newComment) => {
+      $("#noComment").remove();
+      var commentContent = $("#commentContent").val();
+      $("#commentContent").val("");
+      $("#submitButton").attr("disabled", "disabled");
+      $.post("/comment/create", {postID: "{{postID}}", commentContent}, (newComment) => {
         //addComment(newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
         loadComments();
-        $("#commentContent").val("");
         newComments += 1;
         $("#commentNumber").html({{ commentNumber }}+newComments + " comments");
-        $("#submitButton").attr("disabled", "disabled");
       })
 		}
 

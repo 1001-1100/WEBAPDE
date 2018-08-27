@@ -99,7 +99,7 @@
 
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="user-posts" role="tabpanel" aria-labelledby="user-posts-tab">
-            <ul id="postContainer" class="list-unstyled">
+            <ul id="postContainer" class="list-unstyled"></ul>
               <div id="loading-posts">
                 <div class="d-flex flex-row mb-3 media post">
                   <div class="mr-3 actions">
@@ -197,13 +197,11 @@
                 </div>
               </div>
 
-            </ul>
-
             <div id="loadMorePosts" class="btn btn-outline-primary" style="display: none;">See more posts</div>
           </div>
 
           <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
-            <ul id="commentContainer" class="list-unstyled">
+            <ul id="commentContainer" class="list-unstyled"></ul>
               <div id="loading-comments">
                 <div class="comment-container">
                   <div class="ml-3 media comment">
@@ -264,11 +262,8 @@
                     </div>
                   </div>
                 </div>
-
-
               </div>
 
-            </ul>
             <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
             </ul>
           </div>
@@ -296,33 +291,39 @@
 
       var username = "{{username}}";
 
-      $("#postContainer").empty();
-      $("#commentContainer").empty();
-
-      $.post("/user/posts", {
-        username: username
-      }, (foundPosts) => {
-        if (foundPosts.length > 0) {
-          for (let i = 0; i < foundPosts.length; i++) {
-            addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+      function loadPosts(){
+        $("#postContainer").empty();
+        $.post("/user/posts", {
+          username: username
+        }, (foundPosts) => {
+          if (foundPosts.length > 0) {
+            for (let i = 0; i < foundPosts.length; i++) {
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+            }
+            $("#loadMorePosts").show()
+          } else {
+            addNoPosts()
           }
-          $("#loadMorePosts").show()
-        } else {
-          addNoPosts()
-        }
-      })
+        })
+      }
 
-      $.post("/user/comments", {
-        username: username
-      }, (foundComments) => {
-        if (foundComments.length > 0) {
-          for (let i = 0; i < foundComments.length; i++) {
-            addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
+      function loadComments(){
+        $("#commentContainer").empty();
+        $.post("/user/comments", {
+          username: username
+        }, (foundComments) => {
+          if (foundComments.length > 0) {
+            for (let i = 0; i < foundComments.length; i++) {
+              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
+            }
+          } else {
+            addNoComments()
           }
-        } else {
-          addNoComments()
-        }
-      })
+        })     
+      }
+
+      loadPosts();
+      loadComments();
 
       /////////////////////////////////////////////////////////////////
 
@@ -684,21 +685,12 @@
           commentContent: commentContent,
           username: username
         }, (foundUser) => {
-          console.log(foundUser)
-          if (foundUser) {
-            for (let i = 0; i < foundUser.comment.length; i++) {
-              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.relativeTime, foundUser.comment[i].commentScore);
-            }
-          } else {
-            addNoComments()
-          }
-
+          loadComments();
         })
 
       }
 
       function deleteComment(postID, commentID) {
-
         var username = "{{username}}";
         $("#commentContainer").empty();
 
@@ -707,48 +699,26 @@
           commentID: commentID,
           username: username
         }, (foundUser) => { // returns the users list of comments after deleting the said post already
-          console.log(foundUser)
-          if (foundUser.comment.length > 0) {
-            for (let i = 0; i < foundUser.comment.length; i++) {
-              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].relativeTime, foundUser.comment[i].commentScore);
-            }
-          } else {
-            addNoComments()
-          }
+          window.location.href = "/user/{{username}}";
         })
       }
 
       function deletePost(postID) {
         var username = "{{username}}";
-        $("#postContainer").empty();
 
+        $("#postContainer").empty();
         $.post("post/deletepost", {
           id: postID,
           username: username
         }, (deletedPost) => { // returns the users list of post after deleting the said post already
-
-          if (deletedPost) {
-            for (let i = 0; i < deletedPost.post.length; i++) {
-              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber);
-            }
-          } else {
-            addNoPosts()
-          }
-
+          $("#commentContainer").empty();
+          $.post("/user/comments", {
+            username: username
+          }, (foundComments) => {
+            window.location.href = "/user/{{username}}";
+          })
         })
-
-        $("#commentContainer").empty();
-        $.post("/user/comments", {
-          username: username
-        }, (foundComments) => {
-          if (foundComments.length > 0) {
-            for (let i = 0; i < foundComments.length; i++) {
-              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
-            }
-          } else {
-            addNoComments()
-          }
-        })
+        
       }
 
       $("#deletePostConfirmation").on('show.bs.modal', function (e) {

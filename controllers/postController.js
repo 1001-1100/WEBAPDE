@@ -337,63 +337,53 @@ router.get("/delete/:id", (req, res) => {
   
 router.post("/deletepost", (req, res) =>{
 
-	// Deletes post in the Post collection Db given the postID
-	Post.deletePost(req.body.id).then((result)=>{ 
-		//
-	},(error)=>{
-		res.send(null)
-	})
-
-	Comment.deleteCommentFromPost(req.body.id).then((result)=>{
-		//
-	},(error)=>{
-		res.send(null)
-	})
-
-	// Deletes post in the User collection db by searchin for the user then deleting the post in his post array
-	User.deletePost(req.body.username, req.body.id).then((result)=>{ 
-		res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
-	},(error)=>{
-		res.send(null)
-	})
+	Post.get(req.body.id).then((post) => {
+		User.deleteCommentsFromPost(req.body.id).then((result)=>{
+			// Deletes post in the Post collection Db given the postID
+			Post.deletePost(req.body.id).then((result)=>{
+				Comment.deleteCommentFromPost(req.body.id).then((deletedComments)=>{
+					// Deletes post in the User collection db by searchin for the user then deleting the post in his post array
+					User.deletePost(req.body.username, req.body.id).then((result)=>{ 
+						res.send(result) // only sends this one back since the ajax call updates the user profile only with his posts
+					},(error)=>{
+						console.log(error)
+					})
+				},(error)=>{
+					console.log(error)
+				})
+			},(error)=>{
+				console.log(error)
+			})
+		},(error)=>{
+			console.log(error)
+		})
+	}, (error) => {
+		console.log(error)
+	})	
 
 })
 
 router.post("/deletecomment", (req, res) =>{
 
 	// Deletes comment in the Post collection Db given the postID
-	Post.deleteComment(req.body.postID, req.body.commentID).then((result)=>{ 
-	//	res.send(result)
+	Post.deleteComment(req.body.postID, req.body.commentID).then((post)=>{ 
+		Comment.deleteComment(req.body.commentID).then((deletedComments)=>{ 
+			console.log("Outside user: "+deletedComments)
+			// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
+			User.deleteComments(post, deletedComments).then((user)=>{ 
+				res.send(null)
+			},(error)=>{
+				res.send(null)
+			})
+		 },(error)=>{
+			res.send(null)
+		 })
 	},(error)=>{
 		res.send(null)
 	})
 	
-	 Comment.deleteComment(req.body.commentID).then((result)=>{ 
-		//	res.send(result) 
-	 },(error)=>{
-		res.send(null)
-	 })
 
-	// Deletes comment in the User collection db by searching for the user then deleting the post in his post array
-	 User.deleteComment(req.body.username, req.body.postID, req.body.commentID).then((user)=>{ 
-		 var commentData = []
-		 for(let i = 0 ; i < user.comment.length ; i++){
-			commentData.push({
-				_postID: user.comment[i]._postID,
-				commentContent: user.comment[i].commentContent,
-				commentAuthor: user.comment[i].commentAuthor,
-				commentDateString: user.comment[i].commentDateString,
-				commentDate: user.comment[i].commentDate,
-				commentScore: user.comment[i].commentScore,
-				nestedComments: user.comment[i].nestedComments,
-				relativeTime: prettyMs(new Date() - user.comment[i].commentDate, {compact: true, verbose: true})
-			})
-		 }
 
-		 res.send(user)
-	 },(error)=>{
-		//res.send(commentData)
-	 })
 })
 
 router.post("/updateComment", (req, res) =>{

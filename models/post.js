@@ -184,10 +184,10 @@ exports.deleteComment = function (postID, commentID) {
 			_id: postID
 		}).then((post) => {
 			if(post){
-				for(let i =0; i<post.comment.length; i++){
-					if(post.comment[i]._id == commentID){
+				for(let i = 0; i < post.comment.length; i++){
+					if(post.comment[i]._id.equals(commentID)){
 						post.comment.splice(i, 1)
-						post.commentNumber = post.commentNumber - 1;
+						post.commentNumber -= 1;
 					}
 				}
 
@@ -302,8 +302,8 @@ exports.downVote = function (id, username) {
 
 exports.search = function (searchTerm){
 	return new Promise(function (resolve, reject) {
-		var findPost = Post.find({postDescription: {$regex:searchTerm ,$options:"$i"}})
-		var findPost2 = Post.find({postTitle: {$regex:searchTerm ,$options:"$i"}})
+		var findPost = Post.find({postDescription: {$regex:searchTerm, $options:"$i"}})
+		var findPost2 = Post.find({postTitle: {$regex:searchTerm, $options:"$i"}})
 		let check = 0;
 		findPost.then((foundPosts)=>{
 			findPost2.then((foundPosts2)=>{

@@ -26,25 +26,68 @@ exports.get = function (id) {
 
 exports.deleteComment = function(commentID){
 	return new Promise(function (resolve, reject) {
-		Comment.remove({
-			_id: commentID
-		}).then((result) => {
-			resolve(result)
-		}, (err) => {
-			reject(err)
-		})
+
+		var deleteComments = []
+
+		function removeNested(commentID){
+			return new Promise(function (resolve, reject) {
+				Comment.findOne({
+					_id: commentID
+				}).then((comment)=>{
+					try{
+						for(let i = 0 ; i < comment.nestedComments.length ; i++){
+							removeNested(comment.nestedComments[i]._id).then((commentID)=>{});
+						}
+					}catch(e){}
+					Comment.remove({
+						_id: commentID
+					}).then((result) => {
+						deleteComments.push(commentID)
+						resolve(result)	
+					})
+				})
+			})
+		}
+
+		removeNested(commentID).then((result)=>{
+			Comment.countDocuments().then((maxComment)=>{
+				for(let i = 0 ; i < maxComment ; i++){
+					Comment.findOne().skip(i).then((comment)=>{
+						try{
+							for(let i = 0 ; i < comment.nestedComments.length ; i++){
+								if(comment.nestedComments[i]._id.equals(commentID)){
+									comment.nestedComments[i].splice(i, 1);
+								}
+							}
+							comment.save().then((result2)=>{})
+						}catch(e){}
+
+					})
+				}
+				resolve(deleteComments)
+			})
+		});
+
+
 	})
 }
 
 exports.deleteCommentFromPost = function(postID){
 	return new Promise(function (resolve, reject) {
-		Comment.remove({
+		Comment.find({
 			_postID: postID
-		}).then((result) => {
-			resolve(result)
+		}).then((deletedComments) => {
+			Comment.remove({
+				_postID: postID
+			}).then((result) => {
+				resolve(deletedComments)
+			}, (err) => {
+				reject(err)
+			})
 		}, (err) => {
 			reject(err)
 		})
+
 	})
 }
 

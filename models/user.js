@@ -59,68 +59,96 @@ exports.deletePost = function(username, id){
 		User.findOne({
 			username
 		}).then((user)=>{
-
 			for(let i = 0; i < user.post.length; i++ ){
 				if(user.post[i]._id.equals(id)){
 					user.post.splice(i, 1)
 				}
 			}
-
-			for(let i = 0; i < user.comment.length; i++ ){
-				if(user.comment[i]._postID.equals(id)){
-					console.log("fdound")
-					user.comment.splice(i, 1)
-				}
-			}
-
-			user.save().then((newUser)=>{
-				resolve(newUser)
+			user.save().then((result)=>{
+				resolve(user)
 			}, (err)=>{
 				reject(err)
-			})
-			
+			})	
+		}, (err)=>{
+			reject(err)
 		})
 	})
 }
 
-exports.deleteComment = function(username, postID, commentID){
-	console.log("deleteComment postID is " + postID)
-	console.log("deleteComment commentID is " + commentID)
-	console.log("deleteComment username is " + username)
+exports.deleteCommentsFromPost = function(postID){
+	return new Promise(function(resolve, reject){
+		User.countDocuments().then((maxUser)=>{
+			for(let i = 0 ; i < maxUser ; i++){
+				User.findOne().skip(i).then((user)=>{
+					let i = 0
+					while(i < user.comment.length){
+						console.log(user.username + ": " + user.comment[i]._postID + " == " + postID)
+						if(user.comment[i]._postID.equals(postID)){
+							user.comment.splice(i, 1);
+						}else{
+							i++;
+						}
+					}
+					user.save().then((result)=>{
+						resolve(result)
+					}, (err)=>{
+						reject(err)
+					})
+				})
+			}
+		})
+	})
+}
+
+exports.deleteComments = function(post, deletedComments){
+	console.log(deletedComments)
+	return new Promise(function(resolve, reject){
+		User.countDocuments().then((maxUser)=>{
+			for(let i = 0 ; i < maxUser ; i++){
+				User.findOne().skip(i).then((user)=>{
+					for(let j = 0 ; j < deletedComments.length ; j++){
+						let i = 0
+						while(i < user.comment.length){
+							if(user.comment[i]._id.equals(deletedComments[j])){
+								user.comment.splice(i, 1);
+							}else{
+								i++;
+							}
+						}
+						for(let i = 0 ; i < user.post.length ; i++){
+							if(user.post[i]._id.equals(post._id)){
+								user.post[i].commentNumber = post.commentNumber
+							}
+						}
+						user.save().then((result)=>{
+							resolve(result)
+						}, (err)=>{
+							reject(err)
+						})
+					}
+				})
+			}
+		})
+	})
+}
+
+exports.deleteComment = function(username, commentID){
 	return new Promise(function(resolve, reject){
 		User.findOne({
 			username
 		}).then((user)=>{
-
-			if(user){
-			// deletes in comment array in the post array of user
-			for(let i = 0; i < user.post.length; i++ ){
-				if(user.post[i]._id == postID){
-					user.post[i].commentNumber = user.post[i].commentNumber - 1;
-					if(user.post[i].comment.length >0){
-						for(let j = 0; j<user.post[i].comment.length; j++){
-							if(user.post[i].comment[j]._id == commentID){
-								user.post[i].comment.splice(j, 1)
-							}
-						}
-					}
-				}
-			}
-
 			// deletes in comment array of user
 			for(let i = 0; i < user.comment.length; i++){
-				if(user.comment[i]._id == commentID){
+				if(user.comment[i]._id.equals(commentID)){
 					user.comment.splice(i, 1);
-				
 				}
 			}
-
-			user.save().then((newUser)=>{
-				resolve(newUser)
+			user.save().then((result)=>{
+				console.log(commentID + " deleted")
+				resolve(result)
 			}, (err)=>{
 				reject(err)
 			})
-		}else{console.log("user is NULL")}
 		})
 	})
 }
@@ -221,21 +249,21 @@ exports.putNestedComment = function (comment, post, commentID) {
 		}, {
 			$push: {comment: comment}
 		}).then((msg) => {
-			User.findOne({
-				username: post.postAuthor
-			}).then((user) => {
-				for(let i = 0 ; i < user.post.length ; i++){
-					if(user.post[i]._id.equals(post._id)){
-						for(let j = 0 ; j < user.post[i].comment.length ; j++){
-							if(user.post[i].comment[j]._id.equals(commentID)){
-								user.post[i].comment[j].nestedComments.push(comment._id)
-							}
-						}
-					}
-				}
-				user.save().then((msg)=>{})
-				resolve(comment)
-			})
+			// User.findOne({
+			// 	username: post.postAuthor
+			// }).then((user) => {
+			// 	for(let i = 0 ; i < user.post.length ; i++){
+			// 		if(user.post[i]._id.equals(post._id)){
+			// 			for(let j = 0 ; j < user.post[i].comment.length ; j++){
+			// 				if(user.post[i].comment[j]._id.equals(commentID)){
+			// 					user.post[i].comment[j].nestedComments.push(comment._id)
+			// 				}
+			// 			}
+			// 		}
+			// 	}
+			// 	user.save().then((msg)=>{})
+			// })
+			resolve(comment)
 		}, (err) => {
 			reject(err)
 		})
