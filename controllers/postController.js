@@ -498,7 +498,7 @@ router.get("/:id", (req, res) => {
 			commentNumber: post.commentNumber
 		})
 	}, (error) => {
-
+		res.render('./pages/error.hbs')
 	})
 })
 

@@ -227,9 +227,26 @@
       var upArrow = document.createElement("i");
       upArrow.className = "material-icons md-18 md-dark up";
       upArrow.innerHTML = "arrow_upward";
+      upArrow.id = "arrow_upward" + commentID;
+      var upwardSpan = document.createElement("span")
+      upwardSpan.addEventListener("click", function () {
+        console.log("nested - upwardSpan clicked")
+
+        upvoteComment(commentID, postID);
+
+      })
+      upwardSpan.append(upArrow);
       var downArrow = document.createElement("i");
       downArrow.className = "material-icons md-18 md-dark down";
       downArrow.innerHTML = "arrow_downward";
+      downArrow.id = "arrow_downward" + commentID
+      var downwardSpan = document.createElement("span")
+      downwardSpan.addEventListener("click", function () {
+        console.log("downwardSpan clicked")
+
+        downvoteComment(commentID, postID)
+      })
+      downwardSpan.append(downArrow);
       var commentBodyContainer = document.createElement("div");
       commentBodyContainer.className = "media-body";
       commentBodyContainer.id = commentID;
@@ -302,8 +319,8 @@
 
       var txtContainer = document.createElement("div")
 
-      voteContainer.append(upArrow);
-      voteContainer.append(downArrow);
+      voteContainer.append(upwardSpan);
+      voteContainer.append(downwardSpan);
       userNameContainer.append(userName);
       flexContainer.append(userNameContainer);
       flexContainer.append(commentScoreContainer);
@@ -321,6 +338,18 @@
       commentBodyContainer.append(txtContainer)
       mainCommentContainer.append(voteContainer);
       mainCommentContainer.append(commentBodyContainer);
+
+      for (let i = 0; i < upvote.length; i++) {
+        if (upvote[i] == username) { // make arrowup orange
+          upArrow.setAttribute("style", "color:#F36E21");
+        }
+      }
+
+      for (let i = 0; i < downvote.length; i++) {
+        if (downvote[i] == username) { // make arrowdown blue
+          downArrow.setAttribute("style", "color:#3C8AFF");
+        }
+      }
 
       for (let i = 0; i < upvote.length; i++) {
         if (upvote[i] == username) { // make arrowup orange
@@ -432,7 +461,7 @@
         </div>
         <div class="media-body">
           <h5 class="mt-0 mb-1">{{{postTitle}}}</h5>
-          <div>{{{postDescription}}}</div>
+          <div style="max-height: none;">{{{postDescription}}}</div>
           <div class="mt-2 flex-fill">
             <span class="info">
               <span class="p-2">
