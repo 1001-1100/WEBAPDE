@@ -298,7 +298,8 @@
         }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
+
             }
             $("#loadMorePosts").show()
           } else {
@@ -314,7 +315,7 @@
         }, (foundComments) => {
           if (foundComments.length > 0) {
             for (let i = 0; i < foundComments.length; i++) {
-              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
+            addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore, foundComments[i].upvote, foundComments[i].downvote);
             }
           } else {
             addNoComments()
@@ -535,10 +536,7 @@
 
           })
         upwardSpan.append(upArrow);
-        var voteValue = document.createElement("span");
-        voteValue.className = "votes";
-        voteValue.id = "votes" + commentID
-        voteValue.innerHTML = commentScore;
+    
         var downArrow = document.createElement("i");
         downArrow.className = "material-icons md-18 md-dark down";
         downArrow.innerHTML = "arrow_downward";
@@ -568,6 +566,7 @@
         var commentScoreContainer = document.createElement("span");
         commentScoreContainer.className = "ml-2 points";
         commentScoreContainer.innerHTML = commentScore + " points";
+        commentScoreContainer.id = "votes" + commentID
         var separator = document.createElement("span");
         separator.className = "ml-2";
         separator.innerHTML = "·";
@@ -625,7 +624,6 @@
         var txtContainer = document.createElement("div")
 
         voteContainer.append(upwardSpan);
-        voteContainer.append(voteValue);
         voteContainer.append(downwardSpan);
         userNameContainer.append(userName);
 
@@ -762,7 +760,7 @@
 
                       for(let i = 0; i< foundUser.comment.length; i++){
                         if(foundUser.comment[i]._id == commentID){
-                          document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore;
+                          document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore + " points";
                         }
                       }
                   }
@@ -791,7 +789,7 @@
 
               for(let i = 0; i< foundUser.comment.length; i++){
                 if(foundUser.comment[i]._id == commentID){
-                  document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore;
+                  document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore + " points";
                 }
               }
               //set to blue
