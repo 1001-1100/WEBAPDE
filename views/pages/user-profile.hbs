@@ -317,7 +317,7 @@
       }, (foundComments) => {
         if (foundComments.length > 0) {
           for (let i = 0; i < foundComments.length; i++) {
-            addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
+            addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore, foundComments[i].upvote, foundComments[i].downvote);
           }
         } else {
           addNoComments()
@@ -514,8 +514,8 @@
         $("#postContainer").append(mediaPost);
       }
 
-      function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
-        console.log("addComment commentID " + commentID)
+      function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore, upvote, downvote) {
+
         var wholeCommentContainer = document.createElement("div");
         wholeCommentContainer.className = "comment-container";
         var mainCommentContainer = document.createElement("div");
@@ -525,9 +525,31 @@
         var upArrow = document.createElement("i");
         upArrow.className = "material-icons md-18 md-dark up";
         upArrow.innerHTML = "arrow_upward";
+        upArrow.id = "arrow_upward" + commentID;
+        var upwardSpan = document.createElement("span")
+          upwardSpan.addEventListener("click", function () {
+              console.log("upwardSpan clicked")
+
+              upvoteComment(commentID, postID);
+
+          })
+        upwardSpan.append(upArrow);
+        var voteValue = document.createElement("span");
+        voteValue.className = "votes";
+        voteValue.id = "votes" + commentID
+        voteValue.innerHTML = commentScore;
         var downArrow = document.createElement("i");
         downArrow.className = "material-icons md-18 md-dark down";
         downArrow.innerHTML = "arrow_downward";
+        downArrow.id = "arrow_downward" + commentID
+        var downwardSpan = document.createElement("span")
+          downwardSpan.addEventListener("click", function () {
+            console.log("downwardSpan clicked")
+
+            downvoteComment(commentID, postID)
+          })
+        downwardSpan.append(downArrow);
+
         var commentBodyContainer = document.createElement("div");
         if (username)
           commentBodyContainer.className = "media-body";
@@ -601,8 +623,9 @@
 */
         var txtContainer = document.createElement("div")
 
-        voteContainer.append(upArrow);
-        voteContainer.append(downArrow);
+        voteContainer.append(upwardSpan);
+        voteContainer.append(voteValue);
+        voteContainer.append(downwardSpan);
         userNameContainer.append(userName);
 
         var flexColumnInfo = document.createElement("div");
@@ -675,6 +698,18 @@
           navContainer.append(infoSpan);
         }
         */
+        for(let i =0; i <upvote.length; i++){
+          if(upvote[i] == loggedIn){ // make arrowup orange
+            upArrow.setAttribute("style", "color:#F36E21");
+          }
+        }
+
+        for(let i =0; i <downvote.length; i++){
+          if(downvote[i] == loggedIn){ // make arrowdown blue
+            downArrow.setAttribute("style", "color:#3C8AFF");
+          }
+        }
+
         commentBodyContainer.append(flexContainer);
         commentBodyContainer.append(commentContentContainer);
         commentBodyContainer.append(navContainer);
@@ -705,8 +740,67 @@
         var commentid = $(this).attr("data-commentID")
 
         deleteComment(postid, commentid)
+      });
+
+      function upvoteComment(commentID, postID) {
+              var username = "{{uname}}";
+    
+              if (!username) {
+                //add modal
+                alert("Must login before voting.")
+              } else {
+                $.post("comment/upComment", {
+                  commentID: commentID,
+                  postID: postID,
+                  username: username
+                }, (foundUser) => {
+                  if (foundUser) {
+                      
+                    $('#arrow_downward'+commentID).css({   color: "lightgray" });
+                    $('#arrow_upward'+commentID).css({  color: "#F36E21" });
+
+                      for(let i = 0; i< foundUser.comment.length; i++){
+                        if(foundUser.comment[i]._id == commentID){
+                          document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore;
+                        }
+                      }
+                  }
+                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                    alert("You can only upvote once")
+                  }
+                })
+              }
+            }
+      
+      function downvoteComment(commentID, postID) {
+        var username = "{{uname}}";
+        
+        if (!username) {
+          //add modal
+            alert("Must login before voting.")
+        } else {
+          $.post("comment/downComment", {
+            commentID: commentID,
+            postID: postID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+            $('#arrow_upward'+ commentID).css({   color: "lightgray" });
+              $('#arrow_downward' + commentID).css({   color: "#3C8AFF" });
+
+              for(let i = 0; i< foundUser.comment.length; i++){
+                if(foundUser.comment[i]._id == commentID){
+                  document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore;
+                }
+              }
+              //set to blue
+            }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+        
+              alert("You can only downvote once")
+        }
+          })
+        }
       }
-      );
 
       function updateComment(postID, commentID, commentContent) {
         var username = "{{username}}";
@@ -721,7 +815,7 @@
           console.log(foundUser)
           if (foundUser) {
             for (let i = 0; i < foundUser.comment.length; i++) {
-              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.relativeTime, foundUser.comment[i].commentScore);
+              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.relativeTime, foundUser.comment[i].commentScore, foundUser.comment[i].upvote, foundUser.comment[i].downvote);
             }
           } else {
             addNoComments()
@@ -792,7 +886,7 @@
           console.log(foundUser)
           if (foundUser.comment.length > 0) {
             for (let i = 0; i < foundUser.comment.length; i++) {
-              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].relativeTime, foundUser.comment[i].commentScore);
+              addComment(foundUser.comment[i]._id, foundUser.comment[i]._postID, foundUser.comment[i].commentContent, foundUser.comment[i].commentAuthor, foundUser.comment[i].relativeTime, foundUser.comment[i].commentScore, foundUser.comment[i].upvote, foundUser.comment[i].downvote);
             }
           } else {
             addNoComments()
@@ -811,7 +905,7 @@
 
           if (deletedPost) {
             for (let i = 0; i < deletedPost.post.length; i++) {
-              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
+              addPost(deletedPost.post[i]._id, deletedPost.post[i].postTitle, deletedPost.post[i].postDescription, deletedPost.post[i].postAuthor, deletedPost.post[i].postDate, deletedPost.post[i].postScore, deletedPost.post[i].commentNumber, deletedPost[i].relativeTime, deletedPost[i].postScore, deletedPost[i].commentNumber, deletedPost[i].upvote, deletedPost[i].downvote);
             }
           } else {
             addNoPosts()
@@ -825,7 +919,7 @@
         }, (foundComments) => {
           if (foundComments.length > 0) {
             for (let i = 0; i < foundComments.length; i++) {
-              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
+              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore, foundUser.comment[i].upvote, foundUser.comment[i].downvote);
             }
           } else {
             addNoComments()

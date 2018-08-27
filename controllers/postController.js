@@ -247,7 +247,6 @@ router.post("/upPost",(req, res) =>{
 
 	User.upVote(req.body.id, req.body.username).then((foundPost)=>{
 	//	res.send(foundPost)
-	console.log("User.upVote")
 	},(error) =>{
 		console.log(error)
 	})
@@ -263,11 +262,19 @@ router.post("/upPost",(req, res) =>{
 
 router.post("/downPost",(req, res) =>{
 
+	User.downVote(req.body.id, req.body.username).then((foundPost)=>{
+		//	res.send(foundPost)
+		},(error) =>{
+			console.log(error)
+    })
+
 	Post.downVote(req.body.id, req.body.username).then((foundPost)=>{
 		res.send(foundPost)
 	},(error) =>{
 		console.log(error)
 	})
+
+
 
 })
 
@@ -282,7 +289,9 @@ router.post("/comments", (req, res) => {
 				commentAuthor: post.comment[i].commentAuthor,
 				commentScore: post.comment[i].commentScore,
 				nestedComments: post.comment[i].nestedComments,
-				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true})
+				relativeTime: prettyMs(new Date() - post.comment[i].commentDate, {compact: true, verbose: true}),
+				upvote: post.comment[i].upvoteComment,
+				downvote: post.comment[i].downvoteComment
 			})
 		}
 		res.send(commentData)
