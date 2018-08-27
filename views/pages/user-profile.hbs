@@ -298,7 +298,7 @@
         }, (foundPosts) => {
           if (foundPosts.length > 0) {
             for (let i = 0; i < foundPosts.length; i++) {
-              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber);
+              addPost(foundPosts[i]._id, foundPosts[i].postTitle, foundPosts[i].postDescription, foundPosts[i].postAuthor, foundPosts[i].relativeTime, foundPosts[i].postScore, foundPosts[i].commentNumber, foundPosts[i].upvote, foundPosts[i].downvote);
             }
             $("#loadMorePosts").show()
           } else {
@@ -314,7 +314,7 @@
         }, (foundComments) => {
           if (foundComments.length > 0) {
             for (let i = 0; i < foundComments.length; i++) {
-              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore);
+              addComment(foundComments[i]._id, foundComments[i]._postID, foundComments[i].commentContent, foundComments[i].commentAuthor, foundComments[i].relativeTime, foundComments[i].commentScore, foundComments[i].upvote, foundComments[i].downvote);
             }
           } else {
             addNoComments()
