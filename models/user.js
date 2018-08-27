@@ -471,8 +471,9 @@ exports.putComment = function (comment, post) {
 						user.post[i].commentNumber = post.commentNumber
 					}
 				}
-				user.save().then((msg)=>{})
-				resolve(user.comment)
+				user.save().then((newUser)=>{
+					resolve(comment)
+				})
 			})
 		}, (err) => {
 			reject(err)

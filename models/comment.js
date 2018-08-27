@@ -7,7 +7,9 @@ var commentSchema = mongoose.Schema({
 	commentDateString: String,
 	commentDate: Date,
 	commentScore: Number,
-	nestedComments: [mongoose.SchemaTypes.ObjectId]
+	nestedComments: [mongoose.SchemaTypes.ObjectId],
+	upvoteComment:[String],
+	downvoteComment:[String]
 })
 
 var Comment = mongoose.model("commentList",commentSchema)

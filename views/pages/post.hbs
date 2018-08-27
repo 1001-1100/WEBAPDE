@@ -23,7 +23,7 @@
         for(let i = 0 ; i < comment.nestedComments.length ; i++){
           $.get("/comment/"+comment.nestedComments[i], {}, (newComment) => {
             var commentContainer = "div#"+comment._id
-            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore);
+            addNestedComment(commentContainer, newComment._id, newComment._postID, newComment.commentContent, newComment.commentAuthor, newComment.relativeTime, newComment.commentScore, newComment.upvote, newComment.downvote);
             traverseNestedComments(newComment);
           })
         }
@@ -35,7 +35,7 @@
       $.post("/post/comments", { id: "{{postID}}" }, (comments) => {
         if (comments.length > 0) {
           for (let i = 0; i < comments.length; i++) {
-            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore);
+            addComment(comments[i]._id, comments[i]._postID, comments[i].commentContent, comments[i].commentAuthor, comments[i].relativeTime, comments[i].commentScore, comments[i].upvote, comments[i].downvote);
             traverseNestedComments(comments[i])
           }
         } else {
@@ -67,7 +67,7 @@
       })
     }
 
-    function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
+    function addComment(commentID, postID, commentContent, commentAuthor, commentDate, commentScore, upvote, downvote) {
       var wholeCommentContainer = document.createElement("div");
       wholeCommentContainer.className = "comment-container";
       var mainCommentContainer = document.createElement("div");
@@ -214,7 +214,7 @@
       $("#allComments").append(wholeCommentContainer);
     }
 
-    function addNestedComment(commentContainer, commentID, postID, commentContent, commentAuthor, commentDate, commentScore) {
+    function addNestedComment(commentContainer, commentID, postID, commentContent, commentAuthor, commentDate, commentScore, upvote, downvote) {
       var mainCommentContainer = document.createElement("div");
       mainCommentContainer.className = "media comment";
       mainCommentContainer.setAttribute("style", "margin-top: 20px");
@@ -317,6 +317,18 @@
       commentBodyContainer.append(txtContainer)
       mainCommentContainer.append(voteContainer);
       mainCommentContainer.append(commentBodyContainer);
+    
+      for(let i =0; i <upvote.length; i++){
+        if(upvote[i] == username){ // make arrowup orange
+          upArrow.setAttribute("style", "color:#F36E21");
+        }
+      }
+
+      for(let i =0; i <downvote.length; i++){
+        if(downvote[i] == username){ // make arrowdown blue
+          downArrow.setAttribute("style", "color:#3C8AFF");
+        }
+      }
 
       $(commentContainer).append(mainCommentContainer);
     }
