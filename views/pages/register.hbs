@@ -41,13 +41,13 @@
           <span class="input-group-text">Avatar</span>
         </div>
 
-        <img id="avatarPreview" width="100" height="100" class="rounded" src="./uploads/default.jpeg" />
+        <img id="avatarPreview" width="100" height="100" class="rounded" src="./user/avatar/default" />
       </div>
 
       <div class="input-group mb-2">
         <div class="text-left custom-file">
           <input name="avatar" type="file" class="custom-file-input" accept=".png, .jpg, .jpeg" id="inputAvatar">
-          <label class="custom-file-label" for="inputAvatar">Choose file</label>
+          <label class="custom-file-label" for="inputAvatar" id="fileLabel">Choose file</label>
         </div>
       </div>
       {{!--
@@ -119,7 +119,7 @@
 
         // set to back to default black
         $('label[for=inputUsername]').css({ color: 'black' });
-        $('label[for=inputEmail]').css({ color: 'red' });
+        $('label[for=inputEmail]').css({ color: 'black' });
         $('label[for=inputPassword]').css({ color: 'black' });
         $('label[for=inputConfirmPassword]').css({ color: 'black' });
 
@@ -136,14 +136,17 @@
           if (!username) {
 
             $('label[for=inputUsername]').css({ color: 'red' });
-          } else if (!password) {
+          }
+          if (!password) {
 
             $('label[for=inputPassword]').css({ color: 'red' });
-          } else if (!email2) {
+          }
+          if (!email2) {
 
             $('label[for=inputEmail]').css({ color: 'red' });
           }
-          else if (!cpassword) {
+
+          if (!cpassword) {
 
             $('label[for=inputConfirmPassword]').css({ color: 'red' });
           }
@@ -180,8 +183,7 @@
               $('label[for=inputEmail]').css({ color: 'red' });
 
             } else {
-
-              if (safe)
+              if (safe || $("#fileLabel").text() === "Choose file")
                 $('#registerform').submit();
               else
                 $("#uploadErrorModal").modal("show");

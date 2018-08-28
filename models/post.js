@@ -431,40 +431,62 @@ exports.downVote = function (id, username) {
 
 exports.search = function (searchTerm){
 	return new Promise(function (resolve, reject) {
-		var findPost = Post.find({postDescription: {$regex:searchTerm, $options:"$i"}})
-		var findPost2 = Post.find({postTitle: {$regex:searchTerm, $options:"$i"}})
-		let check = 0;
+		var findPost = Post.find({ $or: [ { postDescription: {$regex:searchTerm, $options:"$i"} }, { postTitle: {$regex:searchTerm, $options:"$i"} } ] }).limit(5)
 		findPost.then((foundPosts)=>{
-			findPost2.then((foundPosts2)=>{
-				if(foundPosts || foundPosts2){
-					console.log("foundPosts not nullll");
-					resolve(foundPosts.concat(foundPosts2));
-					
-				}else{
-					console.log("foundPosts nullll");
-					resolve(null);
-				}
-			})
+			resolve(foundPosts);
 		})
 	})
 }
 
 exports.searchMore = function (searchTerm, skipNum){
 	return new Promise(function (resolve, reject) {
-		var findPost = Post.find({postDescription: {$regex:searchTerm ,$options:"$i"}}).skip(skipNum).limit(5)
-		var findPost2 = Post.find({postTitle: {$regex:searchTerm ,$options:"$i"}}).skip(skipNum).limit(5)
-		let check = 0;
+		var findPost = Post.find({ $or: [ { postDescription: {$regex:searchTerm, $options:"$i"} }, { postTitle: {$regex:searchTerm, $options:"$i"} } ] }).skip(parseInt(skipNum)).limit(5)
 		findPost.then((foundPosts)=>{
-			findPost2.then((foundPosts2)=>{
-				if(foundPosts || foundPosts2){
-					console.log("foundPosts not nullll");
-					resolve(foundPosts.concat(foundPosts2));
-					
-				}else{
-					console.log("foundPosts nullll");
-					resolve(null);
-				}
-			})
+			resolve(foundPosts);
+		})
+	})
+}
+
+exports.searchScore = function (searchTerm) {
+	return new Promise(function (resolve, reject) {
+		var findPost = Post.find({ $or: [ { postDescription: {$regex:searchTerm, $options:"$i"} }, { postTitle: {$regex:searchTerm, $options:"$i"} } ] }).sort({postScore : -1}).limit(5)
+		findPost.then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.searchScoreMore = function (searchTerm, skipNum) {
+	return new Promise(function (resolve, reject) {
+		var findPost = Post.find({ $or: [ { postDescription: {$regex:searchTerm, $options:"$i"} }, { postTitle: {$regex:searchTerm, $options:"$i"} } ] }).skip(parseInt(skipNum)).sort({postScore : -1}).limit(5)
+		findPost.then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.searchDate = function (searchTerm) {
+	return new Promise(function (resolve, reject) {
+		var findPost = Post.find({ $or: [ { postDescription: {$regex:searchTerm, $options:"$i"} }, { postTitle: {$regex:searchTerm, $options:"$i"} } ] }).sort({postDate : -1}).limit(5)
+		findPost.then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
+		})
+	})
+}
+
+exports.searchDateMore = function (searchTerm, skipNum) {
+	return new Promise(function (resolve, reject) {
+		var findPost = Post.find({ $or: [ { postDescription: {$regex:searchTerm, $options:"$i"} }, { postTitle: {$regex:searchTerm, $options:"$i"} } ] }).skip(parseInt(skipNum)).sort({postDate : -1}).limit(5)
+		findPost.then((posts) => {
+			resolve(posts)
+		}, (err) => {
+			reject(err)
 		})
 	})
 }
