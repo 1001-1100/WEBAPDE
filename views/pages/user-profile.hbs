@@ -815,6 +815,10 @@
         mainCommentContainer.append(commentBodyContainer);
         wholeCommentContainer.append(mainCommentContainer);
 
+        wholeCommentContainer.addEventListener("click", function () {
+          window.location.href = "/post/"+postID;
+        })
+
         $("#commentContainer").append(wholeCommentContainer);
       }
 
