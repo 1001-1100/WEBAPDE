@@ -50,10 +50,17 @@ body a {
   border: 1px solid #000;
 }
 
-.media-body p {
-  max-height: 180px;
+.media-body div:first-of-type {
+  max-height: 120px;
   overflow: hidden;
-  mask-image: linear-gradient(to bottom, rgb(0, 0, 0) 50%, transparent);
+  position: relative;
+}
+
+.media-body .fade-text {
+  background-image: linear-gradient(180deg, #000 70%, transparent 100%);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 .media-body .info a:hover {

@@ -375,6 +375,7 @@
         postTitleContainer.className = "mt-0 mb-1";
         postTitleLink.innerHTML = postTitle;
         var postContent = document.createElement("div");
+        postContent.className = "fade-text"
         postContent.innerHTML = postDescription;
         var postInfo = document.createElement("div");
         postInfo.className = "p-1 flex-fill";
@@ -399,7 +400,7 @@
         flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
         commentNumberContainer.append(commentIcon);
-        commentNumberContainer.append(" " + commentNumber + " Comments");
+        commentNumberContainer.append(" " + commentNumber + " comments");
         spanComment.append(commentNumberContainer);
         spanInfo.append(spanComment);
         spanUsername.append(personIcon);
@@ -449,7 +450,6 @@
             }
             else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
               $("#upvoteOnce").modal("show")
-              //alert("You can only upvote once")
             }
           })
         }
@@ -472,7 +472,6 @@
               //set to blue
             } else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
               $("#downvoteOnce").modal("show")
-              //alert("You can only downvote once")
             }
           })
         }

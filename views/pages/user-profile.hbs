@@ -20,7 +20,7 @@
           <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}">
         </div>
         <div class="ml-4">
-          <div class="font-weight-bold">{{username}}</div>
+          <div class="font-weight-bold">@{{username}}</div>
           <div class="description">{{{shortBio}}}</div>
         </div>
       </div>
@@ -99,7 +99,7 @@
 
         <div class="tab-content" id="pills-tabContent">
           <div class="tab-pane fade show active" id="user-posts" role="tabpanel" aria-labelledby="user-posts-tab">
-            <ul id="postContainer" class="list-unstyled"></ul>
+            <ul id="postContainer" class="list-unstyled">
               <div id="loading-posts">
                 <div class="d-flex flex-row mb-3 media post">
                   <div class="mr-3 actions">
@@ -197,11 +197,15 @@
                 </div>
               </div>
 
+            </ul>
+
+
             <div id="loadMorePosts" class="btn btn-outline-primary" style="display: none;">See more posts</div>
           </div>
 
           <div class="tab-pane fade" id="user-comments" role="tabpanel" aria-labelledby="user-comments-tab">
-            <ul id="commentContainer" class="list-unstyled"></ul>
+            <ul id="commentContainer" class="list-unstyled">
+
               <div id="loading-comments">
                 <div class="comment-container">
                   <div class="ml-3 media comment">
@@ -264,6 +268,8 @@
                 </div>
               </div>
 
+            </ul>
+
             <div id="loadMoreComments" class="btn btn-outline-primary">See more comments</div>
             </ul>
           </div>
@@ -272,12 +278,85 @@
     </div>
   </main>
 
+  <div class="modal fade" id="voteLoginError">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Vote error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <p class="text-left">You must be logged in to vote.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a href="/signin" class="btn btn-primary">Login</a>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <div class="modal fade" id="upvoteOnce">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Vote error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <p class="text-left">You can only upvote a post or comment once.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Got it</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
+  <div class="modal fade" id="downvoteOnce">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Vote error</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+
+        </div>
+        <div class="modal-body">
+          <p class="text-left">You can only downvote a post or comment once.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Got it</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+
   {{> footer}} {{> scriptResources}}
 
   <script>
 
 
     $(document).ready(function () {
+      $(document).ajaxSend(function (e, jqxhr, options) {
+        // if the request same with the above source/path
+        if (options.url == "post/upPost" || options.url == "post/downPost") {
+          // set global to false
+          options.global = false;
+          $("#loading-posts").css("display", "none");
+        }
+      });
+
 
       $(document).ajaxStart(function () {
         $("#loading-posts").css("display", "block");
@@ -291,7 +370,7 @@
 
       var username = "{{username}}";
 
-      function loadPosts(){
+      function loadPosts() {
         $("#postContainer").empty();
         $.post("/user/posts", {
           username: username
@@ -307,7 +386,7 @@
         })
       }
 
-      function loadComments(){
+      function loadComments() {
         $("#commentContainer").empty();
         $.post("/user/comments", {
           username: username
@@ -319,7 +398,7 @@
           } else {
             addNoComments()
           }
-        })     
+        })
       }
 
       loadPosts();
@@ -340,7 +419,14 @@
         text.innerHTML = "No posts yet...";
         var subtext = document.createElement("h6");
         subtext.className = "mt-1 flex-fill text-center subheading";
-        subtext.innerHTML = "Looks like this user hasn't posted anything.";
+
+        var loggedIn = "{{uname}}";
+        var curUser = "{{username}}";
+
+        if (curUser == loggedIn)
+          subtext.innerHTML = "Looks like you haven't posted anything. Why not <a href='/post/create'>create a post</a> now?";
+        else
+          subtext.innerHTML = "Looks like this user hasn't posted anything.";
         content.append(icon);
         content.append(text);
         content.append(subtext);
@@ -362,7 +448,14 @@
         text.innerHTML = "No comments yet...";
         var subtext = document.createElement("h6");
         subtext.className = "mt-1 flex-fill text-center subheading";
-        subtext.innerHTML = "Looks like this user hasn't commented on anything.";
+
+        var loggedIn = "{{uname}}";
+        var curUser = "{{username}}";
+
+        if (curUser == loggedIn)
+          subtext.innerHTML = "Looks like you haven't commented on anything.";
+        else
+          subtext.innerHTML = "Looks like this user hasn't commented on anything.";
         content.append(icon);
         content.append(text);
         content.append(subtext);
@@ -388,9 +481,9 @@
         arrowUpward.id = "arrow_upward" + postIDs;
         var upwardSpan = document.createElement("span")
         upwardSpan.addEventListener("click", function () {
-            console.log("upwardSpan clicked")
+          console.log("upwardSpan clicked")
 
-            upvotePost(postIDs)
+          upvotePost(postIDs)
 
         })
         upwardSpan.append(arrowUpward);
@@ -399,16 +492,17 @@
         voteValue.className = "votes";
         voteValue.id = "votes" + postIDs
         voteValue.innerHTML = postScore;
+
         var arrowDownward = document.createElement("i");
         arrowDownward.className = "material-icons md-18 md-dark down";
         arrowDownward.innerHTML = "arrow_downward";
         arrowDownward.id = "arrow_downward" + postIDs
         var downwardSpan = document.createElement("span")
-          downwardSpan.addEventListener("click", function () {
-              console.log("downwardSpan clicked")
+        downwardSpan.addEventListener("click", function () {
+          console.log("downwardSpan clicked")
 
-              downvotePost(postIDs)
-          })
+          downvotePost(postIDs)
+        })
         downwardSpan.append(arrowDownward);
 
         var commentIcon = document.createElement("i");
@@ -424,6 +518,7 @@
         postTitleContainer.innerHTML = postTitle;
 
         var postContent = document.createElement("div");
+        postContent.className = "fade-text"
         postContent.innerHTML = postDescription;
 
         var postInfo = document.createElement("div");
@@ -453,7 +548,7 @@
         flexColumn.append(postTitleContainer);
         flexColumn.append(postContent);
         commentNumberContainer.append(commentIcon);
-        commentNumberContainer.append(" " + commentNumber + " Comments");
+        commentNumberContainer.append(" " + commentNumber + " comments");
         spanComment.append(commentNumberContainer);
         spanInfo.append(spanComment);
         spanUsername.append(personIcon);
@@ -466,7 +561,7 @@
         flexRow.append(flexColumn);
         mediaPost.append(flexRow);
 
- 
+
         var curUser = "{{username}}"
         var loggedIn = "{{uname}}"
         if (loggedIn)
@@ -499,14 +594,14 @@
             flexRow.append(deletespan);
           }
 
-        for(let i =0; i <upvote.length; i++){
-          if(upvote[i] == loggedIn){ // make arrowup orange
+        for (let i = 0; i < upvote.length; i++) {
+          if (upvote[i] == loggedIn) { // make arrowup orange
             arrowUpward.setAttribute("style", "color:#F36E21");
           }
         }
 
-        for(let i =0; i <downvote.length; i++){
-          if(downvote[i] == loggedIn){ // make arrowdown blue
+        for (let i = 0; i < downvote.length; i++) {
+          if (downvote[i] == loggedIn) { // make arrowdown blue
             arrowDownward.setAttribute("style", "color:#3C8AFF");
           }
         }
@@ -528,24 +623,24 @@
         upArrow.innerHTML = "arrow_upward";
         upArrow.id = "arrow_upward" + commentID;
         var upwardSpan = document.createElement("span")
-          upwardSpan.addEventListener("click", function () {
-              console.log("upwardSpan clicked")
+        upwardSpan.addEventListener("click", function () {
+          console.log("COMMENT - upwardSpan clicked")
 
-              upvoteComment(commentID, postID);
+          upvoteComment(commentID, postID);
 
-          })
+        })
         upwardSpan.append(upArrow);
-    
+
         var downArrow = document.createElement("i");
         downArrow.className = "material-icons md-18 md-dark down";
         downArrow.innerHTML = "arrow_downward";
         downArrow.id = "arrow_downward" + commentID
         var downwardSpan = document.createElement("span")
-          downwardSpan.addEventListener("click", function () {
-            console.log("downwardSpan clicked")
+        downwardSpan.addEventListener("click", function () {
+          console.log("COMMENT - downwardSpan clicked")
 
-            downvoteComment(commentID, postID)
-          })
+          downvoteComment(commentID, postID)
+        })
         downwardSpan.append(downArrow);
 
         var commentBodyContainer = document.createElement("div");
@@ -559,7 +654,7 @@
         var userNameContainer = document.createElement("h6");
         userNameContainer.className = "mt-0";
         var userName = document.createElement("a");
-        userName.setAttribute("href", "user-profile?u=" + commentAuthor);
+        userName.setAttribute("href", "/post/" + postID);
         userName.setAttribute("style", "color : #000000;");
         userName.innerHTML = commentAuthor;
         var commentScoreContainer = document.createElement("span");
@@ -696,14 +791,14 @@
           navContainer.append(infoSpan);
         }
         */
-        for(let i =0; i <upvote.length; i++){
-          if(upvote[i] == loggedIn){ // make arrowup orange
+        for (let i = 0; i < upvote.length; i++) {
+          if (upvote[i] == loggedIn) { // make arrowup orange
             upArrow.setAttribute("style", "color:#F36E21");
           }
         }
 
-        for(let i =0; i <downvote.length; i++){
-          if(downvote[i] == loggedIn){ // make arrowdown blue
+        for (let i = 0; i < downvote.length; i++) {
+          if (downvote[i] == loggedIn) { // make arrowdown blue
             downArrow.setAttribute("style", "color:#3C8AFF");
           }
         }
@@ -741,41 +836,39 @@
       });
 
       function upvoteComment(commentID, postID) {
-              var username = "{{uname}}";
-    
-              if (!username) {
-                //add modal
-                alert("Must login before voting.")
-              } else {
-                $.post("comment/upComment", {
-                  commentID: commentID,
-                  postID: postID,
-                  username: username
-                }, (foundUser) => {
-                  if (foundUser) {
-                      
-                    $('#arrow_downward'+commentID).css({   color: "lightgray" });
-                    $('#arrow_upward'+commentID).css({  color: "#F36E21" });
+        var username = "{{uname}}";
 
-                      for(let i = 0; i< foundUser.comment.length; i++){
-                        if(foundUser.comment[i]._id == commentID){
-                          document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore + " points";
-                        }
-                      }
-                  }
-                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-                    alert("You can only upvote once")
-                  }
-                })
+        if (!username) {
+          $("#voteLoginError").modal("show");
+        } else {
+          $.post("comment/upComment", {
+            commentID: commentID,
+            postID: postID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+
+              $('#arrow_downward' + commentID).css({ color: "lightgray" });
+              $('#arrow_upward' + commentID).css({ color: "#F36E21" });
+
+              for (let i = 0; i < foundUser.comment.length; i++) {
+                if (foundUser.comment[i]._id == commentID) {
+                  document.getElementById("votes" + commentID).innerHTML = foundUser.comment[i].commentScore + " points";
+                }
               }
             }
-      
+            else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+              $("#upvoteOnce").modal("show")
+            }
+          })
+        }
+      }
+
       function downvoteComment(commentID, postID) {
         var username = "{{uname}}";
-        
+
         if (!username) {
-          //add modal
-            alert("Must login before voting.")
+          $("#voteLoginError").modal("show");
         } else {
           $.post("comment/downComment", {
             commentID: commentID,
@@ -783,19 +876,18 @@
             username: username
           }, (foundUser) => {
             if (foundUser) {
-            $('#arrow_upward'+ commentID).css({   color: "lightgray" });
-              $('#arrow_downward' + commentID).css({   color: "#3C8AFF" });
+              $('#arrow_upward' + commentID).css({ color: "lightgray" });
+              $('#arrow_downward' + commentID).css({ color: "#3C8AFF" });
 
-              for(let i = 0; i< foundUser.comment.length; i++){
-                if(foundUser.comment[i]._id == commentID){
-                  document.getElementById("votes"+commentID).innerHTML= foundUser.comment[i].commentScore + " points";
+              for (let i = 0; i < foundUser.comment.length; i++) {
+                if (foundUser.comment[i]._id == commentID) {
+                  document.getElementById("votes" + commentID).innerHTML = foundUser.comment[i].commentScore + " points";
                 }
               }
               //set to blue
-            }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-        
-              alert("You can only downvote once")
-        }
+            } else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+              $("#downvoteOnce").modal("show")
+            }
           })
         }
       }
@@ -815,53 +907,50 @@
 
       }
 
-        function upvotePost(postID) {
-              var username = "{{uname}}";
-    
-              if (!username) {
-                //add modal
-                alert("Must login before voting.")
-              } else {
-                $.post("post/upPost", {
-                  id: postID,
-                  username: username
-                }, (foundUser) => {
-                  if (foundUser) {
-                      
-                    $('#arrow_downward'+postID).css({   color: "lightgray" });
-                    $('#arrow_upward'+postID).css({  color: "#F36E21" });
-                    document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
-                  }
-                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-                    alert("You can only upvote once")
-                  }
-                })
-              }
+      function upvotePost(postID) {
+        var username = "{{uname}}";
+
+        if (!username) {
+          $("#voteLoginError").modal("show");
+        } else {
+          $.post("post/upPost", {
+            id: postID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+
+              $('#arrow_downward' + postID).css({ color: "lightgray" });
+              $('#arrow_upward' + postID).css({ color: "#F36E21" });
+              document.getElementById("votes" + postID).innerHTML = foundUser.postScore;
             }
-      
-                function downvotePost(postID) {
-                  var username = "{{uname}}";
-                 
-                  if (!username) {
-                    //add modal
-                     alert("Must login before voting.")
-                  } else {
-                    $.post("post/downPost", {
-                      id: postID,
-                      username: username
-                    }, (foundUser) => {
-                      if (foundUser) {
-                      $('#arrow_upward'+ postID).css({   color: "lightgray" });
-                        $('#arrow_downward' + postID).css({   color: "#3C8AFF" });
-                        document.getElementById("votes"+postID).innerHTML= foundUser.postScore;
-                        //set to blue
-                      }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-                  
-                       alert("You can only downvote once")
-                  }
-                    })
-                  }
-                }
+            else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+              $("#upvoteOnce").modal("show")
+            }
+          })
+        }
+      }
+
+      function downvotePost(postID) {
+        var username = "{{uname}}";
+
+        if (!username) {
+          $("#voteLoginError").modal("show");
+        } else {
+          $.post("post/downPost", {
+            id: postID,
+            username: username
+          }, (foundUser) => {
+            if (foundUser) {
+              $('#arrow_upward' + postID).css({ color: "lightgray" });
+              $('#arrow_downward' + postID).css({ color: "#3C8AFF" });
+              document.getElementById("votes" + postID).innerHTML = foundUser.postScore;
+              //set to blue
+            } else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+              $("#downvoteOnce").modal("show")
+            }
+          })
+        }
+      }
 
       function deleteComment(postID, commentID) {
         var username = "{{username}}";
@@ -891,7 +980,7 @@
             window.location.href = "/user/{{username}}";
           })
         })
-        
+
       }
 
       $("#deletePostConfirmation").on('show.bs.modal', function (e) {
