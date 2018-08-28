@@ -106,7 +106,32 @@ router.post("/search/more", urlencoder, (req, res) => {
 })
 
 router.post("/search/date", urlencoder, (req, res) => {
-	Post.search(req.body.searchTerm).then((posts) => {
+	Post.searchDate(req.body.searchTerm).then((posts) => {
+		var postData = []
+		for (let i = 0; i < posts.length; i++) {
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
+			})
+		}
+		res.send(postData)
+	}, (error) => {
+		console.log(error)
+	})
+})
+
+router.post("/search/date/more", urlencoder, (req, res) => {
+	Post.searchDateMore(req.body.searchTerm).then((posts) => {
 		var postData = []
 		for (let i = 0; i < posts.length; i++) {
 			postData.push({
@@ -131,7 +156,32 @@ router.post("/search/date", urlencoder, (req, res) => {
 })
 
 router.post("/search/score", urlencoder, (req, res) => {
-	Post.search(req.body.searchTerm).then((posts) => {
+	Post.searchScore(req.body.searchTerm).then((posts) => {
+		var postData = []
+		for (let i = 0; i < posts.length; i++) {
+			postData.push({
+				_id: posts[i]._id,
+				postTitle: posts[i].postTitle,
+				postDescription: posts[i].postDescription,
+				postAuthor: posts[i].postAuthor,
+				postScore: posts[i].postScore,
+				commentNumber: posts[i].commentNumber,
+				relativeTime: prettyMs(new Date() - posts[i].postDate, {
+					compact: true,
+					verbose: true
+				}),
+				upvote: posts[i].upvote,
+				downvote: posts[i].downvote
+			})
+		}
+		res.send(postData)
+	}, (error) => {
+		console.log(error)
+	})
+})
+
+router.post("/search/score/more", urlencoder, (req, res) => {
+	Post.searchScoreMore(req.body.searchTerm).then((posts) => {
 		var postData = []
 		for (let i = 0; i < posts.length; i++) {
 			postData.push({
