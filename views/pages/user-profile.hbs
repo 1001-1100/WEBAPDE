@@ -17,7 +17,11 @@
     <div class="row starter-template">
       <div class="col-lg-3">
         <div class="text-center mb-3 mt-5">
-          <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}">
+          {{#if avatar}}
+            <img class="avatar img-thumbnail" src="/user/avatar/{{avatar}}">
+          {{else}}
+            <img class="avatar img-thumbnail" src="/user/avatar/default">
+          {{/if}}
         </div>
         <div class="ml-4">
           <div class="font-weight-bold">@{{username}}</div>
