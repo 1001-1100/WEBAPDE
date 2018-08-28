@@ -150,17 +150,9 @@ router.post("/comments", (req, res) => {
 })
 
 router.get("/avatar/:filename", (req, res) => {
-	path.exists(path.join(upload_path, req.params.filename), function(exists) { 
-		if (exists) { 
-			try {
-				fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
-			} catch (e) {}	
-		}else{
-			try {
-				fs.createReadStream(path.join(upload_path, "default")).pipe(res)
-			} catch (e) {}
-		} 
-	  }); 
+	try {
+		fs.createReadStream(path.join(upload_path, req.params.filename)).pipe(res)
+	} catch (e) {}	
 })
 
 router.get("/:username", (req, res) => {
