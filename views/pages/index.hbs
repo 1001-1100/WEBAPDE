@@ -341,7 +341,7 @@
         upwardSpan.addEventListener("click", function () {
           console.log("upwardSpan clicked")
 
-          upvotePost(postID)
+          upvotePost(postID, postAuthor)
 
         })
         upwardSpan.append(arrowUpward);
@@ -357,8 +357,7 @@
         var downwardSpan = document.createElement("span")
         downwardSpan.addEventListener("click", function () {
           console.log("downwardSpan clicked")
-
-          downvotePost(postID)
+          downvotePost(postID, postAuthor)
         })
         downwardSpan.append(arrowDownward);
 
@@ -430,52 +429,56 @@
         $("#postContainer").append(mediaPost);
       }
 
-
-
-      function upvotePost(postID) {
-        var username = "{{uname}}";
-
-        if (!username) {
-          $("#voteLoginError").modal("show");
-        } else {
-          $.post("post/upPost", {
-            id: postID,
-            username: username
-          }, (foundUser) => {
-            if (foundUser) {
-
-              $('#arrow_downward' + postID).css({ color: "lightgray" });
-              $('#arrow_upward' + postID).css({ color: "#F36E21" });
-              document.getElementById("votes" + postID).innerHTML = foundUser.postScore;
+       function upvotePost(postID, postAuthor) {
+              var username = "{{uname}}";
+    
+              if (!username) {
+                //add modal
+                alert("Must login before voting.")
+              } else {
+                $.post("post/upPost", {
+                  id: postID,
+                  username: username,
+                  postAuthor: postAuthor
+                }, (foundUser) => {
+                  if (foundUser) {
+                      
+                    $('#arrow_downward'+postID).css({   color: "lightgray" });
+                    $('#arrow_upward'+postID).css({  color: "#F36E21" });
+                    document.getElementById("votes"+postID).innerHTML=foundUser.postScore;
+                  }
+                  else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                    alert("You can only upvote once")
+                  }
+                })
+              }
             }
-            else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-              $("#upvoteOnce").modal("show")
-            }
-          })
-        }
-      }
-
-      function downvotePost(postID) {
-        var username = "{{uname}}";
-
-        if (!username) {
-          $("#voteLoginError").modal("show");
-        } else {
-          $.post("post/downPost", {
-            id: postID,
-            username: username
-          }, (foundUser) => {
-            if (foundUser) {
-              $('#arrow_upward' + postID).css({ color: "lightgray" });
-              $('#arrow_downward' + postID).css({ color: "#3C8AFF" });
-              document.getElementById("votes" + postID).innerHTML = foundUser.postScore;
-              //set to blue
-            } else { // foundUser is null, username already in the array, na upvote na yung post ng user na yun
-              $("#downvoteOnce").modal("show")
-            }
-          })
-        }
-      }
+      
+                function downvotePost(postID, postAuthor) {
+                  var username = "{{uname}}";
+                 
+                  if (!username) {
+                    //add modal
+                     alert("Must login before voting.")
+                  } else {
+                    $.post("post/downPost", {
+                      id: postID,
+                      username: username,
+                      postAuthor: postAuthor
+                      
+                    }, (foundUser) => {
+                      if (foundUser) {
+                      $('#arrow_upward'+ postID).css({   color: "lightgray" });
+                        $('#arrow_downward' + postID).css({   color: "#3C8AFF" });
+                        document.getElementById("votes"+postID).innerHTML= foundUser.postScore;
+                        //set to blue
+                      }else{ // foundUser is null, username already in the array, na upvote na yung post ng user na yun
+                  
+                       alert("You can only downvote once")
+                  }
+                    })
+                  }
+                }
       /*
                 function upvoteComment(commentID) {
                   var username = "{{uname}}";
